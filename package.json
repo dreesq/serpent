@@ -1,0 +1,26 @@
+{
+  "name": "serpent",
+  "version": "1.0.0",
+  "description": "An express wrapper for developing fast web applications",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dreesq/serpent.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dreesq/serpent/issues"
+  },
+  "homepage": "https://github.com/dreesq/serpent#readme",
+  "dependencies": {
+    "debug": "^4.1.0"
+  }
+}
