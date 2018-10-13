@@ -1,7 +1,7 @@
 const express = require('express');
-const { setup } = require('../../index');
+const { Setup } = require('../../index');
 
 const app = express();
 
-setup(app);
+Setup(app);
 app.listen(3000);

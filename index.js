@@ -7,19 +7,16 @@ const context = require('./lib/context');
  */
 
 let options = {
+     debug: true,
+     auth: true,
      security: true,
      parsers: true,
      cors: true,
      config: false,
-     socket: false,
      autoload: {
           config: true,
           actions: true,
           models: true
-     },
-     routes: {
-          actions: '/actions',
-          handler: '/'
      }
 };
 
@@ -28,10 +25,20 @@ let options = {
  * @param opts
  */
 
-exports.configure = opts => {
+exports.Action = opts => {
      return handler => {
           router.register(handler, opts);
      };
+};
+
+/**
+ * Register a custom plugin
+ * @param name
+ * @param plugin
+ */
+
+exports.register = (name, plugin) => {
+     context.register(name, plugin);
 };
 
 /**
@@ -40,7 +47,7 @@ exports.configure = opts => {
  * @param opts
  */
 
-exports.setup = (app, opts) => {
+exports.Setup = (app, opts) => {
      let config = {...options, ...opts};
 
      context.set('app', app);

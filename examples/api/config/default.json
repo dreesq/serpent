@@ -1,0 +1,21 @@
+{
+  "db": {
+    "enabled": true
+  },
+
+  "socket": {
+    "enabled": true
+  },
+
+  "auth": {
+    "enabled": true
+  },
+
+  "mailer": {
+    "enabled": true
+  },
+
+  "i18n": {
+    "enabled": true
+  }
+}
