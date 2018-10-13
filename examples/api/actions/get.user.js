@@ -1,6 +1,6 @@
-const { Action } = require('../../../index');
+const { config } = require('../../../index');
 
-const withAuth = Action({
+const withAuth = config({
      transports: [
           'socket',
           'http'
@@ -23,7 +23,6 @@ const withAuth = Action({
  */
 
 module.exports = withAuth(async ({ user, db, input }) => {
-     await db.User.findOne(input.id);
-     return user;
+     return await db.User.findOne(input.id);
 });
 

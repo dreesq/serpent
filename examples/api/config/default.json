@@ -1,21 +1,31 @@
 {
-  "db": {
-    "enabled": true
-  },
+  "debug": true,
+  "cors": {
 
-  "socket": {
-    "enabled": true
   },
+  "plugins": {
+    "logger": {
+      "enabled": true
+    },
 
-  "auth": {
-    "enabled": true
-  },
+    "db": {
+      "enabled": true
+    },
 
-  "mailer": {
-    "enabled": true
-  },
+    "socket": {
+      "enabled": true
+    },
 
-  "i18n": {
-    "enabled": true
+    "auth": {
+      "enabled": true
+    },
+
+    "mailer": {
+      "enabled": true
+    },
+
+    "i18n": {
+      "enabled": true
+    }
   }
 }
