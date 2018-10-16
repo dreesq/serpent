@@ -1,22 +1,41 @@
 {
   "debug": true,
-  "cors": {
-
+  "server": {
+    "port": 3000,
+    "helmet": true,
+    "parsers": true,
+    "cors": {
+      "origin": "*",
+      "credentials": true
+    },
+    "session": {
+      "enabled": true,
+      "resave": false,
+      "saveUninitialized": false,
+      "secret": "mySecret"
+    }
   },
   "plugins": {
-    "logger": {
-      "enabled": true
-    },
-
     "db": {
       "enabled": true
     },
 
-    "socket": {
-      "enabled": true
+    "auth": {
+      "enabled": true,
+      "mode": "basic",
+      "providers": ["session", "jwt"],
+      "strategies": ["facebook", "google"]
     },
 
-    "auth": {
+    "logger": {
+      "enabled": true,
+      "path": "./storage/logs.out",
+      "maxsize": 10000000,
+      "zippedArchive": true,
+      "maxFiles": 5
+    },
+
+    "socket": {
       "enabled": true
     },
 

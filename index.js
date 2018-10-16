@@ -1,5 +1,10 @@
 const router = require('./lib/router');
 const context = require('./lib/context');
+const cors = require('cors');
+const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const session = require('express-session');
 
 /**
  * Default options
@@ -39,16 +44,72 @@ exports.register = (name, plugin) => {
 
 /**
  * On application error
+ * @param error
  * @param req
  * @param res
  * @param next
- * @param error
  */
 
-const onError = (req, res, next, error) => {
-     const {logger = console} = context.plugins;
+const onError = (error, req, res, next) => {
+     const logger = plugin('logger', console);
      logger.error(error);
      res.status(500).end(error);
+};
+
+/**
+ * Initialize application context
+ * @param app
+ * @param config
+ */
+
+const initContext = (app, config) => {
+     context.set('app', app);
+     context.set('config', config);
+     context.init();
+};
+
+/**
+ * Initialize global middle wares
+ */
+
+const initMiddlewares = () => {
+     const app = context.get('app');
+     const config = plugin('config');
+
+     if (config.get('server.parsers', false)) {
+          app.use(bodyParser.json());
+          app.use(bodyParser.urlencoded({ extended: true }));
+          app.use(cookieParser());
+     }
+
+     if (config.get('server.helmet', false)) {
+          app.use(helmet());
+     }
+
+     if (config.get('server.cors', false)) {
+          app.use(cors(config.get('server.cors')));
+     }
+
+     if (config.get('server.session', false)) {
+          app.use(session(config.get('server.session')));
+     }
+};
+
+/**
+ * Initialize application router
+ */
+
+const initRouter = () => {
+     const app = context.get('app');
+     const config = context.get('config');
+     router.init(context);
+
+     /**
+      * Register global error handler
+      */
+
+     const errorHandler = typeof config.onError === 'function' ? config.onError : onError;
+     app.use(errorHandler);
 };
 
 /**
@@ -58,26 +119,57 @@ const onError = (req, res, next, error) => {
  */
 
 exports.setup = (app, opts) => {
-     let config = {...options, ...opts};
+     let config = {
+          ...options,
+          ...opts
+     };
 
-     /**
-      * Load application middle wares
-      */
+     initContext(app, config);
+     initMiddlewares();
+     initRouter();
+};
 
-     /**
-      * Load context
-      */
+/**
+ * Returns the global application context
+ */
 
-     context.set('app', app);
-     context.set('config', config);
+exports.getContext = () => {
+     return context;
+};
 
-     context.init();
-     router.init(context);
+/**
+ * Returns all plugins
+ * @returns {*}
+ */
 
-     /**
-      * Register global error handler
-      */
+exports.getPlugins = () => {
+     return context.get('plugins');
+};
 
-     const errorHandler = typeof config.onError === 'function' ? config.onError : onError;
-     app.use(errorHandler);
+/**
+ * Returns a plugin by name
+ * @param name
+ * @param fallback
+ */
+
+exports.plugin = plugin = (name, fallback) => {
+     if (!name) {
+          return context.get('plugins');
+     }
+
+     return context.get('plugins')[name] || fallback;
+};
+
+/**
+ * Creates http server given options
+ */
+
+exports.start = () => {
+     const config = plugin('config');
+     const logger = plugin('logger', console);
+
+     const app = context.get('app');
+     const port = config.get('server.port', 3000);
+
+     app.listen(port, () => logger.info(`Server listening on port ${port}.`));
 };
