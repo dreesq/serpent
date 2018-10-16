@@ -14,6 +14,10 @@ const session = require('express-session');
 let options = {
      config: false,
      onError: false,
+     routes: {
+          actions: '/',
+          handler: '/'
+     },
      autoload: {
           config: true,
           actions: true,
@@ -135,6 +139,15 @@ exports.setup = (app, opts) => {
 
 exports.getContext = () => {
      return context;
+};
+
+/**
+ * Returns Express's application object
+ * @returns {boolean}
+ */
+
+exports.getApp = () => {
+     return context.app;
 };
 
 /**

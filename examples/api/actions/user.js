@@ -1,22 +1,25 @@
-const { config } = require('../../../index');
+const {config} = require('../../../index');
 
 
 config({
-     name: 'getUser',
      route: {
-          method: 'POST',
+          method: 'get',
           path: '/user/me'
      },
-     middleware: [
-          'auth',
-          'is:user,admin',
-          'can:get-user',
-          (req, res, next) => {
-
-          }
-     ]
+     input: {
+          name: 'string',
+          id: 'required|number'
+     }
 })(
+     /**
+      * A test action
+      * @param user
+      * @returns {Promise<{success: boolean}>}
+      */
+
      async ({ user }) => {
-          return user;
+          return {
+               success: true
+          };
      }
 );
