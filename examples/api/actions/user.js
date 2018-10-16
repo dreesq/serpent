@@ -1,10 +1,9 @@
 const {config} = require('../../../index');
 
-
 config({
      route: {
           method: 'get',
-          path: '/user/me'
+          path: '/user/:name'
      },
      input: {
           name: 'string',
@@ -13,13 +12,16 @@ config({
 })(
      /**
       * A test action
-      * @param user
       * @returns {Promise<{success: boolean}>}
       */
 
-     async ({ user }) => {
+     async ({ input }) => {
+          if (input.name !== 'me') {
+               throw new Error('Input is not me.');
+          }
+
           return {
-               success: true
-          };
+               name: 'Me'
+          }
      }
 );
