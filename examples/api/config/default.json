@@ -17,7 +17,8 @@
   },
   "plugins": {
     "db": {
-      "enabled": true
+      "enabled": true,
+      "server": "mongodb://127.0.0.1/database"
     },
 
     "auth": {

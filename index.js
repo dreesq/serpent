@@ -43,7 +43,7 @@ exports.config = opts => {
  */
 
 exports.register = (name, plugin) => {
-     context.register(name, plugin);
+     return context.register(name, plugin);
 };
 
 /**
@@ -77,10 +77,10 @@ const onError = (error, req, res, next) => {
  * @param config
  */
 
-const initContext = (app, config) => {
+const initContext = async (app, config) => {
      context.set('app', app);
      context.set('config', config);
-     context.init();
+     await context.init();
 };
 
 /**
@@ -133,13 +133,13 @@ const initRouter = () => {
  * @param opts
  */
 
-exports.setup = (app, opts) => {
+exports.setup = async (app, opts) => {
      let config = {
           ...options,
           ...opts
      };
 
-     initContext(app, config);
+     await initContext(app, config);
      initMiddlewares();
      initRouter();
 };

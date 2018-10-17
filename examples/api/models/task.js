@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 /**
- * User model
+ * Task Schema
  */
 
 module.exports = new Schema({
-     email: {
-          type: String
+     title: {
+          type: String,
+          required: true
      }
 });
