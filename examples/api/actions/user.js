@@ -6,8 +6,7 @@ config({
           path: '/user/:name'
      },
      input: {
-          name: 'string',
-          id: 'required|number'
+          name: 'required|string',
      }
 })(
      /**
@@ -15,13 +14,9 @@ config({
       * @returns {Promise<{success: boolean}>}
       */
 
-     async ({ input }) => {
-          if (input.name !== 'me') {
-               throw new Error('Input is not me.');
-          }
-
+     async ({ input: { name }, axios }) => {
           return {
-               name: 'Me'
-          }
+               name
+          };
      }
 );
