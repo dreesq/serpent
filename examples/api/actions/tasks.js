@@ -6,7 +6,7 @@ config({
           path: '/tasks'
      },
      input: {
-          name: 'required|string',
+          a: 'number|min:23|max:55'
      }
 })(
      /**
@@ -14,7 +14,7 @@ config({
       * @returns {Promise<{success: boolean}>}
       */
 
-     async ({ input: { name }, db }) => {
+     async ({ db }) => {
           return await db.Task.find();
      }
 );
