@@ -4,9 +4,6 @@ config({
      route: {
           method: 'get',
           path: '/tasks'
-     },
-     input: {
-          a: 'number|min:23|max:55'
      }
 })(
      /**

@@ -23,9 +23,18 @@
 
     "auth": {
       "enabled": true,
-      "mode": "basic",
       "providers": ["session", "jwt"],
-      "strategies": ["facebook", "google"]
+      "strategies": {
+        "local": {
+
+        },
+        "facebook": {
+
+        },
+        "google": {
+
+        }
+      }
     },
 
     "logger": {
