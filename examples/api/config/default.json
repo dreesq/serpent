@@ -21,8 +21,21 @@
       "server": "mongodb://127.0.0.1/database"
     },
 
+    "mail": {
+      "enabled": true,
+      "host": "smtp.ethereal.email",
+      "port": 587,
+      "secure": false,
+      "auth": {
+        "user": "mnxf2ak2zdjjc5kc@ethereal.email",
+        "pass": "ueHQVpx7FxkbsSzp5n"
+      }
+    },
+
     "auth": {
       "enabled": true,
+      "activation": true,
+      "resetPassword": true,
       "providers": ["session", "jwt"],
       "strategies": {
         "local": {
@@ -46,10 +59,6 @@
     },
 
     "socket": {
-      "enabled": true
-    },
-
-    "mailer": {
       "enabled": true
     },
 

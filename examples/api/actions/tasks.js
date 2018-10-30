@@ -11,7 +11,14 @@ config({
       * @returns {Promise<{success: boolean}>}
       */
 
-     async ({ db }) => {
+     async ({ db, mail }) => {
+          await mail({
+               from: 'test@test.com',
+               to: 'test@test.com',
+               subject: 'Test 24 55',
+               html: 'Hello world!'
+          });
+
           return await db.Task.find();
      }
 );
