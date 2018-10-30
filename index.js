@@ -5,6 +5,9 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const http = require('http');
+const https = require('https');
+const {SERVER_LISTENING} = require('./constants');
 
 /**
  * Default options
@@ -191,9 +194,14 @@ exports.plugin = plugin = (name, fallback) => {
 exports.start = () => {
      const config = plugin('config');
      const logger = plugin('logger', console);
+     const events = plugin('events');
 
      const app = context.get('app');
      const port = config.get('server.port', 3000);
+     const server = http.createServer(app);
 
-     app.listen(port, () => logger.info(`Server listening on port ${port}.`));
+     context.set('server', server);
+     events.emit(SERVER_LISTENING);
+
+     server.listen(port, () => logger.info(`Server listening on port ${port}.`));
 };
