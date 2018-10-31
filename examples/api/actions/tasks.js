@@ -1,6 +1,19 @@
 const {config} = require('../../../index');
 
 config({
+     name: 'getTasks'
+})(
+     /**
+      * A test action
+      * @returns {Promise<{success: boolean}>}
+      */
+
+     async ({ db }) => {
+          return await db.Task.find();
+     }
+);
+
+config({
      route: {
           method: 'get',
           path: '/tasks'
@@ -11,14 +24,7 @@ config({
       * @returns {Promise<{success: boolean}>}
       */
 
-     async ({ db, mail }) => {
-          await mail({
-               from: 'test@test.com',
-               to: 'test@test.com',
-               subject: 'Test 24 55',
-               html: 'Hello world!'
-          });
-
+     async ({ db, mail, socket }) => {
           return await db.Task.find();
      }
 );
