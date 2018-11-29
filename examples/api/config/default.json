@@ -32,24 +32,6 @@
       }
     },
 
-    "auth": {
-      "enabled": true,
-      "activation": true,
-      "resetPassword": true,
-      "providers": ["session", "jwt"],
-      "strategies": {
-        "local": {
-
-        },
-        "facebook": {
-
-        },
-        "google": {
-
-        }
-      }
-    },
-
     "logger": {
       "enabled": true,
       "path": "./storage/logs.out",
