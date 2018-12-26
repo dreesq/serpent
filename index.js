@@ -6,9 +6,14 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const http = require('http');
-const https = require('https');
+const spdy = require('spdy');
 const {SERVER_LISTENING} = require('./constants');
 const {error} = require('./lib/utils');
+const fs = require('fs');
+const util = require('util');
+const path = require('path');
+
+const readFile = util.promisify(fs.readFile);
 
 /**
  * Default options
@@ -181,14 +186,31 @@ exports.plugin = plugin = (name, fallback) => {
  * Creates http server given options
  */
 
-exports.start = () => {
+exports.start = async () => {
      const config = plugin('config');
      const logger = plugin('logger', console);
      const events = plugin('events');
 
      const app = context.get('app');
      const port = config.get('server.port', 3000);
-     const server = http.createServer(app);
+
+     const ssl = config.get('server.ssl');
+
+     let server;
+
+     if (ssl) {
+         const appPath = path.dirname(require.main.filename);
+
+         const key = await readFile(path.join(appPath, ssl.key));
+         const cert = await readFile(path.join(appPath, ssl.cert));
+
+          server = spdy.createServer({
+              key,
+              cert
+          }, app);
+     } else {
+          server = http.createServer(app);
+     }
 
      context.set('server', server);
      events.emit(SERVER_LISTENING);

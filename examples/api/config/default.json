@@ -4,6 +4,7 @@
     "port": 3004,
     "helmet": true,
     "parsers": true,
+    "ssl": false,
     "cors": {
       "origin": "*",
       "credentials": true
