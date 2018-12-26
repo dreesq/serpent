@@ -43,7 +43,7 @@ config({
       * @returns {Promise<{success: boolean}>}
       */
 
-     async ({ input, db }) => {
+     async ({ input, user, db }) => {
           return await db.Task.create(input);
      }
 );

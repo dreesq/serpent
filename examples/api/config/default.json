@@ -34,20 +34,17 @@
 
     "auth": {
       "enabled": true,
-      "activation": true,
-      "resetPassword": true,
-      "providers": ["session", "jwt"],
-      "strategies": {
-        "local": {
-
-        },
-        "facebook": {
-
-        },
-        "google": {
-
-        }
-      }
+      "confirm": true,
+      "reset": true,
+      "jwt": {
+        "secret": "mySecret",
+        "duration": "1d"
+      },
+      "strategies": [
+        "local",
+        "fb",
+        "google"
+      ]
     },
 
     "logger": {

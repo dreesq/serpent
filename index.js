@@ -8,6 +8,7 @@ const session = require('express-session');
 const http = require('http');
 const https = require('https');
 const {SERVER_LISTENING} = require('./constants');
+const {error} = require('./lib/utils');
 
 /**
  * Default options
@@ -60,18 +61,7 @@ exports.register = (name, plugin) => {
 const onError = (error, req, res, next) => {
      const logger = plugin('logger', console);
      logger.error(error);
-
-     let response = {
-          errors: [
-               error
-          ]
-     };
-
-     if (typeof error === 'object') {
-          response = error;
-     }
-
-     res.status(500).json(response);
+     res.status(500).json(error(response));
 };
 
 /**
