@@ -9,5 +9,9 @@ module.exports = new Schema({
      title: {
           type: String,
           required: true
-     }
+     },
+    userId: {
+          type: Schema.ObjectId,
+        references: 'user'
+    }
 });

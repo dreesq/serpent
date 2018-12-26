@@ -21,6 +21,11 @@ module.exports = new Schema({
           type: String,
           required: true
      },
+    locale: {
+          type: String,
+        required: true,
+        defaultValue: 'en'
+    },
      status: {
          type: Number,
          required: true,

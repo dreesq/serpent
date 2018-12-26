@@ -36,7 +36,7 @@ module.exports = () => {
             }
 
             req.user = {
-                ...user,
+                ...user.toObject(),
                 is(role) {
 
                 },

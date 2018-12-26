@@ -1,49 +1,39 @@
 const {config} = require('../../../index');
 
 config({
-     name: 'getTasks'
+     name: 'getTasks',
+     middleware: [
+        'auth',
+     ]
 })(
      /**
       * A test action
       * @returns {Promise<{success: boolean}>}
       */
 
-     async ({ db }) => {
-          return await db.Task.find();
+     async ({ db, user }) => {
+          return await db.Task.find({ userId: user._id });
      }
 );
 
 config({
-     route: {
-          method: 'get',
-          path: '/tasks'
-     }
+    name: 'createTask',
+    input: {
+         title: 'string|required'
+    },
+    middleware: [
+        'auth'
+    ]
 })(
      /**
       * A test action
       * @returns {Promise<{success: boolean}>}
       */
 
-     async ({ db, mail, socket }) => {
-          return await db.Task.find();
-     }
-);
-
-config({
-     route: {
-          method: 'get',
-          path: '/tasks/:title'
-     },
-     input: {
-          title: 'required|string',
-     }
-})(
-     /**
-      * A test action
-      * @returns {Promise<{success: boolean}>}
-      */
-
-     async ({ input, user, db }) => {
-          return await db.Task.create(input);
+     async ({ db, user, input }) => {
+          return await db.Task.create({
+              ...input,
+              userId: user._id
+          });
      }
 );

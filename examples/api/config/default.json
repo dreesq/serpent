@@ -60,7 +60,8 @@
     },
 
     "i18n": {
-      "enabled": true
+      "enabled": true,
+      "path": "./res/locales"
     }
   }
 }
