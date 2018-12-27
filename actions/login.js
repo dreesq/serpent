@@ -30,9 +30,6 @@ const local = async ({ db, config, input }) => {
         throw new Error('Invalid login.');
     }
 
-    user = user.toObject();
-    delete user.password;
-
     const token = await jwt.sign({ _id: user._id }, secret, { expiresIn: duration });
     return success(token);
 };
@@ -72,9 +69,6 @@ const fb = async ({ db, config, input, axios }) => {
             facebookId: data.id
         });
     }
-
-    user = user.toObject();
-    delete user.password;
 
     const token = await jwt.sign({ _id: user._id }, secret, { expiresIn: duration });
     return success(token);

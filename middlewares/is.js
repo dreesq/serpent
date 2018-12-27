@@ -17,7 +17,7 @@ module.exports = options => {
 
         const roles = options.split(',');
 
-        if (!user.is(roles)) {
+        if (!user.is.apply(this, roles)) {
             next(true);
             return res.status(401).json(error('User is not allowed to access this.'));
         }

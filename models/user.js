@@ -6,7 +6,7 @@ const {USER_STATUS_ACTIVE} = require('../constants');
  * User model
  */
 
-module.exports = new Schema({
+const schema = new Schema({
      email: {
           type: String,
           unique: true,
@@ -22,7 +22,7 @@ module.exports = new Schema({
           required: true
      },
     locale: {
-          type: String,
+        type: String,
         required: true,
         defaultValue: 'en'
     },
@@ -32,7 +32,8 @@ module.exports = new Schema({
          defaultValue: USER_STATUS_ACTIVE
      },
      role: {
-          type: Schema.ObjectId
+         type: Schema.ObjectId,
+         ref: 'Role'
      },
      permissions: {
           type: [
@@ -44,3 +45,12 @@ module.exports = new Schema({
           default: []
      }
 });
+
+schema.methods.toJSON = function() {
+    const obj = this.toObject();
+    delete obj.password;
+    delete obj.__v;
+    return obj;
+};
+
+module.exports = schema;

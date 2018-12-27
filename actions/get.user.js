@@ -3,7 +3,8 @@ const {config} = require('../index');
 config({
     name: 'getUser',
     middleware: [
-        'auth'
+        'auth',
+        'is:xd'
     ]
 })(
     /**
@@ -13,7 +14,6 @@ config({
      */
 
     async ({ user }) => {
-        delete user.password;
         return user;
     }
 );

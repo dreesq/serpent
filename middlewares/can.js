@@ -1,3 +1,4 @@
+const {getPlugins} = require('../index');
 const {error} = require('../lib/utils');
 
 /**
@@ -7,19 +8,21 @@ const {error} = require('../lib/utils');
  */
 
 module.exports = options => {
+    const {i18n} = getPlugins();
+
     return (req, res, next) => {
         const {user} = req;
 
         if (!user) {
             next(true);
-            return res.status(401).json(error('User is not authenticated.'));
+            return res.status(401).json(error(i18n.translate('errors.requiresAuth')));
         }
 
         const permissions = options.split(',');
 
-        if (!user.can(permissions)) {
+        if (!user.can.apply(this, permissions)) {
             next(true);
-            return res.status(401).json(error('User does not have sufficient permissions.'));
+            return res.status(401).json(error(i18n.translate('errors.requiresAuth')));
         }
 
         next();

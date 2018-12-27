@@ -1,5 +1,9 @@
 {
   "validation": {
     "required": "Field {{ field }} is required."
+  },
+  "errors": {
+    "requiresAuth": "Action requires authentication.",
+    "requiresPermission": "User does not have sufficient permissions."
   }
 }

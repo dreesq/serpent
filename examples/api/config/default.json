@@ -61,7 +61,7 @@
     },
 
     "i18n": {
-      "enabled": true,
+      "defaultLocale": "en",
       "path": "./res/locales"
     }
   }
