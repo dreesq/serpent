@@ -30,3 +30,11 @@ exports.TOKEN_TYPE_CONFIRM = 1;
 
 exports.USER_STATUS_INACTIVE = 0;
 exports.USER_STATUS_ACTIVE = 1;
+
+/**
+ * User account reset actions
+ * @type {number}
+ */
+
+exports.ACTION_REQUEST_RESET = 0;
+exports.ACTION_RESET = 1;

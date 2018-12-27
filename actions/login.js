@@ -8,10 +8,11 @@ const jwt = require('jsonwebtoken');
  * @param db
  * @param config
  * @param input
+ * @param i18n
  * @returns {Promise<void>}
  */
 
-const local = async ({db, config, input}) => {
+const local = async ({db, config, input, i18n}) => {
     const {User} = db;
     const {email} = input;
 
@@ -21,13 +22,13 @@ const local = async ({db, config, input}) => {
     let user = await User.findOne({email});
 
     if (!user) {
-        throw new Error('Invalid login.');
+        throw new Error(i18n('errors.invalidLogin'));
     }
 
     const ok = await bcrypt.compare(input.password, user.password);
 
     if (!ok) {
-        throw new Error('Invalid login.');
+        throw new Error(i18n('errors.invalidLogin'));
     }
 
     const token = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
@@ -100,12 +101,12 @@ config({
      */
 
     async ctx => {
-        const {config, input} = ctx;
+        const {config, input, i18n} = ctx;
         const {provider} = input;
         const strategies = config.get('plugins.auth.strategies');
 
         if (strategies.indexOf(provider) === -1) {
-            throw new Error('Invalid provider.');
+            throw new Error(i18n('errors.invalidProvider'));
         }
 
         return await providers[provider](ctx);

@@ -4,7 +4,6 @@ config({
     name: 'getUser',
     middleware: [
         'auth',
-        'is:xd'
     ]
 })(
     /**

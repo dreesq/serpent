@@ -67,7 +67,7 @@ exports.register = (name, plugin) => {
 const onError = (error, req, res, next) => {
      const logger = plugin('logger', console);
      logger.error(error);
-     res.status(500).json(error(response));
+     res.status(500).json(error);
 };
 
 /**

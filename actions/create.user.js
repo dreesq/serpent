@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 config({
     name: 'createUser',
     input: {
-        email: 'required|string',
+        email: 'required|email|string',
         password: 'required|string',
         name: 'required|string'
     }
@@ -25,6 +25,8 @@ config({
         const confirm = config.get('plugins.auth.confirm');
 
         input.password = await bcrypt.hash(input.password, 10);
+        input.locale = config.get('plugins.i18n.defaultLocale', 'en');
+
         confirm && (input.status = USER_STATUS_INACTIVE);
 
         const user = await User.create(input);
@@ -41,7 +43,7 @@ config({
             await mail({
                 to: input.email,
                 subject: 'Confirm Account',
-                body: token
+                text: token
             });
         }
 
