@@ -1,9 +1,21 @@
 {
   "validation": {
-    "required": "Field {{ field }} is required."
+    "required": "Field {{field}} is required.",
+    "string": "Field {{field}} is not a string.",
+    "min": {
+      "lower": "Field {{field}} requires a higher value.",
+      "greater": "Field {{field}} requires a higher value."
+    },
+    "max": {
+      "lower": "Field {{field}} requires a lower value.",
+      "greater": "Field {{field}} requires a higher value."
+    },
+    "number": "`Field {{field}} is not a number.",
+    "date": "Field {{field}} is not a valid date."
   },
   "errors": {
     "requiresAuth": "Action requires authentication.",
-    "requiresPermission": "User does not have sufficient permissions."
+    "requiresPermission": "User does not have sufficient permissions.",
+    "invalidAction": "Invalid action sent."
   }
 }

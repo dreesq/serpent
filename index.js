@@ -30,7 +30,8 @@ let options = {
      autoload: {
           config: true,
           actions: true,
-          models: true
+          models: true,
+          middlewares: true
      }
 };
 

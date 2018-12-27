@@ -11,7 +11,6 @@ config({
         name: 'required|string'
     }
 })(
-
     /**
      * Default login action
      * @param db
@@ -21,7 +20,7 @@ config({
      * @returns {Promise<void>}
      */
 
-    async ({ db, mail, config, input }) => {
+    async ({db, mail, config, input}) => {
         const {User, Token} = db;
         const confirm = config.get('plugins.auth.confirm');
 

@@ -1,5 +1,6 @@
 {
   "debug": true,
+  "baseUrl": "http://localhost:3004",
   "server": {
     "port": 3004,
     "helmet": true,
@@ -50,7 +51,7 @@
 
     "logger": {
       "enabled": true,
-      "path": "./storage/logs.out",
+      "path": "storage/logs.out",
       "maxsize": 10000000,
       "zippedArchive": true,
       "maxFiles": 5
@@ -62,7 +63,7 @@
 
     "i18n": {
       "defaultLocale": "en",
-      "path": "./res/locales"
+      "path": "res/locales"
     }
   }
 }

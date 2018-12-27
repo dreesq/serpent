@@ -1,3 +1,12 @@
+const path = require('path');
+
+/**
+ * Paths
+ */
+
+exports.APP_PATH = path.dirname(require.main.filename);
+exports.MODULE_PATH = __dirname;
+
 /**
  * Application events
  * @type {string}

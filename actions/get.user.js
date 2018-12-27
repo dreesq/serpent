@@ -13,7 +13,7 @@ config({
      * @returns {Promise<*>}
      */
 
-    async ({ user }) => {
+    async ({user}) => {
         return user;
     }
 );

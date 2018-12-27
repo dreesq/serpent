@@ -11,14 +11,14 @@ const jwt = require('jsonwebtoken');
  * @returns {Promise<void>}
  */
 
-const local = async ({ db, config, input }) => {
+const local = async ({db, config, input}) => {
     const {User} = db;
     const {email} = input;
 
     const secret = config.get('plugins.auth.jwt.secret');
     const duration = config.get('plugins.auth.jwt.duration');
 
-    let user = await User.findOne({ email });
+    let user = await User.findOne({email});
 
     if (!user) {
         throw new Error('Invalid login.');
@@ -30,7 +30,7 @@ const local = async ({ db, config, input }) => {
         throw new Error('Invalid login.');
     }
 
-    const token = await jwt.sign({ _id: user._id }, secret, { expiresIn: duration });
+    const token = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
     return success(token);
 };
 
@@ -39,7 +39,7 @@ const local = async ({ db, config, input }) => {
  * @returns {Promise<void>}
  */
 
-const fb = async ({ db, config, input, axios }) => {
+const fb = async ({db, config, input, axios}) => {
     const {User} = db;
     const {accessToken} = input;
 
@@ -70,7 +70,7 @@ const fb = async ({ db, config, input, axios }) => {
         });
     }
 
-    const token = await jwt.sign({ _id: user._id }, secret, { expiresIn: duration });
+    const token = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
     return success(token);
 };
 
@@ -93,7 +93,6 @@ config({
         provider: 'required|string'
     }
 })(
-
     /**
      * Default login action
      * @param ctx
