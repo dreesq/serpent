@@ -1,5 +1,5 @@
 {
-  "name": "serpent",
+  "name": "@dreesq/serpent",
   "version": "1.0.0",
   "description": "An express wrapper for developing fast web applications",
   "main": "index.js",
@@ -15,7 +15,7 @@
     "url": "git+https://github.com/dreesq/serpent.git"
   },
   "author": "dreesq",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dreesq/serpent/issues"
   },
@@ -36,5 +36,6 @@
     "socket.io": "^2.1.1",
     "spdy": "^4.0.0",
     "winston": "^3.1.0"
-  }
+  },
+  "devDependencies": {}
 }
