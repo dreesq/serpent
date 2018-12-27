@@ -17,10 +17,11 @@ config({
      * @param input
      * @param config
      * @param mail
+     * @param i18n
      * @returns {Promise<void>}
      */
 
-    async ({db, mail, config, input}) => {
+    async ({db, mail, config, input, i18n}) => {
         const {User, Token} = db;
         const confirm = config.get('plugins.auth.confirm');
 
@@ -42,7 +43,7 @@ config({
 
             await mail({
                 to: input.email,
-                subject: 'Confirm Account',
+                subject: i18n('emails.confirmAccount.subject'),
                 text: token
             });
         }

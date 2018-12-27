@@ -40,8 +40,8 @@ config({
 
             await mail({
                 to: input.email,
-                subject: 'Reset Password',
-                text: resetToken
+                subject: i18n('emails.resetAccount.subject'),
+                text: token
             });
 
             return success();

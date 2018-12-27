@@ -16,5 +16,13 @@
     "invalidEmail": "An user with that email does not exist.",
     "invalidLogin": "Invalid credentials.",
     "invalidProvider": "Invalid provider."
+  },
+  "emails": {
+    "confirmAccount": {
+      "subject": "Confirm Account"
+    },
+    "resetAccount": {
+      "subject": "Reset Password"
+    }
   }
 }

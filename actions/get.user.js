@@ -3,7 +3,7 @@ const {config} = require('../index');
 config({
     name: 'getUser',
     middleware: [
-        'auth',
+        'auth'
     ]
 })(
     /**
