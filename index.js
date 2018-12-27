@@ -6,8 +6,18 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const http = require('http');
-const https = require('https');
+const spdy = require('spdy');
 const {SERVER_LISTENING} = require('./constants');
+const utils = require('./lib/utils');
+const fs = require('fs');
+const util = require('util');
+const path = require('path');
+
+/**
+ * Promisify functions
+ */
+
+const readFile = util.promisify(fs.readFile);
 
 /**
  * Default options
@@ -15,18 +25,25 @@ const {SERVER_LISTENING} = require('./constants');
  */
 
 let options = {
-     config: false,
-     onError: false,
-     routes: {
-          actions: '/',
-          handler: '/'
-     },
-     autoload: {
-          config: true,
-          actions: true,
-          models: true
-     }
+    config: false,
+    onError: false,
+    routes: {
+        actions: '/',
+        handler: '/'
+    },
+    autoload: {
+        config: true,
+        actions: true,
+        models: true,
+        middlewares: true
+    }
 };
+
+/**
+ * Export utilities
+ */
+
+exports.utils = utils;
 
 /**
  * Configure helper for actions
@@ -34,9 +51,9 @@ let options = {
  */
 
 exports.config = opts => {
-     return handler => {
-          router.register(handler, opts);
-     };
+    return handler => {
+        router.register(handler, opts);
+    };
 };
 
 /**
@@ -46,7 +63,7 @@ exports.config = opts => {
  */
 
 exports.register = (name, plugin) => {
-     return context.register(name, plugin);
+    return context.register(name, plugin);
 };
 
 /**
@@ -58,20 +75,9 @@ exports.register = (name, plugin) => {
  */
 
 const onError = (error, req, res, next) => {
-     const logger = plugin('logger', console);
-     logger.error(error);
-
-     let response = {
-          errors: [
-               error
-          ]
-     };
-
-     if (typeof error === 'object') {
-          response = error;
-     }
-
-     res.status(500).json(response);
+    const logger = plugin('logger', console);
+    logger.error(error);
+    res.status(500).json(error);
 };
 
 /**
@@ -81,9 +87,9 @@ const onError = (error, req, res, next) => {
  */
 
 const initContext = async (app, config) => {
-     context.set('app', app);
-     context.set('config', config);
-     await context.init();
+    context.set('app', app);
+    context.set('config', config);
+    await context.init();
 };
 
 /**
@@ -91,26 +97,26 @@ const initContext = async (app, config) => {
  */
 
 const initMiddlewares = () => {
-     const app = context.get('app');
-     const config = plugin('config');
+    const app = context.get('app');
+    const config = plugin('config');
 
-     if (config.get('server.parsers', false)) {
-          app.use(bodyParser.json());
-          app.use(bodyParser.urlencoded({ extended: true }));
-          app.use(cookieParser());
-     }
+    if (config.get('server.parsers', false)) {
+        app.use(bodyParser.json());
+        app.use(bodyParser.urlencoded({extended: true}));
+        app.use(cookieParser());
+    }
 
-     if (config.get('server.helmet', false)) {
-          app.use(helmet());
-     }
+    if (config.get('server.helmet', false)) {
+        app.use(helmet());
+    }
 
-     if (config.get('server.cors', false)) {
-          app.use(cors(config.get('server.cors')));
-     }
+    if (config.get('server.cors', false)) {
+        app.use(cors(config.get('server.cors')));
+    }
 
-     if (config.get('server.session', false)) {
-          app.use(session(config.get('server.session')));
-     }
+    if (config.get('server.session', false)) {
+        app.use(session(config.get('server.session')));
+    }
 };
 
 /**
@@ -118,16 +124,16 @@ const initMiddlewares = () => {
  */
 
 const initRouter = () => {
-     const app = context.get('app');
-     const config = context.get('config');
-     router.init(context);
+    const app = context.get('app');
+    const config = context.get('config');
+    router.init(context);
 
-     /**
-      * Register global error handler
-      */
+    /**
+     * Register global error handler
+     */
 
-     const errorHandler = typeof config.onError === 'function' ? config.onError : onError;
-     app.use(errorHandler);
+    const errorHandler = typeof config.onError === 'function' ? config.onError : onError;
+    app.use(errorHandler);
 };
 
 /**
@@ -137,14 +143,14 @@ const initRouter = () => {
  */
 
 exports.setup = async (app, opts) => {
-     let config = {
-          ...options,
-          ...opts
-     };
+    let config = {
+        ...options,
+        ...opts
+    };
 
-     await initContext(app, config);
-     initMiddlewares();
-     initRouter();
+    await initContext(app, config);
+    initMiddlewares();
+    initRouter();
 };
 
 /**
@@ -152,7 +158,7 @@ exports.setup = async (app, opts) => {
  */
 
 exports.getContext = () => {
-     return context;
+    return context;
 };
 
 /**
@@ -161,7 +167,7 @@ exports.getContext = () => {
  */
 
 exports.getApp = () => {
-     return context.app;
+    return context.app;
 };
 
 /**
@@ -170,7 +176,7 @@ exports.getApp = () => {
  */
 
 exports.getPlugins = () => {
-     return context.get('plugins');
+    return context.get('plugins');
 };
 
 /**
@@ -180,28 +186,45 @@ exports.getPlugins = () => {
  */
 
 exports.plugin = plugin = (name, fallback) => {
-     if (!name) {
-          return context.get('plugins');
-     }
+    if (!name) {
+        return context.get('plugins');
+    }
 
-     return context.get('plugins')[name] || fallback;
+    return context.get('plugins')[name] || fallback;
 };
 
 /**
  * Creates http server given options
  */
 
-exports.start = () => {
-     const config = plugin('config');
-     const logger = plugin('logger', console);
-     const events = plugin('events');
+exports.start = async () => {
+    const config = plugin('config');
+    const logger = plugin('logger', console);
+    const events = plugin('events');
 
-     const app = context.get('app');
-     const port = config.get('server.port', 3000);
-     const server = http.createServer(app);
+    const app = context.get('app');
+    const port = config.get('server.port', 3000);
 
-     context.set('server', server);
-     events.emit(SERVER_LISTENING);
+    const ssl = config.get('server.ssl');
 
-     server.listen(port, () => logger.info(`Server listening on port ${port}.`));
+    let server;
+
+    if (ssl) {
+        const appPath = path.dirname(require.main.filename);
+
+        const key = await readFile(path.join(appPath, ssl.key));
+        const cert = await readFile(path.join(appPath, ssl.cert));
+
+        server = spdy.createServer({
+            key,
+            cert
+        }, app);
+    } else {
+        server = http.createServer(app);
+    }
+
+    context.set('server', server);
+    events.emit(SERVER_LISTENING);
+
+    server.listen(port, () => logger.info(`Server listening on port ${port}.`));
 };

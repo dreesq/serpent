@@ -1,5 +1,10 @@
-const {setup, start} = require('../../index');
-const express = require('express');
-const app = express();
+(async () => {
+    //process.env.NODE_ENV = 'production';
 
-setup(app).then(start);
+    const {setup, start} = require('../../index');
+    const express = require('express');
+    const app = express();
+
+    await setup(app);
+    await start();
+})();

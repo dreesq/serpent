@@ -1,0 +1,28 @@
+{
+  "validation": {
+    "required": "Field {{field}} is required.",
+    "string": "Field {{field}} is not a string.",
+    "email": "Field {{field}} is not a valid email.",
+    "min": "Field {{field}} requires a higher value.",
+    "max": "Field {{field}} requires a lower value.",
+    "number": "`Field {{field}} is not a number.",
+    "date": "Field {{field}} is not a valid date."
+  },
+  "errors": {
+    "requiresAuth": "Action requires authentication.",
+    "requiresPermission": "User does not have sufficient permissions.",
+    "invalidAction": "Invalid action sent.",
+    "invalidToken": "Request token is invalid or does not exist.",
+    "invalidEmail": "An user with that email does not exist.",
+    "invalidLogin": "Invalid credentials.",
+    "invalidProvider": "Invalid provider."
+  },
+  "emails": {
+    "confirmAccount": {
+      "subject": "Confirm Account"
+    },
+    "resetAccount": {
+      "subject": "Reset Password"
+    }
+  }
+}
