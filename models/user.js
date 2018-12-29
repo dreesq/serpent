@@ -24,12 +24,12 @@ const schema = new Schema({
     locale: {
         type: String,
         required: true,
-        defaultValue: 'en'
+        default: 'en'
     },
     status: {
         type: Number,
         required: true,
-        defaultValue: USER_STATUS_ACTIVE
+        default: USER_STATUS_ACTIVE
     },
     role: {
         type: Schema.ObjectId,

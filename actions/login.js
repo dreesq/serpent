@@ -1,7 +1,36 @@
-const {config} = require('../index');
-const {success} = require('../lib/utils');
+const {config, getPlugins} = require('../index');
+const {TOKEN_TYPE_REFRESH} = require('../constants');
+const {success, makeToken} = require('../lib/utils');
+const {config: configPlugin} = getPlugins();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+
+/**
+ * Creates a refresh token
+ * @param user
+ * @param Token
+ */
+
+const createRefreshToken = async (user, Token) => {
+    const tokens = await Token.find({
+        userId: user._id,
+        type: TOKEN_TYPE_REFRESH
+    });
+
+    if (tokens.length >= 10) {
+        await tokens[0].remove();
+    }
+
+    const refreshToken = await makeToken(128);
+
+    await Token.create({
+        token: refreshToken,
+        userId: user._id,
+        type: TOKEN_TYPE_REFRESH
+    });
+
+    return refreshToken;
+};
 
 /**
  * Local provider
@@ -13,11 +42,11 @@ const jwt = require('jsonwebtoken');
  */
 
 const local = async ({db, config, input, i18n}) => {
-    const {User} = db;
+    const {User, Token} = db;
     const {email} = input;
 
-    const secret = config.get('plugins.auth.jwt.secret');
-    const duration = config.get('plugins.auth.jwt.duration');
+    const authConfig = config.get('plugins.auth');
+    const {secret, duration} = authConfig.jwt || {};
 
     let user = await User.findOne({email});
 
@@ -32,7 +61,13 @@ const local = async ({db, config, input, i18n}) => {
     }
 
     const token = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
-    return success(token);
+    const res = {token};
+
+    if (authConfig.refresh && input.refresh) {
+        res.refresh = await createRefreshToken(user, Token);
+    }
+
+    return success(res);
 };
 
 /**
@@ -41,11 +76,11 @@ const local = async ({db, config, input, i18n}) => {
  */
 
 const fb = async ({db, config, input, axios}) => {
-    const {User} = db;
+    const {User, Token} = db;
     const {accessToken} = input;
 
-    const secret = config.get('plugins.auth.jwt.secret');
-    const duration = config.get('plugins.auth.jwt.duration');
+    const authConfig = config.get('plugins.auth');
+    const {secret, duration} = authConfig.jwt || {};
 
     const {data} = await axios.get('https://graph.facebook.com/v2.12/me', {
         params: {
@@ -72,7 +107,13 @@ const fb = async ({db, config, input, axios}) => {
     }
 
     const token = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
-    return success(token);
+    const res = {token};
+
+    if (authConfig.refresh && input.refresh) {
+        res.refresh = await createRefreshToken(user, Token);
+    }
+
+    return success(res);
 };
 
 /**
@@ -91,8 +132,10 @@ config({
         email: 'string|when:provider,local',
         password: 'string|when:provider,local',
         accessToken: 'string|when:provider,!local',
-        provider: 'required|string'
-    }
+        provider: 'required|string',
+        refresh: 'number'
+    },
+    enabled: configPlugin.get('plugins.auth.enabled')
 })(
     /**
      * Default login action

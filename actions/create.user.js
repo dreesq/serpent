@@ -1,6 +1,7 @@
-const {config} = require('../index');
+const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_CONFIRM, USER_STATUS_INACTIVE} = require('../constants');
 const {makeToken, success} = require('../lib/utils');
+const {config: configPlugin} = getPlugins();
 const bcrypt = require('bcrypt');
 
 config({
@@ -9,7 +10,8 @@ config({
         email: 'required|email|string',
         password: 'required|string',
         name: 'required|string'
-    }
+    },
+    enabled: configPlugin.get('plugins.auth.enabled')
 })(
     /**
      * Default login action

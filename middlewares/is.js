@@ -22,7 +22,7 @@ module.exports = options => {
 
         if (!user.is.apply(this, roles)) {
             next(true);
-            rreturn res.status(401).json(error(i18n.translate('errors.requiresPermission')));
+            return res.status(401).json(error(i18n.translate('errors.requiresPermission')));
         }
 
         next();

@@ -38,6 +38,7 @@
       "enabled": true,
       "confirm": true,
       "reset": true,
+      "refresh": true,
       "jwt": {
         "secret": "mySecret",
         "duration": "1d"

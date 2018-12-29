@@ -1,4 +1,5 @@
-const {config} = require('../index');
+const {config, getPlugins} = require('../index');
+const {config: configPlugin} = getPlugins();
 const {ACTION_REQUEST_RESET, ACTION_RESET, TOKEN_TYPE_RESET} = require('../constants');
 const {error, success, makeToken} = require('../lib/utils');
 const bcrypt = require('bcrypt');
@@ -8,9 +9,10 @@ config({
     input: {
         action: 'required|number',
         email: 'email|when:action,0',
-        token: 'when:action,1',
+        token: 'when:action,1|min:64',
         password: 'when:action,1|min:10'
-    }
+    },
+    enabled: configPlugin.get('plugins.auth.reset')
 })(
     /**
      * Confirm user account

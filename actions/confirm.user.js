@@ -1,12 +1,14 @@
-const {config} = require('../index');
+const {config, getPlugins} = require('../index');
 const {USER_STATUS_ACTIVE} = require('../constants');
 const {error, success} = require('../lib/utils');
+const {config: configPlugin} = getPlugins();
 
 config({
     name: 'confirmUser',
     input: {
-        token: 'required|string|min:32'
-    }
+        token: 'required|string|min:64'
+    },
+    enabled: configPlugin.get('plugins.auth.confirm')
 })(
     /**
      * Confirm user account

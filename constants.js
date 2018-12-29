@@ -22,6 +22,7 @@ exports.SERVER_LISTENING = 'server:listening';
 
 exports.TOKEN_TYPE_RESET = 0;
 exports.TOKEN_TYPE_CONFIRM = 1;
+exports.TOKEN_TYPE_REFRESH = 2;
 
 /**
  * User statuses

@@ -52,7 +52,7 @@ exports.utils = utils;
 
 exports.config = opts => {
     return handler => {
-        router.register(handler, opts);
+        router.registerAction(handler, opts);
     };
 };
 
@@ -63,7 +63,7 @@ exports.config = opts => {
  */
 
 exports.register = (name, plugin) => {
-    return context.register(name, plugin);
+    return context.registerPlugin(name, plugin);
 };
 
 /**
