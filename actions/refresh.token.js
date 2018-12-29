@@ -1,7 +1,8 @@
 const {config, getPlugins} = require('../index');
-const {TOKEN_TYPE_REFRESH} = require('../constants');
+const {TOKEN_TYPE_REFRESH, REFRESH_TOKEN_EXPIRY} = require('../constants');
 const {error, success, makeToken} = require('../lib/utils');
 const {config: configPlugin} = getPlugins();
+const moment = require('moment');
 
 config({
     name: 'refreshToken',
@@ -29,6 +30,11 @@ config({
 
         if (!token) {
             return error(i18n('errors.invalidToken'));
+        }
+
+        if (moment().diff(moment(token.createdAt), 'days') > REFRESH_TOKEN_EXPIRY) {
+            await token.remove();
+            return error(i18n('errors.expiredToken'));
         }
 
         const user = await User.findOne({ _id: token.userId });

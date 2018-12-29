@@ -15,7 +15,8 @@
     "invalidToken": "Request token is invalid or does not exist.",
     "invalidEmail": "An user with that email does not exist.",
     "invalidLogin": "Invalid credentials.",
-    "invalidProvider": "Invalid provider."
+    "invalidProvider": "Invalid provider.",
+    "expiredToken": "Given token has expired."
   },
   "emails": {
     "confirmAccount": {
