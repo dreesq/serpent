@@ -25,6 +25,14 @@ exports.TOKEN_TYPE_CONFIRM = 1;
 exports.TOKEN_TYPE_REFRESH = 2;
 
 /**
+ * Misc constants
+ * @type {number}
+ */
+
+exports.REFRESH_TOKEN_EXPIRY = 30;
+exports.RESET_TOKEN_EXPIRY = 3;
+
+/**
  * User statuses
  * @type {number}
  */

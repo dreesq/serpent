@@ -1,8 +1,9 @@
 const {config, getPlugins} = require('../index');
 const {config: configPlugin} = getPlugins();
-const {ACTION_REQUEST_RESET, ACTION_RESET, TOKEN_TYPE_RESET} = require('../constants');
+const {ACTION_REQUEST_RESET, ACTION_RESET, TOKEN_TYPE_RESET, RESET_TOKEN_EXPIRY} = require('../constants');
 const {error, success, makeToken} = require('../lib/utils');
 const bcrypt = require('bcrypt');
+const moment = require('moment');
 
 config({
     name: 'resetUser',
@@ -60,6 +61,10 @@ config({
                 return error(i18n('errors.invalidToken'));
             }
 
+            if (moment().diff(moment(token.createdAt, 'days')) > RESET_TOKEN_EXPIRY) {
+                return error(i18n('errors.expiredToken'));
+            }
+
             const user = await User.findOne({_id: token.userId});
 
             if (!user) {
@@ -70,7 +75,7 @@ config({
             user.password = await bcrypt.hash(input.password, 10);
 
             await user.save();
-            await token.remove();
+            await Token.deleteMany({userId: user._id, type: TOKEN_TYPE_RESET});
 
             return success();
         }
