@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const http = require('http');
 const spdy = require('spdy');
-const {SERVER_LISTENING} = require('./constants');
+const {SERVER_LISTENING, APP_PATH} = require('./constants');
 const utils = require('./lib/utils');
 const fs = require('fs');
 const util = require('util');
@@ -100,21 +100,21 @@ const initMiddlewares = () => {
     const app = context.get('app');
     const config = plugin('config');
 
-    if (config.get('server.parsers', false)) {
+    if (config.get('server.parsers')) {
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({extended: true}));
         app.use(cookieParser());
     }
 
-    if (config.get('server.helmet', false)) {
+    if (config.get('server.helmet')) {
         app.use(helmet());
     }
 
-    if (config.get('server.cors', false)) {
+    if (config.get('server.cors')) {
         app.use(cors(config.get('server.cors')));
     }
 
-    if (config.get('server.session', false)) {
+    if (config.get('server.session')) {
         app.use(session(config.get('server.session')));
     }
 };
@@ -210,10 +210,8 @@ exports.start = async () => {
     let server;
 
     if (ssl) {
-        const appPath = path.dirname(require.main.filename);
-
-        const key = await readFile(path.join(appPath, ssl.key));
-        const cert = await readFile(path.join(appPath, ssl.cert));
+        const key = await readFile(path.join(APP_PATH, ssl.key));
+        const cert = await readFile(path.join(APP_PATH, ssl.cert));
 
         server = spdy.createServer({
             key,

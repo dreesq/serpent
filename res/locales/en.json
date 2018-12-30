@@ -6,7 +6,9 @@
     "min": "Field {{field}} requires a higher value.",
     "max": "Field {{field}} requires a lower value.",
     "number": "`Field {{field}} is not a number.",
-    "date": "Field {{field}} is not a valid date."
+    "date": "Field {{field}} is not a valid date.",
+    "file": "Field {{field}} is not a file.",
+    "extension": "Field {{field}} has invalid file extension."
   },
   "errors": {
     "requiresAuth": "Action requires authentication.",
@@ -16,7 +18,8 @@
     "invalidEmail": "An user with that email does not exist.",
     "invalidLogin": "Invalid credentials.",
     "invalidProvider": "Invalid provider.",
-    "expiredToken": "Given token has expired."
+    "expiredToken": "Given token has expired.",
+    "rateLimit": "Rate limit for this resource exceeded."
   },
   "emails": {
     "confirmAccount": {
