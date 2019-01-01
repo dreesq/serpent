@@ -1,7 +1,7 @@
 const {config, getPlugins} = require('../index');
 const {config: configPlugin} = getPlugins();
 const {ACTION_REQUEST_RESET, ACTION_RESET, TOKEN_TYPE_RESET, RESET_TOKEN_EXPIRY} = require('../constants');
-const {error, success, makeToken} = require('../lib/utils');
+const {error, success, makeToken} = require('../utils');
 const bcrypt = require('bcrypt');
 const moment = require('moment');
 
@@ -19,18 +19,18 @@ config({
      * Confirm user account
      * @returns {Promise<void>}
      */
-    async ({db, input, i18n, mail}) => {
+    async ({db, input, i18n, mail, utils}) => {
         const {User, Token} = db;
 
         /**
          * When requesting password reset
          */
 
-        if (input.action === ACTION_REQUEST_RESET) {
+        if (+input.action === ACTION_REQUEST_RESET) {
             const user = await User.findOne({email: input.email});
 
             if (!user) {
-                return error(i18n('errors.invalidEmail'));
+                return error(i18n.translate('errors.invalidEmail'));
             }
 
             const token = await makeToken();
@@ -41,10 +41,15 @@ config({
                 token
             });
 
+            const t = i18n.translator(user.locale).translate;
+
             await mail({
                 to: input.email,
-                subject: i18n('emails.resetAccount.subject'),
-                text: token
+                subject: t('emails.resetAccount.subject'),
+                html: t('emails.resetAccount.html', {
+                    url: utils.url('reset', {token}),
+                    user
+                })
             });
 
             return success();
@@ -58,18 +63,18 @@ config({
             const token = await Token.findOne({token: input.token, type: TOKEN_TYPE_RESET});
 
             if (!token) {
-                return error(i18n('errors.invalidToken'));
+                return error(i18n.translate('errors.invalidToken'));
             }
 
-            if (moment().diff(moment(token.createdAt, 'days')) > RESET_TOKEN_EXPIRY) {
-                return error(i18n('errors.expiredToken'));
+            if (moment().diff(moment(token.createdAt), 'days') > RESET_TOKEN_EXPIRY) {
+                return error(i18n.translate('errors.expiredToken'));
             }
 
             const user = await User.findOne({_id: token.userId});
 
             if (!user) {
                 await token.remove();
-                return error(i18n('errors.invalidUser'));
+                return error(i18n.translate('errors.invalidUser'));
             }
 
             user.password = await bcrypt.hash(input.password, 10);

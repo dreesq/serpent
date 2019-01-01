@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_REFRESH} = require('../constants');
-const {success, makeToken} = require('../lib/utils');
+const {success, makeToken} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -51,13 +51,13 @@ const local = async ({db, config, input, i18n}) => {
     let user = await User.findOne({email});
 
     if (!user) {
-        throw new Error(i18n('errors.invalidLogin'));
+        throw new Error(i18n.translate('errors.invalidLogin'));
     }
 
     const ok = await bcrypt.compare(input.password, user.password);
 
     if (!ok) {
-        throw new Error(i18n('errors.invalidLogin'));
+        throw new Error(i18n.translate('errors.invalidLogin'));
     }
 
     const token = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
@@ -135,7 +135,7 @@ config({
         provider: 'required|string',
         refresh: 'number'
     },
-    enabled: configPlugin.get('plugins.auth.enabled')
+    enabled: configPlugin.get('plugins.auth')
 })(
     /**
      * Default login action
@@ -149,7 +149,7 @@ config({
         const strategies = config.get('plugins.auth.strategies');
 
         if (strategies.indexOf(provider) === -1) {
-            throw new Error(i18n('errors.invalidProvider'));
+            throw new Error(i18n.translate('errors.invalidProvider'));
         }
 
         return await providers[provider](ctx);

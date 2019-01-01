@@ -8,7 +8,9 @@
     "number": "`Field {{field}} is not a number.",
     "date": "Field {{field}} is not a valid date.",
     "file": "Field {{field}} is not a file.",
-    "extension": "Field {{field}} has invalid file extension."
+    "extension": "Field {{field}} has invalid file extension.",
+    "locale": "Invalid locale sent.",
+    "unique": "Field {{field}} with value {{value}} already exists."
   },
   "errors": {
     "requiresAuth": "Action requires authentication.",
@@ -23,10 +25,12 @@
   },
   "emails": {
     "confirmAccount": {
-      "subject": "Confirm Account"
+      "subject": "Confirm Account",
+      "html": "Hello {{user.name}}. Please confirm your account here {{url}}"
     },
     "resetAccount": {
-      "subject": "Reset Password"
+      "subject": "Reset Password",
+      "html": "Hello {{user.name}}. Please reset your account password here {{url}}"
     }
   }
 }

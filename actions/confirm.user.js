@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {USER_STATUS_ACTIVE} = require('../constants');
-const {error, success} = require('../lib/utils');
+const {error, success} = require('../utils');
 const {config: configPlugin} = getPlugins();
 
 config({
@@ -20,7 +20,7 @@ config({
         const token = await Token.findOne({token: input.token});
 
         if (!token) {
-            return error(i18n('errors.invalidToken'));
+            return error(i18n.translate('errors.invalidToken'));
         }
 
         await User.updateOne({_id: token.userId}, {status: USER_STATUS_ACTIVE});

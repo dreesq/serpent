@@ -6,7 +6,7 @@ config({
     middleware: [
         'auth'
     ],
-    enabled: configPlugin.get('plugins.auth.enabled')
+    enabled: configPlugin.get('plugins.auth')
 })(
     /**
      * Returns the authenticated user

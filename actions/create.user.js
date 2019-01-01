@@ -1,17 +1,28 @@
 const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_CONFIRM, USER_STATUS_INACTIVE} = require('../constants');
-const {makeToken, success} = require('../lib/utils');
+const {makeToken, success} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const bcrypt = require('bcrypt');
 
 config({
     name: 'createUser',
     input: {
-        email: 'required|email|string',
-        password: 'required|string',
-        name: 'required|string'
+        email: 'required|email|string|unique:user,email',
+        password: 'required|string|min:10',
+        name: 'required|string',
+        async locale(value) {
+            const locales = configPlugin.get('plugins.i18n.locales', []);
+
+            if (!value) {
+                return;
+            }
+
+            if (locales.indexOf(value) === -1) {
+                return 'validation.invalidLocale'
+            }
+        }
     },
-    enabled: configPlugin.get('plugins.auth.enabled')
+    enabled: configPlugin.get('plugins.auth')
 })(
     /**
      * Default login action
@@ -20,15 +31,19 @@ config({
      * @param config
      * @param mail
      * @param i18n
+     * @param utils
      * @returns {Promise<void>}
      */
 
-    async ({db, mail, config, input, i18n}) => {
+    async ({db, mail, config, input, i18n, utils}) => {
         const {User, Token} = db;
         const confirm = config.get('plugins.auth.confirm');
 
         input.password = await bcrypt.hash(input.password, 10);
-        input.locale = config.get('plugins.i18n.defaultLocale', 'en');
+
+        if (!input.locale) {
+            input.locale = config.get('plugins.i18n.defaultLocale', 'en');
+        }
 
         confirm && (input.status = USER_STATUS_INACTIVE);
 
@@ -43,10 +58,15 @@ config({
                 token
             });
 
+            const t = i18n.translator(user.locale).translate;
+
             await mail({
                 to: input.email,
-                subject: i18n('emails.confirmAccount.subject'),
-                text: token
+                subject: t('emails.confirmAccount.subject'),
+                html: t('emails.confirmAccount.html', {
+                    user: user.toObject(),
+                    url: utils.url('confirm', {token})
+                })
             });
         }
 

@@ -11,7 +11,6 @@
       "credentials": true
     },
     "session": {
-      "enabled": true,
       "resave": false,
       "saveUninitialized": false,
       "secret": "mySecret"
@@ -19,23 +18,10 @@
   },
   "plugins": {
     "db": {
-      "enabled": true,
       "server": "mongodb://127.0.0.1/database"
     },
 
-    "mail": {
-      "enabled": true,
-      "host": "smtp.ethereal.email",
-      "port": 587,
-      "secure": false,
-      "auth": {
-        "user": "mnxf2ak2zdjjc5kc@ethereal.email",
-        "pass": "ueHQVpx7FxkbsSzp5n"
-      }
-    },
-
     "auth": {
-      "enabled": true,
       "confirm": true,
       "reset": true,
       "refresh": true,
@@ -50,8 +36,18 @@
       ]
     },
 
-    "logger": {
+    "mail": {
       "enabled": true,
+      "host": "smtp.ethereal.email",
+      "port": 587,
+      "secure": false,
+      "auth": {
+        "user": "mnxf2ak2zdjjc5kc@ethereal.email",
+        "pass": "ueHQVpx7FxkbsSzp5n"
+      }
+    },
+
+    "logger": {
       "path": "storage/logs.out",
       "maxsize": 10000000,
       "zippedArchive": true,
@@ -59,12 +55,16 @@
     },
 
     "socket": {
-      "enabled": true
+
     },
 
     "i18n": {
       "defaultLocale": "en",
-      "path": "res/locales"
+      "path": "res/locales",
+      "locales": [
+        "en",
+        "de"
+      ]
     }
   }
 }

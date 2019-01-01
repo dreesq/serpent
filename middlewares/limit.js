@@ -1,4 +1,4 @@
-const {error} = require('../lib/utils');
+const {error} = require('../utils');
 const {getPlugins} = require('../index');
 const moment = require('moment');
 

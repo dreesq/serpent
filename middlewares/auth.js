@@ -1,5 +1,5 @@
 const {getPlugins} = require('../index');
-const {error} = require('../lib/utils');
+const {error} = require('../utils');
 
 /**
  * Authenticated middleware
