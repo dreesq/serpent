@@ -48,7 +48,7 @@ config({
                 subject: t('emails.resetAccount.subject'),
                 html: t('emails.resetAccount.html', {
                     url: utils.url('reset', {token}),
-                    user
+                    user: user.toObject()
                 })
             });
 
