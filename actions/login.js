@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_REFRESH} = require('../constants');
-const {success, makeToken} = require('../utils');
+const {success, makeToken, hash} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -24,7 +24,7 @@ const createRefreshToken = async (user, Token) => {
     const refreshToken = await makeToken(128);
 
     await Token.create({
-        token: refreshToken,
+        token: hash(refreshToken),
         userId: user._id,
         type: TOKEN_TYPE_REFRESH
     });

@@ -201,3 +201,12 @@ exports.capitalize = capitalize = (text = '') => `${text.charAt(0).toUpperCase()
 exports.toModelName = (model = '') => {
     return model.split('.').map(part => capitalize(part)).join('')
 };
+
+/**
+ * Sha256 hash helper
+ * @param text
+ */
+
+exports.hash = (text = '') => {
+    return crypto.createHash('sha256').update(text).digest('hex');
+};

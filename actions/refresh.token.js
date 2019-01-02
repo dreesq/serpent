@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_REFRESH, REFRESH_TOKEN_EXPIRY} = require('../constants');
-const {error, success, makeToken} = require('../utils');
+const {error, success, makeToken, hash} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const moment = require('moment');
 
@@ -24,7 +24,7 @@ config({
         const {Token, User} = db;
 
         const token = await Token.findOne({
-            token: input.token,
+            token: hash(input.token),
             type: TOKEN_TYPE_REFRESH
         });
 
@@ -43,14 +43,15 @@ config({
             return error(i18n.translate('errors.invalidToken'));
         }
 
-        token.token = await makeToken(128);
+        const newToken = await makeToken(128);
+        token.token = hash(newToken);
         await token.save();
 
         const {secret, duration} = config.get('plugins.auth.jwt');
         const accessToken = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
 
         return success({
-            refreshToken: token.token,
+            refreshToken: newToken,
             token: accessToken
         });
     }

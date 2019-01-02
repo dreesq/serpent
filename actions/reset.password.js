@@ -1,7 +1,7 @@
 const {config, getPlugins} = require('../index');
 const {config: configPlugin} = getPlugins();
 const {ACTION_REQUEST_RESET, ACTION_RESET, TOKEN_TYPE_RESET, RESET_TOKEN_EXPIRY} = require('../constants');
-const {error, success, makeToken} = require('../utils');
+const {error, success, makeToken, hash} = require('../utils');
 const bcrypt = require('bcrypt');
 const moment = require('moment');
 
@@ -38,7 +38,7 @@ config({
             await Token.create({
                 userId: user._id,
                 type: TOKEN_TYPE_RESET,
-                token
+                token: hash(token)
             });
 
             const t = i18n.translator(user.locale).translate;
@@ -60,7 +60,7 @@ config({
          */
 
         if (input.action === ACTION_RESET) {
-            const token = await Token.findOne({token: input.token, type: TOKEN_TYPE_RESET});
+            const token = await Token.findOne({token: hash(input.token), type: TOKEN_TYPE_RESET});
 
             if (!token) {
                 return error(i18n.translate('errors.invalidToken'));

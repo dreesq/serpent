@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {USER_STATUS_ACTIVE} = require('../constants');
-const {error, success} = require('../utils');
+const {error, success, hash} = require('../utils');
 const {config: configPlugin} = getPlugins();
 
 config({
@@ -17,7 +17,7 @@ config({
     async ({db, input, i18n}) => {
         const {User, Token} = db;
 
-        const token = await Token.findOne({token: input.token});
+        const token = await Token.findOne({token: hash(input.token)});
 
         if (!token) {
             return error(i18n.translate('errors.invalidToken'));

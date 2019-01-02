@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_CONFIRM, USER_STATUS_INACTIVE} = require('../constants');
-const {makeToken, success} = require('../utils');
+const {makeToken, success, hash} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const bcrypt = require('bcrypt');
 
@@ -55,7 +55,7 @@ config({
             await Token.create({
                 userId: user._id,
                 type: TOKEN_TYPE_CONFIRM,
-                token
+                token: hash(token)
             });
 
             const t = i18n.translator(user.locale).translate;
