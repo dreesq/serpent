@@ -54,6 +54,10 @@
       "maxFiles": 5
     },
 
+    "redis": {
+
+    },
+
     "socket": {
 
     },

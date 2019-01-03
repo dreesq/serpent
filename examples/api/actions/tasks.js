@@ -20,6 +20,18 @@ config({
 );
 
 config({
+    name: 'getLastTask',
+    middleware: [
+        'auth'
+    ]
+})(
+    async ({redis}) => {
+         const task = await redis.get('lastTask');
+         return JSON.parse(task);
+    }
+);
+
+config({
     name: 'createTask',
     input: {
         title: 'string|required'
@@ -33,11 +45,14 @@ config({
      * @returns {Promise<{success: boolean}>}
      */
 
-    async ({db, user, input}) => {
-        return await db.Task.create({
+    async ({db, user, redis, input}) => {
+        const task = await db.Task.create({
             ...input,
             userId: user._id
         });
+
+        await redis.set('lastTask', JSON.stringify(task));
+        return task;
     }
 );
 
