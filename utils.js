@@ -3,6 +3,7 @@ const {promisify} = require('util');
 const fs = require('fs');
 const path = require('path');
 const {MODULE_PATH} = require('./constants');
+const serpent = require('./');
 
 /**
  * Promisify functions
@@ -79,6 +80,8 @@ exports.success = (data = '') => {
 
 exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false, requireFile = true) => {
     const entities = await readdir(`${appPath}/${type}`);
+    d('Loading', type, 'path', appPath, 'requireFile', requireFile);
+
 
     for (const entity of entities) {
         let entityPath = path.join(appPath, type, entity);
@@ -100,6 +103,21 @@ exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false,
             callback(entity, required);
         }
     }
+};
+
+/**
+ * Debug helper
+ * @param args
+ */
+
+exports.d = d = (...args) => {
+    const config = serpent.plugin('config', false);
+
+    if (!config || !config.get || !config.get('debug', false)) {
+        return;
+    }
+
+    return console.log.apply(this, ['(serpent)', ...args]);
 };
 
 /**

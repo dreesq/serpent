@@ -4,10 +4,7 @@ config({
     name: 'getTasks',
     input: {
         filters: 'object'
-    },
-    middleware: [
-        'auth'
-    ]
+    }
 })(
     utils.autoFilter('Task', {
         restrictToUser: true,

@@ -5,6 +5,13 @@
     const express = require('express');
     const app = express();
 
-    await setup(app);
+    await setup(app, {
+        autoload: {
+            actions: true,
+            config: true,
+            models: true
+        }
+    });
+
     await start();
 })();
