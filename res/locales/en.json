@@ -21,7 +21,8 @@
     "invalidLogin": "Invalid credentials.",
     "invalidProvider": "Invalid provider.",
     "expiredToken": "Given token has expired.",
-    "rateLimit": "Rate limit for this resource exceeded."
+    "rateLimit": "Rate limit for this resource exceeded.",
+    "alreadyConfirmed": "User has already confirmed his account."
   },
   "emails": {
     "confirmAccount": {
