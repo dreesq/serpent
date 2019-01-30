@@ -16,10 +16,11 @@ config({
      * @param mail
      * @param user
      * @param i18n
+     * @param utils
      * @returns {Promise<void>}
      */
 
-    async ({db, mail, user, i18n}) => {
+    async ({db, mail, user, i18n, utils}) => {
         const t = i18n.translate;
 
         if (user.status !== USER_STATUS_INACTIVE) {

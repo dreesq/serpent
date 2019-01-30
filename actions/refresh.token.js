@@ -22,6 +22,7 @@ config({
 
     async ({db, input, i18n, config}) => {
         const {Token, User} = db;
+        const t = i18n.translate;
 
         const token = await Token.findOne({
             token: hash(input.token),
@@ -29,18 +30,20 @@ config({
         });
 
         if (!token) {
-            return error(i18n.translate('errors.invalidToken'));
+            return error(t('errors.invalidToken'));
         }
 
-        if (moment().diff(moment(token.createdAt), 'days') > REFRESH_TOKEN_EXPIRY) {
+        const diff = moment().diff(moment(token.createdAt), 'days');
+
+        if (diff > REFRESH_TOKEN_EXPIRY) {
             await token.remove();
-            return error(i18n.translate('errors.expiredToken'));
+            return error(t('errors.expiredToken'));
         }
 
         const user = await User.findOne({ _id: token.userId });
 
         if (!user) {
-            return error(i18n.translate('errors.invalidToken'));
+            return error(t('errors.invalidToken'));
         }
 
         const newToken = await makeToken(128);
