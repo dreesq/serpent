@@ -21,6 +21,7 @@ config({
      */
     async ({db, input, i18n, mail, utils}) => {
         const {User, Token} = db;
+        const t = i18n.translate;
 
         /**
          * When requesting password reset
@@ -30,7 +31,7 @@ config({
             const user = await User.findOne({email: input.email});
 
             if (!user) {
-                return error(i18n.translate('errors.invalidEmail'));
+                return error(t('errors.invalidEmail'));
             }
 
             const token = await makeToken();
@@ -59,22 +60,24 @@ config({
          * When requesting password update
          */
 
-        if (input.action === ACTION_RESET) {
+        if (+input.action === ACTION_RESET) {
             const token = await Token.findOne({token: hash(input.token), type: TOKEN_TYPE_RESET});
 
             if (!token) {
-                return error(i18n.translate('errors.invalidToken'));
+                return error(t('errors.invalidToken'));
             }
 
-            if (moment().diff(moment(token.createdAt), 'days') > RESET_TOKEN_EXPIRY) {
-                return error(i18n.translate('errors.expiredToken'));
+            const diff = moment().diff(moment(token.createdAt), 'days');
+
+            if (diff > RESET_TOKEN_EXPIRY) {
+                return error(t('errors.expiredToken'));
             }
 
             const user = await User.findOne({_id: token.userId});
 
             if (!user) {
                 await token.remove();
-                return error(i18n.translate('errors.invalidUser'));
+                return error(t('errors.invalidUser'));
             }
 
             user.password = await bcrypt.hash(input.password, 10);

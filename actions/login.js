@@ -44,6 +44,7 @@ const createRefreshToken = async (user, Token) => {
 const local = async ({db, config, input, i18n}) => {
     const {User, Token} = db;
     const {email} = input;
+    const t = i18n.translate;
 
     const authConfig = config.get('plugins.auth');
     const {secret, duration} = authConfig.jwt || {};
@@ -51,13 +52,13 @@ const local = async ({db, config, input, i18n}) => {
     let user = await User.findOne({email});
 
     if (!user) {
-        throw new Error(i18n.translate('errors.invalidLogin'));
+        throw new Error(t('errors.invalidLogin'));
     }
 
     const ok = await bcrypt.compare(input.password, user.password);
 
     if (!ok) {
-        throw new Error(i18n.translate('errors.invalidLogin'));
+        throw new Error(t('errors.invalidLogin'));
     }
 
     const token = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
@@ -147,9 +148,10 @@ config({
         const {config, input, i18n} = ctx;
         const {provider} = input;
         const strategies = config.get('plugins.auth.strategies');
+        const t = i18n.translate;
 
         if (strategies.indexOf(provider) === -1) {
-            throw new Error(i18n.translate('errors.invalidProvider'));
+            throw new Error(t('errors.invalidProvider'));
         }
 
         return await providers[provider](ctx);
