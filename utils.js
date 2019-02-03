@@ -82,7 +82,6 @@ exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false,
     const entities = await readdir(`${appPath}/${type}`);
     d('Loading', type, 'path', appPath, 'requireFile', requireFile);
 
-
     for (const entity of entities) {
         let entityPath = path.join(appPath, type, entity);
         let itemStat = await stat(entityPath);
