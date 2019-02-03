@@ -16,11 +16,12 @@ config({
      */
     async ({db, input, i18n}) => {
         const {User, Token} = db;
+        const t = i18n.translate;
 
         const token = await Token.findOne({token: hash(input.token)});
 
         if (!token) {
-            return error(i18n.translate('errors.invalidToken'));
+            return error(t('errors.invalidToken'));
         }
 
         await User.updateOne({_id: token.userId}, {status: USER_STATUS_ACTIVE});
