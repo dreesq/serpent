@@ -21,15 +21,22 @@ const createRefreshToken = async (user, Token) => {
         await tokens[0].remove();
     }
 
-    const refreshToken = await makeToken(128);
+    const [guid, refreshToken] = await Promise.all([
+        makeToken(12),
+        makeToken(128)
+    ]);
 
     await Token.create({
         token: hash(refreshToken),
         userId: user._id,
+        guid,
         type: TOKEN_TYPE_REFRESH
     });
 
-    return refreshToken;
+    return {
+        refreshToken,
+        guid
+    };
 };
 
 /**
@@ -61,13 +68,17 @@ const local = async ({db, config, input, i18n}) => {
         throw new Error(t('errors.invalidLogin'));
     }
 
-    const token = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
-    const res = {token};
+    const res = {};
+    const payload = {_id: user._id, ts: user.ts};
 
     if (authConfig.refresh && input.refresh) {
-        res.refresh = await createRefreshToken(user, Token);
+        const {refreshToken, guid} = await createRefreshToken(user, Token);
+
+        res.refresh = refreshToken;
+        payload.guid = guid;
     }
 
+    res.token = await jwt.sign(payload, secret, {expiresIn: duration});
     return success(res);
 };
 
@@ -107,13 +118,17 @@ const fb = async ({db, config, input, axios}) => {
         });
     }
 
-    const token = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
-    const res = {token};
+    const res = {};
+    const payload = {_id: user._id, ts: user.ts};
 
     if (authConfig.refresh && input.refresh) {
-        res.refresh = await createRefreshToken(user, Token);
+        const {refreshToken, guid} = await createRefreshToken(user, Token);
+
+        res.refresh = refreshToken;
+        payload.guid = guid;
     }
 
+    res.token = await jwt.sign(payload, secret, {expiresIn: duration});
     return success(res);
 };
 

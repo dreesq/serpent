@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const moment = require('moment');
 
 config({
-    name: 'resetUser',
+    name: 'resetPassword',
     input: {
         action: 'required|number',
         email: 'email|when:action,0',
@@ -19,6 +19,7 @@ config({
      * Confirm user account
      * @returns {Promise<void>}
      */
+
     async ({db, input, i18n, mail, utils}) => {
         const {User, Token} = db;
         const t = i18n.translate;
@@ -49,7 +50,7 @@ config({
                 subject: t('emails.resetAccount.subject'),
                 html: t('emails.resetAccount.html', {
                     url: utils.url('reset', {token}),
-                    user: user.toObject()
+                    user
                 })
             });
 
@@ -81,6 +82,7 @@ config({
             }
 
             user.password = await bcrypt.hash(input.password, 10);
+            user.ts = moment().unix();
 
             await user.save();
             await Token.deleteMany({userId: user._id, type: TOKEN_TYPE_RESET});

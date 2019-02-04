@@ -9,8 +9,8 @@ module.exports = () => {
     const {auth, i18n, logger = console} = getPlugins();
 
     return async (req, res, next) => {
-        const fail = () => {
-            res.status(401).json(error(i18n.translate('errors.requiresAuth')));
+        const fail = (message = i18n.translate('errors.requiresAuth')) => {
+            res.status(401).json(error(message));
             next(true);
         };
 
@@ -24,7 +24,7 @@ module.exports = () => {
             req.user = await auth.getUser(token);
         } catch(e) {
             logger.error(e.stack);
-            return fail();
+            return fail(e.message);
         }
 
         next();

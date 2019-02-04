@@ -60,6 +60,6 @@ config({
     ]
 })(
     async ({user, db}) => {
-        return await db.Task.remove({userId: user._id});
+        return await db.Task.deleteOne({userId: user._id});
     }
 );

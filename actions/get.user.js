@@ -15,6 +15,12 @@ config({
      */
 
     async ({user}) => {
+        delete user.password;
+        delete user.token;
+        delete user.ts;
+        delete user._id;
+        delete user.__v;
+
         return user;
     }
 );

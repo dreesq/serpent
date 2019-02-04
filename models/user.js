@@ -21,6 +21,9 @@ const schema = new Schema({
         type: String,
         required: true
     },
+    ts: {
+        type: Number
+    },
     locale: {
         type: String,
         required: true,

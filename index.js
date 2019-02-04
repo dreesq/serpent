@@ -50,9 +50,21 @@ exports.utils = utils;
  * @param opts
  */
 
-exports.config = opts => {
+exports.config = config = opts => {
     return handler => {
         router.registerAction(handler, opts);
+
+        /**
+         * Allow updating options on already
+         * registered routes
+         */
+
+        return others => {
+            router.registerAction(handler, {
+                ...opts,
+                ...others
+            });
+        };
     };
 };
 
@@ -120,13 +132,74 @@ const initMiddlewares = () => {
 };
 
 /**
+ * Register additional helpers
+ */
+
+const buildHelpers = () => {
+    /**
+     * Method helpers
+     */
+
+    const methods = {
+        del: 'delete',
+        put: 'put',
+        post: 'post',
+        get: 'get',
+        update: 'update',
+        head: 'head',
+        options: 'options',
+        patch: 'patch'
+    };
+
+    for (const key in methods) {
+        exports[key] = (path, handler) => {
+            return config({
+                route: {
+                    method: methods[key],
+                    path
+                }
+            })(
+                handler
+            );
+        };
+    }
+
+    exports.action = (name, handler) => {
+        return {
+            name,
+            handler
+        };
+    };
+
+    /**
+     * Group helper
+     */
+
+    exports.group = opts => {
+        return (...args) => {
+            for (const action of args) {
+                action(opts);
+            }
+        };
+    };
+};
+
+/**
  * Initialize application router
  */
 
 const initRouter = () => {
     const app = context.get('app');
     const config = context.get('config');
+
     router.init(context);
+
+    /**
+     * Attach helpers to
+     * the exported object
+     */
+
+    buildHelpers();
 
     /**
      * Register global error handler

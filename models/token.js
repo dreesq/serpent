@@ -11,13 +11,17 @@ module.exports = new Schema({
         ref: 'User',
         index: true
     },
+    token: {
+        type: String,
+        index: true
+    },
+    guid: {
+        type: String,
+        index: true
+    },
     type: {
         type: String,
         index: true,
-        required: true
-    },
-    token: {
-        type: String,
         required: true
     },
     description: {
@@ -29,6 +33,5 @@ module.exports = new Schema({
         default() {
             return new Date();
         }
-
     }
 });

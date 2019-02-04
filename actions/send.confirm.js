@@ -42,7 +42,7 @@ config({
             to: user.email,
             subject: t('emails.confirmAccount.subject'),
             html: t('emails.confirmAccount.html', {
-                user: user.toObject(),
+                user,
                 url: utils.url('confirm', {token})
             })
         });

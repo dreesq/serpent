@@ -3,6 +3,7 @@ const {TOKEN_TYPE_REFRESH, REFRESH_TOKEN_EXPIRY} = require('../constants');
 const {error, success, makeToken, hash} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const moment = require('moment');
+const jwt = require('jsonwebtoken');
 
 config({
     name: 'refreshToken',
@@ -46,12 +47,19 @@ config({
             return error(t('errors.invalidToken'));
         }
 
-        const newToken = await makeToken(128);
+        const [newToken, guid] = await Promise.all([
+            makeToken(128),
+            makeToken(12)
+        ]);
+
         token.token = hash(newToken);
+        token.guid = guid;
         await token.save();
 
         const {secret, duration} = config.get('plugins.auth.jwt');
-        const accessToken = await jwt.sign({_id: user._id}, secret, {expiresIn: duration});
+        const payload = {_id: user._id, ts: user.ts, guid: token.guid};
+
+        const accessToken = await jwt.sign(payload, secret, {expiresIn: duration});
 
         return success({
             refreshToken: newToken,
