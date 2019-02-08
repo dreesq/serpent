@@ -1,4 +1,5 @@
 const {config, getPlugins} = require('../index');
+const {removeKeys} = require('../utils');
 const {config: configPlugin} = getPlugins();
 
 config({
@@ -15,12 +16,6 @@ config({
      */
 
     async ({user}) => {
-        delete user.password;
-        delete user.token;
-        delete user.ts;
-        delete user._id;
-        delete user.__v;
-
-        return user;
+        return removeKeys(user, ['password', 'token', 'ts', '_id', '__v']);
     }
 );

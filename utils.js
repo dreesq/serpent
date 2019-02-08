@@ -25,6 +25,23 @@ exports.get = get = (obj, path, defaultValue = false) => {
 };
 
 /**
+ * Remove keys utility
+ * @param obj
+ * @param args
+ * @returns object
+ */
+
+exports.removeKeys = (obj, args = []) => {
+    let copied = {...obj};
+
+    for (let arg of args) {
+        delete copied[arg];
+    }
+
+    return copied;
+};
+
+/**
  * Helper for creating tokens
  * @param length
  * @returns {Promise<*>}
