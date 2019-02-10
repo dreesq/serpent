@@ -113,8 +113,10 @@ const fb = async ({db, config, input, axios}) => {
         user = await User.create({
             name: data.name,
             locale: data.locale,
+            email: data.email,
             timezone: data.timezone,
-            facebookId: data.id
+            facebookId: data.id,
+            password: await makeToken(64)
         });
     }
 

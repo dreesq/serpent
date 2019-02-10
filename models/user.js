@@ -21,6 +21,9 @@ const schema = new Schema({
         type: String,
         required: true
     },
+    facebookId: {
+        type: Number
+    },
     ts: {
         type: Number
     },
