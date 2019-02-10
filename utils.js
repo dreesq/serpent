@@ -137,13 +137,173 @@ exports.d = d = (...args) => {
 };
 
 /**
+ * Auto generate crud methods
+ * @param model
+ * @param options
+ */
+
+exports.autoCrud = (model, options = {}) => {
+    const methods = [
+        'create',
+        'remove',
+        'update',
+        'get',
+        'find'
+    ];
+
+    const defaults = {
+        methods,
+        name: `Auto${model}`,
+        middleware: [],
+        type: 'actions',
+        after(action, data, ctx) {
+            return data;
+        },
+        before(ctx) {
+
+        }
+    };
+
+    options = {
+        ...defaults,
+        ...options
+    };
+
+    /**
+     * Name the method
+     * @param name
+     * @param method
+     * @param type
+     * @param path
+     * @param visible
+     * @returns {*}
+     */
+
+    const nameMethod = (name, method, type = 'action', path = '', visible = true) => {
+        if (type === 'rest') {
+            const methods = {
+                create: 'post',
+                update: 'put',
+                remove: 'delete',
+                find: 'get',
+                get: 'get'
+            };
+
+            const toRoutePath = (method) => {
+                return {
+                    'create': `${path}`,
+                    'update': `${path}/:id`,
+                    'remove': `${path}/:id`,
+                    'find': `${path}`,
+                    'get': `${path}/:id`
+                }[method];
+            };
+
+            return {
+                route: {
+                    method: methods[method],
+                    path: toRoutePath(method)
+                }
+            }
+        }
+
+        return {
+            name: `${method}${name}`,
+            visible
+        };
+    };
+
+    /**
+     * Define the method
+     * @param model
+     * @param method
+     * @param before
+     * @param after
+     * @returns {Function}
+     */
+
+    const defineMethod = (model, method, before, after) => {
+        return async ctx => {
+            const {db, req} = ctx;
+            const collection = db[model];
+
+            if (!collection) {
+                return error();
+            }
+
+            let data = false;
+
+            let filters = {
+                _id: get(req.body, 'id', req.params.id)
+            };
+
+            if (typeof before === 'function') {
+                filters = await before(ctx, method, filters);
+            }
+
+            if (method === 'get') {
+                data = await collection.findOne(filters);
+                data = data || {};
+            }
+
+            if (method === 'find') {
+                data = await autoFilter(model, {
+                    filters: (() => filters),
+                    pagination: true
+                })(ctx);
+            }
+
+            if (method === 'create') {
+                data = await collection.create(req.body);
+            }
+
+            if (method === 'remove') {
+                await collection.deleteMany(filters);
+                data = {
+                    success: true
+                };
+            }
+
+            if (method === 'update') {
+                await collection.updateMany(filters, {
+                    $set: req.body
+                });
+
+                const updated = await collection.find(filters);
+                data = updated.length === 1 ? updated[0] : updated;
+            }
+
+            if (typeof after === 'function') {
+                return await after(ctx, method, data);
+            }
+
+            return data;
+        };
+    };
+
+    for (const method of options.methods) {
+        if (!methods.includes(method)) {
+            throw new Error(`Invalid method ${method}.`);
+        }
+
+        config({
+            ...nameMethod(options.name, method, options.type, options.path, options.visible),
+            middleware: options.middleware
+        })(
+            defineMethod(model, method, options.before, options.after)
+        );
+    }
+};
+
+
+/**
  * Auto filter model helper
  * @param model
  * @param options
  * @returns {Function}
  */
 
-exports.autoFilter = (model, options) => {
+exports.autoFilter = autoFilter = (model, options) => {
     return async ({input, db, user}) => {
         let collection = db[model];
 
@@ -152,11 +312,14 @@ exports.autoFilter = (model, options) => {
         }
 
         const {filters = {}} = input;
-
         const page = filters.page || 1;
-        delete filters.page;
 
-        let query = collection.find(filters);
+        delete filters.page;
+        let query = collection.find();
+
+        if (options.filters) {
+            options.filters(query, filters, {db, user, input});
+        }
 
         if (options.restrictToUser) {
             query.where({userId: user._id});
@@ -175,8 +338,8 @@ exports.autoFilter = (model, options) => {
 
         let [data, total] = await Promise.all([query, count]);
 
-        if (options.transform) {
-            data = options.transform(data);
+        if (options.after) {
+            data = options.after(data);
         }
 
         if (options.pagination) {
@@ -184,7 +347,7 @@ exports.autoFilter = (model, options) => {
                 data,
                 pagination: {
                     page: limit === -1 ? 1 : page,
-                    pages: limit === -1 ? 1 : Math.abs(total / limit),
+                    pages: limit === -1 ? 1 : Math.ceil(total / limit),
                     hasMoreItems: limit === -1 ? false : ((skip + limit) < total)
                 }
             }

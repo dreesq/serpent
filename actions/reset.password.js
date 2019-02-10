@@ -22,7 +22,6 @@ config({
 
     async ({db, input, i18n, mail, utils}) => {
         const {User, Token} = db;
-        const t = i18n.translate;
 
         /**
          * When requesting password reset
@@ -32,7 +31,7 @@ config({
             const user = await User.findOne({email: input.email});
 
             if (!user) {
-                return error(t('errors.invalidEmail'));
+                return error(i18n.translate('errors.invalidEmail'));
             }
 
             const token = await makeToken();
@@ -65,16 +64,17 @@ config({
             const token = await Token.findOne({token: hash(input.token), type: TOKEN_TYPE_RESET});
 
             if (!token) {
-                return error(t('errors.invalidToken'));
+                return error(i18n.translate('errors.invalidToken'));
             }
 
             const diff = moment().diff(moment(token.createdAt), 'days');
 
             if (diff > RESET_TOKEN_EXPIRY) {
-                return error(t('errors.expiredToken'));
+                return error(i18n.translate('errors.expiredToken'));
             }
 
             const user = await User.findOne({_id: token.userId});
+            const t = i18n.translator(user.locale).translate;
 
             if (!user) {
                 await token.remove();
