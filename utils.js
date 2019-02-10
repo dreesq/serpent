@@ -156,11 +156,11 @@ exports.autoCrud = (model, options = {}) => {
         name: `Auto${model}`,
         middleware: [],
         type: 'actions',
-        after(action, data, ctx) {
+        after(ctx, method, data) {
             return data;
         },
-        before(ctx) {
-
+        before(ctx, method, filters) {
+            return filters;
         }
     };
 
