@@ -1,65 +1,10 @@
-const {config, utils} = require('../../../index');
+const {utils} = require('../../../index');
 
-config({
-    name: 'getTasks',
-    input: {
-        filters: 'object'
-    }
-})(
-    utils.autoFilter('Task', {
-        restrictToUser: true,
-        pagination: true,
-        limit: 2,
-        transform(data) {
-            return data;
-        }
-    })
-);
-
-config({
-    name: 'getLastTask',
-    middleware: [
-        'auth'
-    ]
-})(
-    async ({redis}) => {
-         const task = await redis.get('lastTask');
-         return JSON.parse(task);
-    }
-);
-
-config({
-    name: 'createTask',
-    input: {
-        title: 'string|required'
+utils.autoCrud('Task', {
+    before(ctx, method, filters) {
+        return filters;
     },
-    middleware: [
-        'auth'
-    ]
-})(
-    /**
-     * A test action
-     * @returns {Promise<{success: boolean}>}
-     */
-
-    async ({db, user, redis, input}) => {
-        const task = await db.Task.create({
-            ...input,
-            userId: user._id
-        });
-
-        await redis.set('lastTask', JSON.stringify(task));
-        return task;
+    after(ctx, method, data) {
+        return data;
     }
-);
-
-config({
-    name: 'deleteTasks',
-    middleware: [
-        'auth'
-    ]
-})(
-    async ({user, db}) => {
-        return await db.Task.deleteOne({userId: user._id});
-    }
-);
+});

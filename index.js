@@ -221,6 +221,18 @@ exports.setup = async (app, opts) => {
         ...opts
     };
 
+    /**
+     * Overwrite express's listen function in
+     * order to send the listening event
+     * @param args
+     */
+
+    app.listen = (...args) => {
+        const events = plugin('events');
+        app.listen(...args);
+        events.emit(SERVER_LISTENING);
+    };
+
     await initContext(app, config);
     initMiddlewares();
     initRouter();
