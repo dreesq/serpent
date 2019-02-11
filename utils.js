@@ -25,6 +25,43 @@ exports.get = get = (obj, path, defaultValue = false) => {
 };
 
 /**
+ * Given an object, return selected fields
+ * @param obj
+ * @param fields
+ */
+
+exports.select = select = (obj = {}, fields = []) => {
+    if (fields === null) {
+        return obj;
+    }
+
+    let actions = {};
+
+    for (let key of fields) {
+        let remove = key[0] === '-';
+
+        if (remove) {
+            key = key.substr(1, key.length);
+            actions[key] = -1;
+        }
+
+        if (!remove) {
+            actions[key] = 1;
+        }
+    }
+
+    for (let key in obj) {
+        if (actions[key] === 1) {
+            continue;
+        }
+
+        delete obj[key];
+    }
+
+    return obj;
+};
+
+/**
  * Remove keys utility
  * @param obj
  * @param args
@@ -57,7 +94,7 @@ exports.makeToken = async (length = 64) => {
  * @returns {{errors: {message: string[]}}}
  */
 
-exports.error = (data = '') => {
+exports.error = error = (data = '') => {
     let res = {
         errors: {
             message: [data]
@@ -76,7 +113,7 @@ exports.error = (data = '') => {
  * @param data
  */
 
-exports.success = (data = '') => {
+exports.success = success = (data = '') => {
     if (!data) {
         return {
             success: true
@@ -154,8 +191,10 @@ exports.autoCrud = (model, options = {}) => {
     const defaults = {
         methods,
         name: `Auto${model}`,
+        select: null,
         middleware: [],
         type: 'actions',
+        allowNull: false,
         after(ctx, method, data) {
             return data;
         },
@@ -171,15 +210,13 @@ exports.autoCrud = (model, options = {}) => {
 
     /**
      * Name the method
-     * @param name
      * @param method
-     * @param type
-     * @param path
-     * @param visible
      * @returns {*}
      */
 
-    const nameMethod = (name, method, type = 'action', path = '', visible = true) => {
+    const nameMethod = method => {
+        const {name, type = 'action', path = '', visible = true} = options;
+
         if (type === 'rest') {
             const methods = {
                 create: 'post',
@@ -217,44 +254,56 @@ exports.autoCrud = (model, options = {}) => {
      * Define the method
      * @param model
      * @param method
-     * @param before
-     * @param after
      * @returns {Function}
      */
 
-    const defineMethod = (model, method, before, after) => {
+    const defineMethod = (model, method) => {
         return async ctx => {
-            const {db, req} = ctx;
+            const {db, input} = ctx;
             const collection = db[model];
+            const {before, after} = options;
 
             if (!collection) {
-                return error();
+                return error(`Could not find the given collection.`);
             }
 
             let data = false;
+            let filters = {};
 
-            let filters = {
-                _id: get(req.body, 'id', req.params.id)
-            };
+            let fields = Array.isArray(options.fields) ? options.fields.join(' ') : null;
+
+            if (['update', 'remove', 'get'].includes(method)) {
+                let id = input.id;
+
+                if (id) {
+                    filters._id = id;
+                }
+
+                if (!id && !options.allowNull) {
+                    return error(`Method does not support null filtering.`);
+                }
+            }
 
             if (typeof before === 'function') {
                 filters = await before(ctx, method, filters);
             }
 
             if (method === 'get') {
-                data = await collection.findOne(filters);
+                data = await collection.findOne(filters, fields);
                 data = data || {};
             }
 
             if (method === 'find') {
                 data = await autoFilter(model, {
-                    filters: (() => filters),
-                    pagination: true
+                    pagination: true,
+                    fields
                 })(ctx);
             }
 
             if (method === 'create') {
-                data = await collection.create(req.body);
+                delete input._id;
+                data = await collection.create(input);
+                data = select(data._doc, options.fields);
             }
 
             if (method === 'remove') {
@@ -266,10 +315,10 @@ exports.autoCrud = (model, options = {}) => {
 
             if (method === 'update') {
                 await collection.updateMany(filters, {
-                    $set: req.body
+                    $set: input
                 });
 
-                const updated = await collection.find(filters);
+                const updated = await collection.find(filters, fields);
                 data = updated.length === 1 ? updated[0] : updated;
             }
 
@@ -287,10 +336,10 @@ exports.autoCrud = (model, options = {}) => {
         }
 
         config({
-            ...nameMethod(options.name, method, options.type, options.path, options.visible),
+            ...nameMethod(method),
             middleware: options.middleware
         })(
-            defineMethod(model, method, options.before, options.after)
+            defineMethod(model, method)
         );
     }
 };
@@ -304,25 +353,38 @@ exports.autoCrud = (model, options = {}) => {
  */
 
 exports.autoFilter = autoFilter = (model, options) => {
-    return async ({input, db, user}) => {
+    return async ctx => {
+        const {input, db, user} = ctx;
         let collection = db[model];
 
         if (!collection) {
-            return error();
+            return error(`Could not find the given collection.`);
         }
 
-        const {filters = {}} = input;
-        const page = filters.page || 1;
+        const {filters = {}, sorts = {}, page = 1} = input;
 
-        delete filters.page;
-        let query = collection.find();
+        let makeQuery = () => {
+            let query = collection.find();
 
-        if (options.filters) {
-            options.filters(query, filters, {db, user, input});
-        }
+            if (options.before) {
+                options.before(query, filters, ctx);
+            }
 
-        if (options.restrictToUser) {
-            query.where({userId: user._id});
+            if (options.restrictToUser) {
+                query.where({userId: user._id});
+            }
+
+            if (options.fields) {
+                query.select(options.fields);
+            }
+
+            return query;
+        };
+
+        let query = makeQuery();
+
+        if (Object.keys(sorts).length) {
+            query.sort(sorts);
         }
 
         const limit = options.limit || 5;
@@ -333,7 +395,7 @@ exports.autoFilter = autoFilter = (model, options) => {
 
         if (options.pagination) {
             limit !== -1 && query.skip(skip);
-            count = collection.countDocuments();
+            count = makeQuery().countDocuments();
         }
 
         let [data, total] = await Promise.all([query, count]);
