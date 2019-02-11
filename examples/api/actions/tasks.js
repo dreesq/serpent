@@ -14,7 +14,10 @@ utils.autoCrud('Task', {
 });
 
 config({
-    name: 'getATasks'
+    name: 'getATasks',
+    middleware: [
+        'auth'
+    ]
 })(
     utils.autoFilter('Task', {
         fields: [
