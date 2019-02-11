@@ -32,13 +32,9 @@ const schema = new Schema({
         required: true,
         default: 'en'
     },
-    status: {
-        type: Number,
-        required: true,
-        default: USER_STATUS_ACTIVE
-    },
     role: {
         type: Schema.ObjectId,
+        default: null,
         ref: 'Role'
     },
     permissions: {
@@ -49,14 +45,12 @@ const schema = new Schema({
             }
         ],
         default: []
+    },
+    status: {
+        type: Number,
+        required: true,
+        default: USER_STATUS_ACTIVE
     }
 });
-
-schema.methods.toJSON = function () {
-    const obj = this.toObject();
-    delete obj.password;
-    delete obj.__v;
-    return obj;
-};
 
 module.exports = schema;

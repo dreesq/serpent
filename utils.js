@@ -294,10 +294,16 @@ exports.autoCrud = (model, options = {}) => {
             }
 
             if (method === 'find') {
-                data = await autoFilter(model, {
+                const opts = {
                     pagination: true,
                     fields
-                })(ctx);
+                };
+
+                if (typeof filters === 'function') {
+                    opts.before = filters;
+                }
+
+                data = await autoFilter(model, opts)(ctx);
             }
 
             if (method === 'create') {

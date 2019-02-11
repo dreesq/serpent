@@ -6,10 +6,10 @@ const {error} = require('../utils');
  */
 
 module.exports = () => {
-    const {auth, i18n, logger = console} = getPlugins();
+    const {auth, logger = console} = getPlugins();
 
     return async (req, res, next) => {
-        const fail = (message = i18n.translate('errors.requiresAuth')) => {
+        const fail = (message = req.translate('errors.requiresAuth')) => {
             res.status(401).json(error(message));
             next(true);
         };

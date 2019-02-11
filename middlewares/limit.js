@@ -1,5 +1,4 @@
 const {error} = require('../utils');
-const {getPlugins} = require('../index');
 const moment = require('moment');
 
 /**
@@ -34,8 +33,6 @@ setInterval(() => {
  */
 
 module.exports = options => {
-    const {i18n} = getPlugins();
-
     return (req, res, next) => {
         if (!store[req.ip]) {
             store[req.ip] = {};
@@ -52,7 +49,7 @@ module.exports = options => {
 
         if (current[0] > limit) {
             next(true);
-            return res.status(429).json(error(i18n.translate('errors.rateLimit')));
+            return res.status(429).json(error(req.translate('errors.rateLimit')));
         }
 
         current[0] += 1;

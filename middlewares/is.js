@@ -1,5 +1,4 @@
 const {error} = require('../utils');
-const {getPlugins} = require('../index');
 
 /**
  * Middleware to check if user has permissions
@@ -8,19 +7,17 @@ const {getPlugins} = require('../index');
  */
 
 module.exports = roles => {
-    const {i18n} = getPlugins();
-
     return (req, res, next) => {
         const {user} = req;
 
         if (!user) {
             next(true);
-            return res.status(401).json(error(i18n.translate('errors.requiresAuth')));
+            return res.status(401).json(error(req.translate('errors.requiresAuth')));
         }
 
         if (!user.is.apply(this, roles)) {
             next(true);
-            return res.status(401).json(error(i18n.translate('errors.requiresPermission')));
+            return res.status(401).json(error(req.translate('errors.requiresPermission')));
         }
 
         next();
