@@ -1,4 +1,4 @@
-const {utils, config} = require('../../../index');
+const {utils, config, get} = require('../../../index');
 
 utils.autoCrud('Task', {
     fields: [
@@ -29,3 +29,12 @@ config({
         }
     })
 );
+
+get('/tasks/notify', async ({ firebase }) => {
+    return await firebase.messaging().send({
+        data: {
+            task: "1"
+        },
+        topic: 'tasks'
+    });
+});

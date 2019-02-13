@@ -154,10 +154,7 @@ const buildHelpers = () => {
     for (const key in methods) {
         exports[key] = (path, handler) => {
             return config({
-                route: {
-                    method: methods[key],
-                    path
-                }
+                route: [methods[key], path]
             })(
                 handler
             );

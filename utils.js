@@ -237,10 +237,7 @@ exports.autoCrud = (model, options = {}) => {
             };
 
             return {
-                route: {
-                    method: methods[method],
-                    path: toRoutePath(method)
-                }
+                route: [methods[method], toRoutePath(method)]
             }
         }
 

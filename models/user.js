@@ -51,6 +51,8 @@ const schema = new Schema({
         required: true,
         default: USER_STATUS_ACTIVE
     }
+}, {
+    timestamps: true
 });
 
 module.exports = schema;

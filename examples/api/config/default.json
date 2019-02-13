@@ -17,6 +17,14 @@
     }
   },
   "plugins": {
+    "firebase": {
+      "credential": "./firebase.json"
+    },
+
+    "stripe": {
+
+    },
+
     "validator": {
       "gcaptcha": {
         "secret": ""
