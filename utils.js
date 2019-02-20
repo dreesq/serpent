@@ -30,8 +30,8 @@ exports.get = get = (obj, path, defaultValue = false) => {
  * @param fields
  */
 
-exports.select = select = (obj = {}, fields = []) => {
-    if (fields === null) {
+exports.select = select = (obj = {}, fields) => {
+    if (!Array.isArray(fields)) {
         return obj;
     }
 
@@ -317,6 +317,7 @@ exports.autoCrud = (model, options = {}) => {
             }
 
             if (method === 'update') {
+                delete input._id;
                 await collection.updateMany(filters, {
                     $set: input
                 });
