@@ -2,7 +2,7 @@ const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_REFRESH} = require('../constants');
 const {success, makeToken, hash} = require('../utils');
 const {config: configPlugin} = getPlugins();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 /**

@@ -2,7 +2,7 @@ const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_CONFIRM, USER_STATUS_INACTIVE} = require('../constants');
 const {makeToken, success, hash} = require('../utils');
 const {config: configPlugin} = getPlugins();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 config({
     name: 'createUser',

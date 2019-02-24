@@ -2,7 +2,7 @@ const {config, getPlugins} = require('../index');
 const {config: configPlugin} = getPlugins();
 const {ACTION_REQUEST_RESET, ACTION_RESET, TOKEN_TYPE_RESET, RESET_TOKEN_EXPIRY} = require('../constants');
 const {error, success, makeToken, hash} = require('../utils');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const moment = require('moment');
 
 config({
