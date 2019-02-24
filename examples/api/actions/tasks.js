@@ -38,3 +38,4 @@ get('/tasks/notify', async ({ firebase }) => {
         topic: 'tasks'
     });
 });
+

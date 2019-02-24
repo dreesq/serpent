@@ -133,8 +133,14 @@ exports.success = success = (data = '') => {
  */
 
 exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false, requireFile = true) => {
-    const entities = await readdir(`${appPath}/${type}`);
+    let entities = [];
     d('Loading', type, 'path', appPath, 'requireFile', requireFile);
+
+    try {
+        entities = await readdir(`${appPath}/${type}`);
+    } catch(e) {
+
+    }
 
     for (const entity of entities) {
         let entityPath = path.join(appPath, type, entity);

@@ -108,7 +108,7 @@ const initContext = async (app, config) => {
  * Initialize global middle wares
  */
 
-const initMiddlewares = () => {
+const initMiddlewares = async () => {
     const app = context.get('app');
     const config = plugin('config');
 
@@ -185,18 +185,11 @@ const buildHelpers = () => {
  * Initialize application router
  */
 
-const initRouter = () => {
+const initRouter = async () => {
     const app = context.get('app');
     const config = context.get('config');
 
-    router.init(context);
-
-    /**
-     * Attach helpers to
-     * the exported object
-     */
-
-    buildHelpers();
+    await router.init(context);
 
     /**
      * Register global error handler
@@ -219,6 +212,13 @@ exports.setup = async (app, opts) => {
     };
 
     /**
+     * Attach helpers to
+     * the exported object
+     */
+
+    buildHelpers();
+
+    /**
      * Overwrite express's listen function in
      * order to send the listening event
      * @param args
@@ -231,8 +231,8 @@ exports.setup = async (app, opts) => {
     };
 
     await initContext(app, config);
-    initMiddlewares();
-    initRouter();
+    await initMiddlewares();
+    await initRouter();
 };
 
 /**
