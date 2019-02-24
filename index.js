@@ -279,13 +279,13 @@ exports.plugin = plugin = (name, fallback) => {
  * Creates http server given options
  */
 
-exports.start = async () => {
+exports.start = async (port = 3000) => {
     const config = plugin('config');
     const logger = plugin('logger', console);
     const events = plugin('events');
 
     const app = context.get('app');
-    const port = config.get('server.port', 3000);
+    const port = config.get('server.port', port);
 
     const ssl = config.get('server.ssl');
 
