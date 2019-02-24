@@ -27,8 +27,8 @@ const readFile = util.promisify(fs.readFile);
 let options = {
     config: false,
     onError: false,
-    routes: {
-        actions: '/',
+    actions: {
+        list: '/',
         handler: '/'
     },
     autoload: {
