@@ -39,6 +39,7 @@
       "confirm": true,
       "reset": true,
       "refresh": true,
+      "devices": true,
       "jwt": {
         "secret": "mySecret",
         "duration": "1d"

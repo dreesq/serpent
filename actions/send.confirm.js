@@ -8,7 +8,7 @@ config({
     middleware: [
         'auth'
     ],
-    enabled: configPlugin.get('plugins.auth.confirm'),
+    enabled: configPlugin.get('plugins.auth.confirm')
 })(
     /**
      * Resend user activation code
