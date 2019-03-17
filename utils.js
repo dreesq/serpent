@@ -471,6 +471,43 @@ exports.toModelName = (model = '') => {
     return model.split('.').map(part => capitalize(part)).join('')
 };
 
+
+/**
+ * Stripe hook utility
+ * @param options
+ * @returns {Promise<void>}
+ */
+
+
+/*user.stripe.subscribe(customerId, planId);
+user.stripe.unsubscribe(customerId, planId);
+user.stripe.sources();
+user.stripe.subscriptions();
+user.stripe.buy(productId);
+user.stripe.pay(sourceId, amount, currency);
+
+stripe.products();
+
+config()(
+    stripeHook({
+        onSubscribe(user, ctx) {
+
+        },
+        onUnsubscribe(user, ctx) {
+
+        },
+        onEvent(payload) {
+
+        }
+    })
+);*/
+
+exports.stripeHook = options => {
+    return async ({req, res}) => {
+
+    };
+};
+
 /**
  * Sha256 hash helper
  * @param text

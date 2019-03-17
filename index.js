@@ -162,10 +162,11 @@ const buildHelpers = () => {
     }
 
     exports.action = (name, handler) => {
-        return {
-            name,
+        return config({
+            name
+        })(
             handler
-        };
+        );
     };
 
     /**

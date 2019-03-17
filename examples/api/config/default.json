@@ -22,7 +22,7 @@
     },
 
     "stripe": {
-
+      "secretKey": ""
     },
 
     "validator": {

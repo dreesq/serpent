@@ -21,6 +21,9 @@ const schema = new Schema({
         type: String,
         required: true
     },
+    stripeId: {
+        type: String
+    },
     facebookId: {
         type: Number
     },
