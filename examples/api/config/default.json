@@ -17,10 +17,6 @@
     }
   },
   "plugins": {
-    "firebase": {
-      "credential": "./firebase.json"
-    },
-
     "stripe": {
       "secretKey": ""
     },
@@ -36,7 +32,7 @@
     },
 
     "auth": {
-      "confirm": true,
+      "confirm": false,
       "reset": true,
       "refresh": true,
       "devices": true,
@@ -46,8 +42,7 @@
       },
       "strategies": [
         "local",
-        "fb",
-        "google"
+        "fb"
       ]
     },
 

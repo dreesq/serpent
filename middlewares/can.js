@@ -12,12 +12,12 @@ module.exports = permissions => {
 
         if (!user) {
             next(true);
-            return res.status(401).json(error(req.translate('errors.requiresAuth')));
+            return res.status(403).json(error(req.translate('errors.requiresAuth')));
         }
 
         if (!user.can.apply(this, permissions)) {
             next(true);
-            return res.status(401).json(error(req.translate('errors.requiresAuth')));
+            return res.status(403).json(error(req.translate('errors.requiresAuth')));
         }
 
         next();

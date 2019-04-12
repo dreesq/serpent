@@ -134,7 +134,7 @@ exports.success = success = (data = '') => {
 
 exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false, requireFile = true) => {
     let entities = [];
-    d('Loading', type, 'path', appPath, 'requireFile', requireFile);
+    d('Loading', type, 'from', appPath);
 
     try {
         entities = await readdir(`${appPath}/${type}`);
