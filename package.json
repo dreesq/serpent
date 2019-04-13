@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/dreesq/serpent#readme",
   "dependencies": {
+    "@elastic/elasticsearch": "^7.0.0-rc.1",
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",

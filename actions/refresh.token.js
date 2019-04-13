@@ -62,7 +62,7 @@ config({
         const accessToken = await jwt.sign(payload, secret, {expiresIn: duration});
 
         return success({
-            refreshToken: newToken,
+            refresh: newToken,
             token: accessToken
         });
     }
