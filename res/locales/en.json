@@ -11,7 +11,8 @@
     "extension": "Field {{field}} has invalid file extension.",
     "locale": "Invalid locale sent.",
     "unique": "Field {{field}} with value {{value}} already exists.",
-    "captcha": "Captcha {{field}} was not validated."
+    "captcha": "Captcha {{field}} was not validated.",
+    "array": "Field {{field}} must be a list of entries."
   },
   "errors": {
     "requiresAuth": "Action requires authentication.",

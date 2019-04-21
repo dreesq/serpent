@@ -277,6 +277,19 @@ exports.plugin = plugin = (name, fallback) => {
 };
 
 /**
+ * Helper for overwriting actions
+ * @param action
+ * @param reconfig
+ */
+
+exports.override = (action = '', reconfig) => {
+    let registeredAction = router.getAction(action);
+    const {handler, ...options} = registeredAction;
+    const newOptions = reconfig(options);
+    return config(newOptions)(handler);
+};
+
+/**
  * Creates http server given options
  */
 
