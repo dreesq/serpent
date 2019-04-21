@@ -6,7 +6,7 @@ config({
     name: 'getTranslations',
     input: {
         locale: 'required|string',
-        items: 'required|array'
+        list: 'required|array'
     },
     enabled: configPlugin.get('plugins.i18n.serveTranslations')
 })(
