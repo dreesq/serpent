@@ -1,3 +1,3 @@
 const {get} = require('../../../index');
 
-get('/hello/:name', ({input}) => `Hello ${input.name}!`);
+get('/hello/:name/:count?', ({input, t}) => t('greeting', input));

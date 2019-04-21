@@ -438,7 +438,26 @@ exports.autoFilter = autoFilter = (model, options) => {
 
 exports.parseTemplate = (string, data = {}) => {
     return string.replace(/{{\s*([^}]*)\s*}}/g, (match, $1) => {
-        return get(data, $1.trim(), `[${$1.trim()}]`);
+        let key = $1.trim();
+
+        /**
+         * Handle pluralization
+         */
+
+        if (key.indexOf(':') > -1) {
+            let [newKey, options] = key.split(':');
+            let value = +get(data, newKey, `[${newKey}]`);
+
+            options = options.split('|');
+            let index = value === 0 ? 0 : (value === 1 ? 1 : (value > 1 ? 2 : false));
+
+            if (!isNaN(index)) {
+                let result = options[index];
+                return result.indexOf('_') > -1  ? result.replace(/_/g, value) : result[index];
+            }
+        }
+
+        return get(data, key, `[${key}]`);
     });
 };
 
