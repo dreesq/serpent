@@ -25,7 +25,7 @@ config({
     enabled: configPlugin.get('plugins.auth')
 })(
     /**
-     * Default login action
+     * Default create user action
      * @param db
      * @param input
      * @param config

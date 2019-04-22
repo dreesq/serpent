@@ -146,9 +146,9 @@ const providers = {
 config({
     name: 'login',
     input: {
-        email: 'string|when:provider,local',
-        password: 'string|when:provider,local',
-        accessToken: 'string|when:provider,!local',
+        email: 'required|email|when:provider,local',
+        password: 'required|min:10|when:provider,local',
+        accessToken: 'required|when:provider,!local',
         provider: 'required|string',
         refresh: 'number'
     },
