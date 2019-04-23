@@ -17,6 +17,11 @@ config({
 })(
     /**
      * Confirm user account
+     * @param db
+     * @param input
+     * @param i18n
+     * @param mail
+     * @param utils
      * @returns {Promise<void>}
      */
 

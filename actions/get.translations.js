@@ -16,7 +16,7 @@ config({
      * of translations
      *
      * @param input
-     * @param db
+     * @param i18n
      * @returns {Promise<{success}>}
      */
 
