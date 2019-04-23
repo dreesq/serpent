@@ -12,7 +12,8 @@
     "locale": "Invalid locale sent.",
     "unique": "Field {{field}} with value {{value}} already exists.",
     "captcha": "Captcha {{field}} was not validated.",
-    "array": "Field {{field}} must be a list of entries."
+    "array": "Field {{field}} must be a list of entries.",
+    "sameAs": "Field {{field}} value must be the same as {{options.0}} value."
   },
   "errors": {
     "requiresAuth": "Action requires authentication.",
