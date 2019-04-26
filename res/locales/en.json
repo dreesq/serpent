@@ -13,14 +13,23 @@
     "unique": "Field {{field}} with value {{value}} already exists.",
     "captcha": "Captcha {{field}} was not validated.",
     "array": "Field {{field}} must be a list of entries.",
-    "sameAs": "Field {{field}} value must be the same as {{options.0}} value."
+    "sameAs": "Field {{field}} value must be the same as {{options.0}}'s value."
+  },
+  "messages": {
+    "userCreated": "Account successfully created.",
+    "addDevice": "Device successfully registered.",
+    "userConfirmed": "Account successfully verified.",
+    "userConfirmRequired": "A mail containing verification details was sent to the registered email.",
+    "confirmResent": "A new confirmation email was successfully sent.",
+    "resetRequested": "A mail containing the reset url was sent to the registered email.",
+    "resetDone": "Account password successfully changed."
   },
   "errors": {
     "requiresAuth": "Action requires authentication.",
     "requiresPermission": "User does not have sufficient permissions.",
     "invalidAction": "Invalid action sent.",
     "invalidToken": "Request token is invalid or does not exist.",
-    "invalidEmail": "An user with that email does not exist.",
+    "invalidEmail": "An user with that email could not be found.",
     "invalidLogin": "Invalid credentials.",
     "invalidProvider": "Invalid provider.",
     "expiredToken": "Given token has expired.",

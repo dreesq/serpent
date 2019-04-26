@@ -58,7 +58,7 @@ config({
                 })
             });
 
-            return success();
+            return success(t('messages.resetRequested'));
         }
 
         /**
@@ -92,7 +92,7 @@ config({
             await user.save();
             await Token.deleteMany({userId: user._id, type: TOKEN_TYPE_RESET});
 
-            return success();
+            return success(t('messages.resetDone'));
         }
     }
 );

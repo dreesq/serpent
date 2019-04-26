@@ -47,6 +47,6 @@ config({
             })
         });
 
-        return success();
+        return success(t('messages.confirmResent'));
     }
 );

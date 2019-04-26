@@ -18,10 +18,11 @@ config({
      * @param input
      * @param db
      * @param user
+     * @param t
      * @returns {Promise<{success}>}
      */
 
-    async ({input, db, user}) => {
+    async ({input, db, user, t}) => {
         const {Device} = db;
 
         await Device.create({
@@ -29,6 +30,6 @@ config({
             userId: user._id
         });
 
-        return success();
+        return success(t('messages.addDevice'));
     }
 );

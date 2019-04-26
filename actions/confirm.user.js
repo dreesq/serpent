@@ -30,6 +30,6 @@ config({
 
         await User.updateOne({_id: token.userId}, {status: USER_STATUS_ACTIVE});
         await token.remove();
-        return success();
+        return success(t('messages.userConfirmed'));
     }
 );

@@ -6,7 +6,19 @@ config({
     name: 'getTranslations',
     input: {
         locale: 'required|string',
-        list: 'required|array'
+        list(value) {
+            if (!Array.isArray(value)) {
+                return 'validation.array';
+            }
+
+            let allowed = configPlugin.get('plugins.i18n.serveTranslations');
+
+            for (let entry of value) {
+                if (!allowed.includes(entry)) {
+                    return 'validation.array';
+                }
+            }
+        }
     },
     enabled: configPlugin.get('plugins.i18n.serveTranslations')
 })(

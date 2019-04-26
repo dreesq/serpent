@@ -48,6 +48,7 @@ config({
         confirm && (input.status = USER_STATUS_INACTIVE);
 
         const user = await User.create(input);
+        const t = i18n.translator(user.locale).translate;
 
         if (confirm) {
             const token = await makeToken();
@@ -57,8 +58,6 @@ config({
                 type: TOKEN_TYPE_CONFIRM,
                 token: hash(token)
             });
-
-            const t = i18n.translator(user.locale).translate;
 
             await mail({
                 to: input.email,
@@ -70,7 +69,8 @@ config({
             });
         }
 
-        return success();
+        const message = confirm ? 'messages.userConfirmRequired' : 'messages.userCreated';
+        return success(t(message));
     }
 );
 

@@ -66,7 +66,7 @@ module.exports = () => {
    //   redis: {},
       socket: {},
       i18n: {
-        serveTranslations: true,
+        serveTranslations: ['messages', 'validation'],
         defaultLocale: 'en',
         path: 'res/locales',
         locales: [
