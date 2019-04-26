@@ -3,15 +3,17 @@
     "required": "Field {{field}} is required.",
     "string": "Field {{field}} is not a string.",
     "email": "Field {{field}} is not a valid email.",
-    "min": "Field {{field}} requires a higher value.",
-    "max": "Field {{field}} requires a lower value.",
+    "min": "Field {{field}} requires a at least {{options.0}} characters.",
+    "max": "Field {{field}} requires maximum {{options.0}} characters.",
     "number": "`Field {{field}} is not a number.",
     "date": "Field {{field}} is not a valid date.",
     "file": "Field {{field}} is not a file.",
     "extension": "Field {{field}} has invalid file extension.",
     "locale": "Invalid locale sent.",
     "unique": "Field {{field}} with value {{value}} already exists.",
-    "captcha": "Captcha {{field}} was not validated."
+    "captcha": "Captcha {{field}} was not validated.",
+    "array": "Field {{field}} must be a list of entries.",
+    "sameAs": "Field {{field}} value must be the same as {{options.0}} value."
   },
   "errors": {
     "requiresAuth": "Action requires authentication.",

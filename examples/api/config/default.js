@@ -5,9 +5,9 @@
 module.exports = () => {
   return {
     debug: true,
-    baseUrl: 'http://localhost:3004',
+    baseUrl: 'http://localhost:3000',
     server: {
-      port: 3004,
+      port: 3000,
       helmet: true,
       parsers: true,
       ssl: false,
@@ -66,6 +66,7 @@ module.exports = () => {
    //   redis: {},
       socket: {},
       i18n: {
+        serveTranslations: true,
         defaultLocale: 'en',
         path: 'res/locales',
         locales: [

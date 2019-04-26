@@ -277,6 +277,19 @@ exports.plugin = plugin = (name, fallback) => {
 };
 
 /**
+ * Helper for overwriting actions
+ * @param action
+ * @param reconfig
+ */
+
+exports.override = (action = '', reconfig) => {
+    let registeredAction = router.getAction(action);
+    const {handler, ...options} = registeredAction;
+    const newOptions = reconfig(options);
+    return config(newOptions)(handler);
+};
+
+/**
  * Creates http server given options
  */
 
@@ -289,12 +302,11 @@ exports.start = async (port = 3000) => {
     port = port || config.get('server.port', 3000);
 
     const ssl = config.get('server.ssl');
-
     let server;
 
     if (ssl) {
-        const key = await readFile(path.join(APP_PATH, ssl.key));
-        const cert = await readFile(path.join(APP_PATH, ssl.cert));
+        const key = await readFile(path.join(APP_PATH, ssl.key), 'utf-8');
+        const cert = await readFile(path.join(APP_PATH, ssl.cert), 'utf-8');
 
         server = spdy.createServer({
             key,

@@ -6,7 +6,7 @@ module.exports = () => {
   return {
     debug: false,
     server: {
-      port: 3004,
+      port: 3000,
       helmet: true,
       parsers: true,
       ssl: {

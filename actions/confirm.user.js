@@ -12,8 +12,12 @@ config({
 })(
     /**
      * Confirm user account
+     * @param db
+     * @param input
+     * @param i18n
      * @returns {Promise<void>}
      */
+
     async ({db, input, i18n}) => {
         const {User, Token} = db;
         const t = i18n.translate;
