@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>@dreesq/serpent | Documentation</title>
+    <title>Documentation</title>
     <link rel="stylesheet" href="https://unpkg.com/docute@4/dist/docute.css">
 </head>
 <body>
@@ -11,7 +11,55 @@
 <script src="https://unpkg.com/docute@4/dist/docute.js"></script>
 <script>
     new Docute({
-        target: '#docute'
+        target: '#docute',
+        theme: 'dark',
+        nav: [
+            {
+                title: 'Home',
+                link: '/'
+            },
+            {
+                title: 'GitHub',
+                link: 'https://github.com/dreesq/serpent'
+            },
+            {
+                title: 'Discord',
+                link: 'https://discord.gg/4EUtFsx'
+            }
+        ],
+        sidebar: [
+            {
+                title: 'Guide',
+                links: [
+                    {
+                        title: 'Getting Started',
+                        link: '/guide/getting-started'
+                    },
+                    {
+                        title: 'Installation',
+                        link: '/guide/installation'
+                    }
+                ]
+            },
+            {
+                title: 'Actions',
+                links: [
+                    {
+                        title: 'Introduction',
+                        link: '/actions/introduction'
+                    }
+                ]
+            },
+            {
+                title: 'Plugins',
+                links: [
+                    {
+                        title: 'Authentication',
+                        link: '/plugins/authentication'
+                    }
+                ]
+            }
+        ]
     })
 </script>
 </body>
