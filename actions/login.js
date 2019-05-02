@@ -83,54 +83,80 @@ const local = async ({db, config, input, i18n}) => {
 };
 
 /**
- * Facebook provider
+ * 3rd party providers
  * @returns {Promise<void>}
  */
 
-const fb = async ({db, config, input, axios}) => {
-    const {User, Token} = db;
-    const {accessToken} = input;
-
-    const authConfig = config.get('plugins.auth');
-    const {secret, duration} = authConfig.jwt || {};
-
-    const {data} = await axios.get('https://graph.facebook.com/v2.12/me', {
-        params: {
-            access_token: accessToken,
-            fields: 'email,name,locale,timezone'
+const providers = {
+    fb: {
+        endpoint: 'https://graph.facebook.com/v2.12/me',
+        dbField: 'facebookId',
+        resultField: 'id',
+        payload(accessToken) {
+            return {
+                params: {
+                    access_token: accessToken,
+                    fields: 'email,name,locale,timezone'
+                }
+            }
         }
-    });
+    },
+    google: {
+        endpoint: 'https://www.googleapis.com/oauth2/v3/tokeninfo',
+        dbField: 'googleId',
+        resultField: 'sub',
+        payload(accessToken) {
+            return {
+                params: {
+                    access_token: accessToken
+                }
+            }
+        }
+    }
+};
 
-    let user = await User.findOne({
-        facebookId: data.id
-    });
+const makeProvider = (provider) => {
+    return async ({db, config, input, axios}) => {
+        const providerConfig = providers[provider];
+        const {User, Token} = db;
+        const {accessToken} = input;
 
-    /**
-     * Create the user if not already created
-     */
+        const authConfig = config.get('plugins.auth');
+        const {secret, duration} = authConfig.jwt || {};
 
-    if (!user) {
-        user = await User.create({
-            name: data.name,
-            locale: data.locale,
-            email: data.email,
-            facebookId: data.id,
-            password: await makeToken(64)
+        const {data} = await axios.get(providerConfig.endpoint, providerConfig.payload(accessToken));
+
+        let user = await User.findOne({
+            [providerConfig.dbField]: data[providerConfig.resultField]
         });
-    }
 
-    const res = {};
-    const payload = {_id: user._id, ts: user.ts};
+        /**
+         * Create the user if not already created
+         */
 
-    if (authConfig.refresh && input.refresh) {
-        const {refreshToken, guid} = await createRefreshToken(user, Token);
+        if (!user) {
+            user = await User.create({
+                name: data.name,
+                locale: data.locale,
+                email: data.email,
+                [providerConfig.dbField]: data[providerConfig.resultField],
+                password: await makeToken(64)
+            });
+        }
 
-        res.refresh = refreshToken;
-        payload.guid = guid;
-    }
+        const res = {};
+        const payload = {_id: user._id, ts: user.ts};
 
-    res.token = await jwt.sign(payload, secret, {expiresIn: duration});
-    return success(res);
+        if (authConfig.refresh && input.refresh) {
+            const {refreshToken, guid} = await createRefreshToken(user, Token);
+
+            res.refresh = refreshToken;
+            payload.guid = guid;
+        }
+
+        res.token = await jwt.sign(payload, secret, {expiresIn: duration});
+        return success(res);
+    };
 };
 
 /**
@@ -138,9 +164,10 @@ const fb = async ({db, config, input, axios}) => {
  * @type {{local: local, fb: *}}
  */
 
-const providers = {
+const allProviders = {
     local,
-    fb
+    fb: makeProvider('fb'),
+    google: makeProvider('google')
 };
 
 config({
@@ -170,6 +197,6 @@ config({
             throw new Error(t('errors.invalidProvider'));
         }
 
-        return await providers[provider](ctx);
+        return await allProviders[provider](ctx);
     }
 );

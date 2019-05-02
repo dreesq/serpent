@@ -299,7 +299,7 @@ exports.start = async (port = 3000) => {
     const events = plugin('events');
 
     const app = context.get('app');
-    port = port || config.get('server.port', 3000);
+    port = config.get('server.port', port);
 
     const ssl = config.get('server.ssl');
     let server;

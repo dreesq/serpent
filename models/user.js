@@ -27,6 +27,9 @@ const schema = new Schema({
     facebookId: {
         type: Number
     },
+    googleId: {
+        type: Number
+    },
     ts: {
         type: Number
     },
