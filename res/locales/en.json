@@ -3,7 +3,7 @@
     "required": "Field {{field}} is required.",
     "string": "Field {{field}} is not a string.",
     "email": "Field {{field}} is not a valid email.",
-    "min": "Field {{field}} requires a at least {{options.0}} characters.",
+    "min": "Field {{field}} requires at least {{options.0}} characters.",
     "max": "Field {{field}} requires maximum {{options.0}} characters.",
     "number": "`Field {{field}} is not a number.",
     "date": "Field {{field}} is not a valid date.",
