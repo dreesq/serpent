@@ -47,13 +47,13 @@ config({
 
         confirm && (input.status = USER_STATUS_INACTIVE);
 
-        const user = await User.create(input);
+        const user = await User._create(input);
         const t = i18n.translator(user.locale).translate;
 
         if (confirm) {
             const token = await makeToken();
 
-            await Token.create({
+            await Token._create({
                 userId: user._id,
                 type: TOKEN_TYPE_CONFIRM,
                 token: hash(token)

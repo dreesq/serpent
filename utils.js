@@ -187,7 +187,7 @@ exports.d = d = (...args) => {
 
 exports.autoCrud = (model, options = {}) => {
     const methods = [
-        'create',
+        '_create.md',
         'remove',
         'update',
         'get',
@@ -309,9 +309,9 @@ exports.autoCrud = (model, options = {}) => {
                 data = await autoFilter(model, opts)(ctx);
             }
 
-            if (method === 'create') {
+            if (method === '_create.md') {
                 delete input._id;
-                data = await collection.create(input);
+                data = await collection._create(input);
                 data = select(data._doc, options.fields);
             }
 
@@ -497,33 +497,9 @@ exports.toModelName = (model = '') => {
  * @returns {Promise<void>}
  */
 
-
-/*user.stripe.subscribe(customerId, planId);
-user.stripe.unsubscribe(customerId, planId);
-user.stripe.sources();
-user.stripe.subscriptions();
-user.stripe.buy(productId);
-user.stripe.pay(sourceId, amount, currency);
-
-stripe.products();
-
-config()(
-    stripeHook({
-        onSubscribe(user, ctx) {
-
-        },
-        onUnsubscribe(user, ctx) {
-
-        },
-        onEvent(payload) {
-
-        }
-    })
-);*/
-
 exports.stripeHook = options => {
     return async ({req, res}) => {
-
+        // @TODO
     };
 };
 

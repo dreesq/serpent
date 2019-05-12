@@ -41,7 +41,7 @@ config({
 
             const token = await makeToken();
 
-            await Token.create({
+            await Token._create({
                 userId: user._id,
                 type: TOKEN_TYPE_RESET,
                 token: hash(token)

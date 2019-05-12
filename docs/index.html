@@ -27,6 +27,9 @@
                 link: 'https://discord.gg/4EUtFsx'
             }
         ],
+        cssVariables: {
+            sidebarWidth: '300px',
+        },
         sidebar: [
             {
                 title: 'Guide',
@@ -43,20 +46,112 @@
             },
             {
                 title: 'Actions',
+                collapsable: true,
                 links: [
                     {
                         title: 'Introduction',
                         link: '/actions/introduction'
+                    },
+                    {
+                        title: 'Config',
+                        link: '/actions/config'
+                    },
+                    {
+                        title: 'Helpers',
+                        link: '/actions/helpers'
+                    },
+                    {
+                        title: 'Middlewares',
+                        link: '/actions/middlewares'
+                    }
+                ]
+            },
+            {
+                title: 'Client',
+                collapsable: true,
+                links: [
+                    {
+                        title: 'Introduction',
+                        link: '/client/introduction'
+                    },
+                    {
+                        title: 'Authentication',
+                        link: '/client/auth'
+                    },
+                    {
+                        title: 'Validator',
+                        link: '/client/validator'
+                    },
+                    {
+                        title: 'Events',
+                        link: '/client/events'
                     }
                 ]
             },
             {
                 title: 'Plugins',
+                collapsable: true,
                 links: [
                     {
+                        title: 'Router',
+                        link: '/plugins/router'
+                    },
+                    {
                         title: 'Authentication',
-                        link: '/plugins/authentication'
-                    }
+                        link: '/plugins/auth'
+                    },
+                    {
+                        title: 'Input',
+                        link: '/plugins/input'
+                    },
+                    {
+                        title: 'Validator',
+                        link: '/plugins/validator'
+                    },
+                    {
+                        title: 'Socket Server (sio)',
+                        link: '/plugins/sockets'
+                    },
+                    {
+                        title: 'Internationalization (i18n)',
+                        link: '/plugins/i18n'
+                    },
+                    {
+                        title: 'Database',
+                        link: '/plugins/db'
+                    },
+                    {
+                        title: 'Elasticsearch (es)',
+                        link: '/plugins/es'
+                    },
+                    {
+                        title: 'Stripe',
+                        link: '/plugins/stripe'
+                    },
+                    {
+                        title: 'Mail',
+                        link: '/plugins/mail'
+                    },
+                    {
+                        title: 'Events',
+                        link: '/plugins/events'
+                    },
+                    {
+                        title: 'Axios',
+                        link: '/plugins/axios'
+                    },
+                    {
+                        title: 'Firebase',
+                        link: '/plugins/firebase'
+                    },
+                    {
+                        title: 'Utils',
+                        link: '/plugins/utils'
+                    },
+                    {
+                        title: 'Creating a plugin',
+                        link: '/plugins/_create'
+                    },
                 ]
             }
         ]

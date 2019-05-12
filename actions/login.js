@@ -26,7 +26,7 @@ const createRefreshToken = async (user, Token) => {
         makeToken(128)
     ]);
 
-    await Token.create({
+    await Token._create({
         token: hash(refreshToken),
         userId: user._id,
         guid,
@@ -135,7 +135,7 @@ const makeProvider = (provider) => {
          */
 
         if (!user) {
-            user = await User.create({
+            user = await User._create({
                 name: data.name,
                 locale: data.locale,
                 email: data.email,
