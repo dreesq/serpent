@@ -14,6 +14,24 @@ utils.autoCrud('Task', {
 });
 
 config({
+    route: [
+        'get',
+        '/path'
+    ],
+    input: {
+        name: 'required'
+    }
+})(
+    async ({ input }) => {
+        const {name} = input;
+
+        return {
+            name
+        };
+    }
+);
+
+config({
     name: 'getATasks',
     middleware: [
         'auth'
