@@ -7,7 +7,7 @@ const {error} = require('../utils');
 
 module.exports = (options) => {
     const {auth, logger = console} = getPlugins();
-    const required = options[0] === 'required';
+    const required = options && options[0] === 'required';
 
     return async (req, res, next) => {
         const fail = (message = req.translate('errors.requiresAuth')) => {
