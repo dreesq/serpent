@@ -311,7 +311,7 @@ exports.autoCrud = (model, options = {}) => {
 
             if (method === 'create') {
                 delete input._id;
-                data = await collection._create(input);
+                data = await collection.create(input);
                 data = select(data._doc, options.fields);
             }
 

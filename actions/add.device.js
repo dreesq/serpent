@@ -25,7 +25,7 @@ config({
     async ({input, db, user, t}) => {
         const {Device} = db;
 
-        await Device._create({
+        await Device.create({
             ...input,
             userId: user._id
         });
