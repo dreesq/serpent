@@ -1,4 +1,6 @@
-<img src="docs/res/logo.png" style="display:block;margin: 30px auto;"/>
+<p align="center"> 
+  <img src="docs/res/logo.png">
+</p>
 
 Serpent is the first open source contribution of the dreesq team. Its purpose is to better improve developer's **productivity** by dealing with most of the code boilerplate any new application would require such as: Authentication, Middlewares, WebSockets, Internationalization etc.
 
@@ -14,4 +16,4 @@ We think that web applications should be **fun** to develop. Here's a quick snip
     get('/hello/:name', async ({ input }) => `Hello there ${input.name}!`);
 ```
 
-If we caught your attention, we invite you to the next pages where you will learn how to develop applications using Serpent.
+If we caught your attention, we invite you to check the [documentation](https://dreesq.github.io/serpent).
