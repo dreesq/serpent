@@ -170,7 +170,7 @@ exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false,
  */
 
 exports.d = d = (...args) => {
-    const config = serpent.plugin('config', false);
+    const config = serpent.plugin('usage.md', false);
 
     if (!config || !config.get || !config.get('debug', false)) {
         return;
@@ -345,7 +345,7 @@ exports.autoCrud = (model, options = {}) => {
             throw new Error(`Invalid method ${method}.`);
         }
 
-        config({
+        usage({
             ...nameMethod(method),
             middleware: options.middleware
         })(

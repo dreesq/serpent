@@ -5,8 +5,9 @@ const {error} = require('../utils');
  * Authenticated middleware
  */
 
-module.exports = () => {
+module.exports = (options) => {
     const {auth, logger = console} = getPlugins();
+    const required = options[0] === 'required';
 
     return async (req, res, next) => {
         const fail = (message = req.translate('errors.requiresAuth')) => {
@@ -14,19 +15,23 @@ module.exports = () => {
             next(true);
         };
 
-        if (!req.headers.authorization) {
+        let user = false;
+        let token = req.headers.authorization;
+
+        if (token) {
+            try {
+                user = await auth.getUser(token);
+            } catch(e) {
+                logger.error(e.stack);
+                return fail(e.message);
+            }
+        }
+
+        if (required && !user) {
             return fail();
         }
 
-        const token = req.headers.authorization;
-
-        try {
-            req.user = await auth.getUser(token);
-        } catch(e) {
-            logger.error(e.stack);
-            return fail(e.message);
-        }
-
+        req.user = user;
         next();
     };
 };
