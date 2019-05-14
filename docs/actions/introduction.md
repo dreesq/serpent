@@ -7,7 +7,6 @@ The idea between actions is that there would be only GET route, called ```list``
 Actions may be enabled or disabled from the main configuration object. In case you decide not to use them, be advised to also turn actions auto load off.
 
 ```js
-    // ---- rest of the code ----
     await setup(app, {
         actions: {
             list: '/list',
@@ -17,7 +16,6 @@ Actions may be enabled or disabled from the main configuration object. In case y
             actions: true
         }
     });
-    // ---- rest of the code ----
 ```
 
 The above example will register 2 routes, the ```/list``` route which will return a list of available actions along with its input structure. And a ```/handler``` route that will receive action requests.
