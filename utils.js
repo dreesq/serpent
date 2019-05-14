@@ -187,7 +187,7 @@ exports.d = d = (...args) => {
 
 exports.autoCrud = (model, options = {}) => {
     const methods = [
-        '_create.md',
+        'create',
         'remove',
         'update',
         'get',
@@ -309,7 +309,7 @@ exports.autoCrud = (model, options = {}) => {
                 data = await autoFilter(model, opts)(ctx);
             }
 
-            if (method === '_create.md') {
+            if (method === 'create') {
                 delete input._id;
                 data = await collection._create(input);
                 data = select(data._doc, options.fields);
