@@ -9,7 +9,7 @@ config({
         type: 'required|number'
     },
     middleware: [
-        'auth'
+        'auth:required'
     ],
     enabled: configPlugin.get('plugins.auth.devices')
 })(

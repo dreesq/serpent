@@ -7,7 +7,7 @@ const moment = require('moment');
 config({
     name: 'logout',
     middleware: [
-        'auth'
+        'auth:required'
     ],
     enabled: configPlugin.get('plugins.auth')
 })(

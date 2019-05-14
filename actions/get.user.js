@@ -5,7 +5,7 @@ const {config: configPlugin} = getPlugins();
 config({
     name: 'getUser',
     middleware: [
-        'auth'
+        'auth:required'
     ],
     enabled: configPlugin.get('plugins.auth')
 })(

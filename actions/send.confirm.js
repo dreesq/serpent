@@ -6,7 +6,7 @@ const {error, makeToken} = require('../utils');
 config({
     name: 'sendConfirm',
     middleware: [
-        'auth'
+        'auth:required'
     ],
     enabled: configPlugin.get('plugins.auth.confirm')
 })(
