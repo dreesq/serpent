@@ -139,7 +139,7 @@ exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false,
     try {
         entities = await readdir(`${appPath}/${type}`);
     } catch(e) {
-
+        d('Failed to read path', `${appPath}/${type}`, 'error', e);
     }
 
     for (const entity of entities) {

@@ -12,7 +12,6 @@ We think that web applications should be **fun** to develop. Here's a quick snip
     const {get} = require('@dreesq/serpent');
 
     get('/hello/:name', async ({ input }) => `Hello there ${input.name}!`);
-
 ```
 
 If we caught your attention, we invite you to the next pages where you will learn how to develop applications using Serpent.
