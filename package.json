@@ -9,7 +9,7 @@
   },
   "scripts": {
     "example": "nodemon ./examples/api/index.js -watch ../..",
-    "docs": "http-server docs -o"
+    "docs": "http-server docs -o -c-1"
   },
   "repository": {
     "type": "git",
