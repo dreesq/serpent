@@ -237,6 +237,24 @@ exports.setup = async (app, opts) => {
 };
 
 /**
+ * Utility for calling an action, note that called
+ * actions skip middleware flow
+ *
+ * @param action
+ * @param payload
+ * @param extra
+ * @returns {Promise<void>}
+ */
+
+exports.call = async (action, payload = {}, extra = {user: false}) => {
+    if (!action) {
+        throw new Error(`Call helper cannot be used without required action parameter.`);
+    }
+
+    return router.runAction(action, payload, extra);
+};
+
+/**
  * Returns the global application context
  */
 

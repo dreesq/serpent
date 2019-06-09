@@ -1,4 +1,4 @@
-const {utils, config, get} = require('../../../index');
+const {utils, config, get, action, call} = require('../../../index');
 
 utils.autoCrud('Task', {
     fields: [
@@ -11,6 +11,15 @@ utils.autoCrud('Task', {
     after(ctx, method, data) {
         return data;
     }
+});
+
+action('testAction', async ({ input }) => input);
+
+get('/test-action', async ({ input }) => {
+    return await Promise.all([1, 2, 3].map(i => call('testAction', {
+        input,
+        i
+    })));
 });
 
 config({
