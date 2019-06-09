@@ -31,6 +31,8 @@ exports.TOKEN_TYPE_REFRESH = 2;
 
 exports.REFRESH_TOKEN_EXPIRY = 30;
 exports.RESET_TOKEN_EXPIRY = 3;
+exports.SOURCE_LOCAL = 0;
+exports.SOURCE_REMOTE = 1;
 
 /**
  * User statuses
