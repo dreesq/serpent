@@ -5,6 +5,7 @@ process.env.NODE_ENV = 'production';
 
 (async () => {
     await setup(app, {
+        batch: true,
         autoload: {
             actions: true,
             config: true,
