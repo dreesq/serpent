@@ -9,6 +9,7 @@ Actions may be enabled or disabled from the main configuration object. In case y
 ```js
     await setup(app, {
         actions: {
+            batch: true,
             list: '/list',
             handler: '/handler'
         },
@@ -19,5 +20,16 @@ Actions may be enabled or disabled from the main configuration object. In case y
 ```
 
 The above example will register 2 routes, the ```/list``` route which will return a list of available actions along with its input structure. And a ```/handler``` route that will receive action requests.
+
+`batch` parameter allows running multiple actions in a single http request by sending requests in the handler route with data structure like:
+```
+    [
+        ['firstAction', {input: "A"}],
+        ['firstAction', {input: "B"}],
+        ['secondAction']
+    ]
+```
+
+*Note:* Actions are being run in parallel, each action running its own middleware so for example if all actions run the auth middleware, auth middleware will be run 3 times in the above example.
 
 In next chapter we will explore on how to configure and call an action from the outside world.

@@ -13,6 +13,29 @@ get('/test', async ({req}) => `Hello World!`);
 post('/test', async ({req}) => `Hello Post!`);
 ```
 
+#### call
+
+Allows you to call actions from outside actions context by passing custom payload along with custom context data. 
+
+*Note:* When using `call`, action middlewares are not run.
+
+```js
+const {call, config} = require('@dreesq/serpent');
+
+config({
+    name: 'myAction'
+})(
+    async ({input, source, user}) => {
+        // `input` will be the second argument
+        // source === SOURCE_LOCAL when called using `call` utility,
+        return 'myResult';
+    }
+);
+
+const result = await call('myAction', {}, {user: ''}); // myResult
+
+```
+
 #### utils.autoFilter
 
 The autoFilter utility allows to automatically create an action that handles collection filtering along with pagination.
@@ -21,9 +44,9 @@ The autoFilter utility allows to automatically create an action that handles col
     const {utils, config} = require('@dreesq/serpent');
 
     config({
-        action: 'filterUsers',
+        name: 'filterUsers',
         middleware: [
-            'auth'
+            'auth:required'
         ],
         input: {
             filters: 'object',
@@ -51,7 +74,7 @@ The autoFilter utility allows to automatically create an action that handles col
 
 The above example creates an action with name ```filterUsers``` that automatically deals with filtering the ```User``` collection.
 
-The ```restrictToUser``` parameter adds attaches a ```where``` filter to ```userId``` is authenticated's user _id.
+The ```restrictToUser``` parameter attaches a ```where``` filter to ```userId``` is authenticated's user _id.
 
 ```limit``` is the number of documents returned per page
 
@@ -66,7 +89,55 @@ The ```restrictToUser``` parameter adds attaches a ```where``` filter to ```user
 
 #### utils.autoCrud
 
-@TODO
+Given a collection, the autoCrud utility allows quickly creating all required crud actions/rest routes. In behind, the find route is using ```utils.autoFilter```.
+
+```js
+const {utils} = require('@dreesq/serpent');
+
+utils.autoCrud('User', {
+    fields: [
+        '-_id'
+    ],
+    middleware: [
+        'auth:required'
+    ],
+    path: '/user',
+    restrictToUser: true,
+    methods: [
+        'create',
+        'update',
+        'find',
+        'remove',
+        'get'
+    ],
+    type: 'actions',
+    allowNull: false,
+    after(ctx, method, data) {
+        return data;
+    },
+    before(ctx, method, filters) {
+        return filters;
+    }
+});
+```
+
+Above example creates a total of 5 actions that can be called by doing requests on the handler route having the following action naming: `${method}Auto${collection}` so if I would like to create an user, I would do a POST request in the handler route with the following request payload.
+
+```['createAutoUser', {name: 'user', password: 'password'}]```
+
+```type``` parameter specify wether actions or rest routes should be created. If `type` value equals ```rest```, 5 routes would be created on following endpoints:
+
+```
+    create - POST - /${path}
+    update - PUT - /${path}/:id
+    find - GET - /${path}
+    remove - DELETE - /${path}
+    get - GET - /${path}/:id
+```
+
+The ```restrictToUser``` parameter attaches a ```where``` filter to ```userId``` is authenticated's user _id.
+
+```allowNull``` prevents users to send _id filter with null value, preventing whole collection queries.
 
 #### override
 

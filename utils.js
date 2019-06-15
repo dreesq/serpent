@@ -201,6 +201,7 @@ exports.autoCrud = (model, options = {}) => {
         middleware: [],
         type: 'actions',
         allowNull: false,
+        restrictToUser: false,
         after(ctx, method, data) {
             return data;
         },
@@ -282,6 +283,10 @@ exports.autoCrud = (model, options = {}) => {
                     filters._id = id;
                 }
 
+                if (options.restrictToUser) {
+                    filters.userId = ctx.user._id;
+                }
+
                 if (!id && !options.allowNull) {
                     return error(`Method does not support null filtering.`);
                 }
@@ -299,7 +304,8 @@ exports.autoCrud = (model, options = {}) => {
             if (method === 'find') {
                 const opts = {
                     pagination: true,
-                    fields
+                    fields,
+                    restrictToUser: options.restrictToUser
                 };
 
                 if (typeof filters === 'function') {
