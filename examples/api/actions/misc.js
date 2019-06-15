@@ -5,8 +5,11 @@ get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 config({
     name: 'firstAction',
     middleware: [
-        'auth:required'
-    ]
+
+    ],
+    input: {
+        a: 'string|required'
+    }
 })(
     async ({input}) => {
         return input;

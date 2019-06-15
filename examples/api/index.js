@@ -5,11 +5,15 @@ process.env.NODE_ENV = 'production';
 
 (async () => {
     await setup(app, {
-        batch: true,
         autoload: {
             actions: true,
             config: true,
             models: true
+        },
+        actions: {
+            batch: true,
+            handler: '/',
+            list: '/'
         }
     });
 
