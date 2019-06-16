@@ -30,13 +30,13 @@
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "debug": "^4.1.1",
-    "deepmerge": "^3.2.0",
-    "express-session": "^1.16.1",
-    "firebase-admin": "^8.0.0",
+    "deepmerge": "^3.2.1",
+    "express-session": "^1.16.2",
+    "firebase-admin": "^8.1.0",
     "helmet": "^3.18.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.5.14",
+    "mongoose": "^5.6.0",
     "node-spdy": "^3.4.7",
     "nodemailer": "^6.2.1",
     "qs": "^6.7.0",
@@ -46,8 +46,5 @@
     "stripe": "^7.1.0",
     "uuid": "^3.3.2",
     "winston": "^3.2.1"
-  },
-  "devDependencies": {
-    "http-server": "^0.11.1"
   }
 }
