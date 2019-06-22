@@ -85,7 +85,13 @@ exports.removeKeys = (obj, args = []) => {
  */
 
 exports.makeToken = async (length = 64) => {
-    return await crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length);
+    const crypto = await serpent.plugin('crypto');
+
+    if (!crypto) {
+        return d('Could not load crypto plugin. Is the plugin enabled?');
+    }
+
+    return await crypto.random(length);
 };
 
 /**
