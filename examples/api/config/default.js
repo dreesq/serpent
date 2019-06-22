@@ -63,7 +63,11 @@ module.exports = () => {
         zippedArchive: true,
         maxFiles: 5
       },
-   //   redis: {},
+      crypto: {
+        key: '',
+        private: '',
+        public: ''
+      },
       socket: {},
       i18n: {
         serveTranslations: ['messages', 'validation'],
@@ -74,7 +78,8 @@ module.exports = () => {
           'de'
         ]
       },
-      //es: {}
+      // es: {},
+      // redis: {}
     }
   };
 };

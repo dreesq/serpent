@@ -18,3 +18,8 @@ config({
 
 action('secondAction', 'secondResult');
 action('thirdAction', () => { throw new Error('Unknown error') });
+
+get('/test', async ({crypto}) => {
+    const encrypted = await crypto.symetric.encrypt('AAA');
+    return await crypto.symetric.decrypt(encrypted);
+});
