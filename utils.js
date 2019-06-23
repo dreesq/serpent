@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const {MODULE_PATH} = require('./constants');
 const serpent = require('./');
+const bodyParser = require('body-parser');
 
 /**
  * Promisify functions
@@ -509,9 +510,41 @@ exports.toModelName = (model = '') => {
  * @returns {Promise<void>}
  */
 
-exports.stripeHook = options => {
-    return async ({req, res}) => {
-        // @TODO
+exports.stripeHook = ({onSubscribe, onUnsubscribe, onEvent, onRefund}) => {
+    const {stripe, config} = serpent.getPlugins();
+    const whKey = config.get('plugins.stripe.whKey');
+
+    return async ctx => {
+        const {req, res} = ctx;
+        const {client} = stripe.build(req);
+        const sig = req.headers['stripe-signature'];
+
+        let event;
+
+        try {
+            event = client.webhooks.constructEvent(req.rawBody, sig, whKey);
+        } catch (err) {
+            return res.status(400).send(`Webhook Error: ${err.message}`);
+        }
+
+        const type = event.type;
+        const data = event.data.object;
+
+        onEvent && await onEvent(type, data, ctx);
+
+        if (type === 'charge.refunded') {
+            onRefund && await onRefund(data, ctx);
+        }
+
+        if (type === 'customer.subscription.created') {
+            onSubscribe && await onSubscribe(data, ctx);
+        }
+
+        if (type === 'customer.subscription.deleted') {
+            onUnsubscribe && await onUnsubscribe(data, ctx);
+        }
+
+        res.end();
     };
 };
 

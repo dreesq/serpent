@@ -1,4 +1,4 @@
-const {get, action, config} = require('../../../index');
+const {get, post, action, config, utils} = require('../../../index');
 
 get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 
@@ -19,7 +19,32 @@ config({
 action('secondAction', 'secondResult');
 action('thirdAction', () => { throw new Error('Unknown error') });
 
+get('/test-2', async ({ stripe }) => {
+    return await stripe.products();
+});
+
 get('/test', async ({crypto}) => {
     const encrypted = await crypto.symetric.encrypt('AAA');
     return await crypto.symetric.decrypt(encrypted);
 });
+
+post(
+    '/stripe',
+    utils.stripeHook({
+        async onSubscribe(data, ctx) {
+
+        },
+
+        async onUnsubscribe(data, ctx) {
+
+        },
+
+        async onEvent(type, data, ctx) {
+
+        },
+
+        async onRefund(data, ctx) {
+
+        }
+    })
+);

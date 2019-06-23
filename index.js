@@ -114,7 +114,11 @@ const initMiddlewares = async () => {
     const config = plugin('config');
 
     if (config.get('server.parsers')) {
-        app.use(bodyParser.json());
+        app.use(bodyParser.json({
+            verify(req, res, buf, encoding) {
+                req.rawBody = buf.toString();
+            }
+        }));
         app.use(bodyParser.urlencoded({extended: true}));
         app.use(cookieParser());
     }

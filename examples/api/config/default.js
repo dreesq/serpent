@@ -23,7 +23,8 @@ module.exports = () => {
     },
     plugins: {
       stripe: {
-        secretKey: ''
+        secretKey: '',
+        whKey: ''
       },
       validator: {
         gcaptcha: {
