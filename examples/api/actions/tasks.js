@@ -13,15 +13,6 @@ utils.autoCrud('Task', {
     }
 });
 
-action('testAction', async ({ input }) => input);
-
-get('/test-action', async ({ input }) => {
-    return await Promise.all([1, 2, 3].map(i => call('testAction', {
-        input,
-        i
-    })));
-});
-
 config({
     route: [
         'get',
