@@ -113,6 +113,10 @@ const initMiddlewares = async () => {
     const app = context.get('app');
     const config = plugin('config');
 
+    if (!app) {
+        return;
+    }
+
     if (config.get('server.parsers')) {
         app.use(bodyParser.json({
             verify(req, res, buf, encoding) {
@@ -201,8 +205,10 @@ const initRouter = async () => {
      * Register global error handler
      */
 
-    const errorHandler = typeof config.onError === 'function' ? config.onError : onError;
-    app.use(errorHandler);
+    if (app) {
+        const errorHandler = typeof config.onError === 'function' ? config.onError : onError;
+        app.use(errorHandler);
+    }
 };
 
 /**
@@ -242,13 +248,32 @@ exports.setup = async (app, opts) => {
 };
 
 /**
+ * Runs the application without the http server
+ * @param opts
+ * @returns {Promise<void>}
+ */
+
+exports.standalone = async (opts) => {
+    let config = {
+        ...options,
+        ...opts
+    };
+
+    buildHelpers();
+
+    await initContext(false, config);
+    await initMiddlewares();
+    await initRouter();
+};
+
+/**
  * Utility for calling an action, note that called
  * actions skip middleware flow
  *
  * @param action
  * @param payload
  * @param extra
- * @returns {Promise<void>}
+ * @returns
  */
 
 exports.call = async (action, payload = {}, extra = {user: false}) => {
@@ -256,7 +281,20 @@ exports.call = async (action, payload = {}, extra = {user: false}) => {
         throw new Error(`Call helper cannot be used without required action parameter.`);
     }
 
-    return router.runAction(action, payload, extra);
+    let result = {
+        data: false,
+        errors: false
+    };
+
+    const res = await router.runAction(action, payload, extra);
+
+    if (res.errors) {
+        result.errors = res.errors;
+    } else {
+        result.data = res;
+    }
+
+    return result;
 };
 
 /**
