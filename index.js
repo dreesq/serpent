@@ -117,6 +117,10 @@ const initMiddlewares = async () => {
         return;
     }
 
+    if (context.get('config').mamba) {
+        return;
+    }
+
     if (config.get('server.parsers')) {
         app.use(bodyParser.json({
             verify(req, res, buf, encoding) {
@@ -236,9 +240,10 @@ exports.setup = async (app, opts) => {
      * @param args
      */
 
+    app.__listen = app.listen;
     app.listen = (...args) => {
         const events = plugin('events');
-        app.listen(...args);
+        app.__listen(...args);
         events.emit(SERVER_LISTENING);
     };
 
@@ -363,6 +368,11 @@ exports.start = async (port = 3000) => {
     port = config.get('server.port', port);
 
     const ssl = config.get('server.ssl');
+
+    if (context.get('config').mamba) {
+        return app.__listen(port, () => logger.info(`Server listening on port ${port}.`));
+    }
+
     let server;
 
     if (ssl) {

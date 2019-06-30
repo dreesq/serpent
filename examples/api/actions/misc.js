@@ -1,4 +1,4 @@
-const {get, post, action, config, utils} = require('../../../index');
+const {get, post, action, config, call, utils} = require('../../../index');
 
 get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 
@@ -49,10 +49,7 @@ post('/stripe', utils.stripeHook({
 action('testAction', async ({ input }) => input);
 
 get('/test-action', async ({ input }) => {
-    return await Promise.all([1, 2, 3].map(i => call('testAction', {
-        input,
-        i
-    })));
+    return 'XXX';
 });
 
 get('/stress-test', async ({db}) => {

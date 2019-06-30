@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "express": "^4.16.3"
+  },
+  "dependencies": {
+    "@dreesq/mamba": "^1.0.4"
   }
 }
