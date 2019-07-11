@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const {MODULE_PATH} = require('./constants');
 const serpent = require('./');
-const bodyParser = require('body-parser');
 
 /**
  * Promisify functions
@@ -86,10 +85,11 @@ exports.removeKeys = (obj, args = []) => {
  */
 
 exports.makeToken = async (length = 64) => {
-    const crypto = await serpent.plugin('crypto');
+    const crypto = serpent.plugin('crypto');
+    const logger = serpent.plugin('logger', console);
 
     if (!crypto) {
-        return d('Could not load crypto plugin. Is the plugin enabled?');
+        return logger.error('Failed to load (crypto) plugin. Is it enabled?');
     }
 
     return await crypto.random(length);
@@ -141,12 +141,13 @@ exports.success = success = (data = '') => {
 
 exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false, requireFile = true) => {
     let entities = [];
-    d('Loading', type, 'from', appPath);
+    let logger = serpent.plugin('logger', console);
+    d(`load (${type}) <- (${appPath})`);
 
     try {
         entities = await readdir(`${appPath}/${type}`);
     } catch(e) {
-        d('Failed to read path', `${appPath}/${type}`, 'error', e);
+        logger.error(`Failed to read path (${appPath}/${type}), error:`, e);
     }
 
     for (const entity of entities) {
@@ -178,12 +179,14 @@ exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false,
 
 exports.d = d = (...args) => {
     const config = serpent.plugin('config', false);
+    const logger = serpent.plugin('logger', console);
 
     if (!config || !config.get || !config.get('debug', false)) {
         return;
     }
 
-    return console.log.apply(this, ['(serpent)', ...args]);
+    args.unshift('(s)');
+    return logger.debug(args.join(' '));
 };
 
 /**

@@ -12,6 +12,7 @@ const utils = require('./utils');
 const fs = require('fs');
 const util = require('util');
 const path = require('path');
+const package = require('./package.json');
 
 /**
  * Promisify functions
@@ -88,9 +89,12 @@ exports.register = (name, plugin) => {
  */
 
 const onError = (error, req, res, next) => {
+    const isDev = process.env.NODE_ENV !== 'development';
     const logger = plugin('logger', console);
+    const message = error instanceof Error ? error.stack : error;
+
     logger.error(error);
-    res.status(500).json(error);
+    res.status(500).json(error(isDev ? message : ''));
 };
 
 /**
@@ -222,6 +226,7 @@ const initRouter = async () => {
  */
 
 exports.setup = async (app, opts) => {
+
     let config = {
         ...options,
         ...opts
@@ -369,8 +374,31 @@ exports.start = async (port = 3000) => {
 
     const ssl = config.get('server.ssl');
 
+    const env = process.env.NODE_ENV || 'development';
+    const debug = config.get('debug', false);
+
+    logger.verbose(`
+             \`/+-                                 
+            -+++++.                               
+           .++++:\`                                
+           /+++\`           .:///:-\`               
+           +++.          .+++++++++/\`             
+           :++\`         :+++++-\` \`-++.            
+           \`++-       .+++++:\`     .++\`           
+            .++-    \`:+++++-       \`++:           
+             \`:++/:/+++++/\`        -++/           
+               \`-/++++/:\`        \`:+++:           
+                    \`          .+++++/\`           
+                                \`-:-.
+            version: ${package.version}
+            env: ${env}
+            debug: ${debug}
+    `);
+
+    const onListen = () => logger.info(`Listening on port ${port}`);
+
     if (context.get('config').mamba) {
-        return app.__listen(port, () => logger.info(`Server listening on port ${port}.`));
+        return app.__listen(port, onListen);
     }
 
     let server;
@@ -389,6 +417,5 @@ exports.start = async (port = 3000) => {
 
     context.set('server', server);
     events.emit(SERVER_LISTENING);
-
-    server.listen(port, () => logger.info(`Server listening on port ${port}.`));
+    server.listen(port, onListen);
 };

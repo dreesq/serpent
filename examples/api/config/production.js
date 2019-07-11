@@ -4,7 +4,7 @@
 
 module.exports = () => {
   return {
-    debug: false,
+    debug: true,
     server: {
       port: 3001
     }
