@@ -76,7 +76,7 @@ exports.config = config = opts => {
  */
 
 exports.register = (name, plugin) => {
-    return context.registerPlugin(name, plugin);
+    return context.registerPlugin(name, plugin, true);
 };
 
 /**

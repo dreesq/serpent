@@ -5,7 +5,7 @@
     "email": "Field {{field}} is not a valid email.",
     "min": "Field {{field}} requires at least {{options.0}} characters.",
     "max": "Field {{field}} requires maximum {{options.0}} characters.",
-    "number": "`Field {{field}} is not a number.",
+    "number": "Field {{field}} is not a number.",
     "date": "Field {{field}} is not a valid date.",
     "file": "Field {{field}} is not a file.",
     "extension": "Field {{field}} has invalid file extension.",

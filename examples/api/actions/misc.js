@@ -1,4 +1,4 @@
-const {get, post, action, config, call, utils} = require('../../../index');
+const {get, post, action, config, register, plugin, utils} = require('../../../index');
 
 get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 
@@ -48,12 +48,24 @@ post('/stripe', utils.stripeHook({
 
 action('testAction', async ({ input }) => input);
 
-get('/test-action', async ({ input }) => {
-    return 'XXX';
-});
-
 get('/stress-test', async ({db}) => {
     return await db.Task.create({
         title: 'XXX'
     });
 });
+
+register('myPlugin', {
+    init(ctx) {
+
+    },
+    build(req, res, ctx) {
+        return {
+            random: 1
+        }
+    },
+    methods: {
+        random: 2
+    }
+});
+
+get('/random-number', ({ myPlugin }) => myPlugin.random + plugin('myPlugin').random);
