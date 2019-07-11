@@ -68,4 +68,23 @@ register('myPlugin', {
     }
 });
 
-get('/random-number', ({ myPlugin }) => myPlugin.random + plugin('myPlugin').random);
+get('/random-number', ({ myPlugin, logger }) => {
+    const {json} = logger;
+    const randomNumber = myPlugin.random + plugin('myPlugin').random;
+
+    json({
+        randomNumber,
+        a: 1,
+        b: 2,
+        c: {
+            e: 2,
+            r: {
+                e: {
+                    z: 4
+                }
+            }
+        }
+    });
+
+    return randomNumber;
+});
