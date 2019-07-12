@@ -34,7 +34,8 @@
     "invalidProvider": "Invalid provider.",
     "expiredToken": "Given token has expired.",
     "rateLimit": "Rate limit for this resource exceeded.",
-    "alreadyConfirmed": "User has already confirmed his account."
+    "alreadyConfirmed": "User has already confirmed his account.",
+    "genericError": "An error occurred. Please try again later."
   },
   "emails": {
     "confirmAccount": {

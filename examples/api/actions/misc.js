@@ -72,6 +72,8 @@ get('/random-number', ({ myPlugin, logger }) => {
     const {json} = logger;
     const randomNumber = myPlugin.random + plugin('myPlugin').random;
 
+    throw new Error('xxx');
+
     json({
         randomNumber,
         a: 1,
