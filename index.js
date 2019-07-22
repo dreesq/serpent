@@ -376,8 +376,10 @@ exports.start = async (port = 3000) => {
 
     const env = process.env.NODE_ENV || 'development';
     const debug = config.get('debug', false);
+    const name = config.get('name', 'app');
 
     logger.verbose(`
+    
              \`/+-                                 
             -+++++.                               
            .++++:\`                                
@@ -390,6 +392,8 @@ exports.start = async (port = 3000) => {
                \`-/++++/:\`        \`:+++:           
                     \`          .+++++/\`           
                                 \`-:-.
+                    
+            name: ${name}               
             version: ${package.version}
             env: ${env}
             debug: ${debug}

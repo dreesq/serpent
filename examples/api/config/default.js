@@ -4,6 +4,7 @@
 
 module.exports = () => {
   return {
+    name: 'app',
     debug: true,
     baseUrl: 'http://localhost:3000',
     server: {
