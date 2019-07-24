@@ -179,7 +179,7 @@ exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false,
 
 exports.d = d = (...args) => {
     const config = serpent.plugin('config', false);
-    const logger = serpent.plugin('logger');
+    const logger = serpent.plugin('logger', console);
 
     if (!config || !config.get || !config.get('debug', false)) {
         return;
