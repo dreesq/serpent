@@ -90,7 +90,7 @@ exports.register = (name, plugin) => {
 
 const onError = (error, req, res, next) => {
     const isProd = process.env.NODE_ENV !== 'development';
-    const logger = plugin('logger', console);
+    const logger = plugin('logger');
     const message = error instanceof Error ? error.stack : error;
 
     logger.error(error);
@@ -366,7 +366,7 @@ exports.override = (action = '', reconfig) => {
 
 exports.start = async (port = 3000) => {
     const config = plugin('config');
-    const logger = plugin('logger', console);
+    const logger = plugin('logger');
     const events = plugin('events');
 
     const app = context.get('app');

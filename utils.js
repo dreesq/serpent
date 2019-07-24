@@ -86,7 +86,7 @@ exports.removeKeys = (obj, args = []) => {
 
 exports.makeToken = async (length = 64) => {
     const crypto = serpent.plugin('crypto');
-    const logger = serpent.plugin('logger', console);
+    const logger = serpent.plugin('logger');
 
     if (!crypto) {
         return logger.error('Failed to load (crypto) plugin. Is it enabled?');
@@ -141,7 +141,7 @@ exports.success = success = (data = '') => {
 
 exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false, requireFile = true) => {
     let entities = [];
-    let logger = serpent.plugin('logger', console);
+    let logger = serpent.plugin('logger');
     d(`load (${type}) <- (${appPath})`);
 
     try {
@@ -179,7 +179,7 @@ exports.load = async (appPath = MODULE_PATH, type = 'actions', callback = false,
 
 exports.d = d = (...args) => {
     const config = serpent.plugin('config', false);
-    const logger = serpent.plugin('logger', console);
+    const logger = serpent.plugin('logger');
 
     if (!config || !config.get || !config.get('debug', false)) {
         return;

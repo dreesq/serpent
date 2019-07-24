@@ -8,7 +8,7 @@ config({
 
     ],
     input: {
-        a: 'string|required'
+        a: 'textarea|string|required'
     }
 })(
     async ({input}) => {
