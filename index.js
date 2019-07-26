@@ -13,6 +13,7 @@ const fs = require('fs');
 const util = require('util');
 const path = require('path');
 const package = require('./package.json');
+const deepmerge = require('deepmerge');
 
 /**
  * Promisify functions
@@ -25,7 +26,7 @@ const readFile = util.promisify(fs.readFile);
  * @type {{}}
  */
 
-let options = {
+let defaultOptions = {
     config: false,
     onError: false,
     actions: {
@@ -222,15 +223,12 @@ const initRouter = async () => {
 /**
  * Setup serpent on top of express
  * @param app
- * @param opts
+ * @param options
  */
 
-exports.setup = async (app, opts) => {
+exports.setup = async (app, options) => {
 
-    let config = {
-        ...options,
-        ...opts
-    };
+    let config = deepmerge(defaultOptions, options);
 
     /**
      * Attach helpers to
