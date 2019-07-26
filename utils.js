@@ -552,10 +552,17 @@ exports.stripeHook = ({onSubscribe, onUnsubscribe, onEvent, onRefund}) => {
 };
 
 /**
- * Sha256 hash helper
- * @param text
+ * Generates a form structure for client side auto generation
+ * @param type
+ * @param label
+ * @param placeholder
+ * @param values
+ * @returns {Buffer | Buffer}
  */
 
-exports.hash = (text = '') => {
-    return crypto.createHash('sha256').update(text).digest('hex');
+exports.form = ({type = 'text', label = '', placeholder = '', values = ''}) => {
+    let data = [type, label, placeholder, values];
+    let result = new Buffer(JSON.stringify(data)).toString('base64');
+
+    return `form:${result}`;
 };
