@@ -3,13 +3,17 @@ const {get, post, action, config, register, plugin, utils} = require('../../../i
 get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 
 config({
-    name: 'firstAction',
+    name: 'test4',
     middleware: [
 
     ],
-    input: {
-        a: 'textarea|string|required'
-    }
+    input: utils.form({
+        a: {
+            label: 'A',
+            placeholder: 'A',
+            validation: 'required|number'
+        }
+    })
 })(
     async ({input}) => {
         return input;

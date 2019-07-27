@@ -560,7 +560,7 @@ exports.stripeHook = ({onSubscribe, onUnsubscribe, onEvent, onRefund}) => {
  * @returns {Buffer | Buffer}
  */
 
-exports.form = form = ({type = 'text', label = '', placeholder = '', values = ''}) => {
+exports.encodeField = encodeField = ({type = 'text', label = '', placeholder = '', values = ''}) => {
     let data = [type, label, placeholder, values];
     let result = new Buffer(JSON.stringify(data)).toString('base64');
 
@@ -569,18 +569,20 @@ exports.form = form = ({type = 'text', label = '', placeholder = '', values = ''
 
 /**
  * Given an input and a form structure, maps its data to form base64
- * @param input
- * @param formStruct
  */
 
-exports.mapForm = (input, formStruct) => {
-    for (const key in input) {
-        if (!formStruct[key]) {
-            continue;
+exports.form = (form = {}) => {
+    let result = {};
+
+    for (const key in form) {
+        let validation = false;
+
+        if (form[key].validation) {
+            validation = form[key].validation;
         }
 
-        input[key] = `${form(formStruct[key])}|${input[key]}`;
+        result[key] = `${encodeField(form[key])}|${validation}`;
     }
 
-    return input;
+    return result;
 };
