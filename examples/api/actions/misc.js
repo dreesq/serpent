@@ -3,6 +3,18 @@ const {get, post, action, config, register, plugin, utils} = require('../../../i
 get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 
 config({
+    route: ['get', '/test5'],
+    hooks: {
+
+    },
+    input: {
+
+    }
+})(
+    async ({ options }) => options
+);
+
+config({
     name: 'test4',
     middleware: [
 
