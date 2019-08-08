@@ -86,12 +86,6 @@ exports.removeKeys = (obj, args = []) => {
 
 exports.makeToken = async (length = 64) => {
     const crypto = serpent.plugin('crypto');
-    const logger = serpent.plugin('logger');
-
-    if (!crypto) {
-        return logger.error('Failed to load (crypto) plugin. Is it enabled?');
-    }
-
     return await crypto.random(length);
 };
 
