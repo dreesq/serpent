@@ -562,6 +562,22 @@ exports.encodeField = encodeField = ({type = 'text', label = '', placeholder = '
 };
 
 /**
+ * Generates a hook runner based on given options
+ * @param options
+ * @returns {Function}
+ */
+
+exports.hookRunner = (options = {}) => {
+    return (hook, ...args) => {
+        if (!options.hooks)
+            return;
+
+        if (typeof options.hooks[hook] === 'function')
+            return options.hooks[hook](...args);
+    }
+};
+
+/**
  * Given an input and a form structure, maps its data to form base64
  */
 

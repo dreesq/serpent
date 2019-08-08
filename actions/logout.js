@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_REFRESH} = require('../constants');
-const {success} = require('../utils');
+const {success, hookRunner} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const moment = require('moment');
 
@@ -15,12 +15,15 @@ config({
      * Logout action
      * @param user
      * @param db
+     * @param options
      * @returns {Promise<void>}
      */
 
-    async ({user, db}) => {
+    async ({user, db, options}) => {
         const {Token, User} = db;
+        const runner = hookRunner(options);
 
+        runner('before', user);
         await Token.deleteOne({
             userId: user._id,
             type: TOKEN_TYPE_REFRESH,

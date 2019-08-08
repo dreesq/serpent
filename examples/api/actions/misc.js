@@ -1,4 +1,4 @@
-const {get, post, action, config, register, plugin, utils} = require('../../../index');
+const {get, post, action, override, config, register, plugin, utils} = require('../../../index');
 
 get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 
@@ -13,6 +13,21 @@ config({
 })(
     async ({ options }) => options
 );
+
+get('/test-6', () => {
+    undefined_variable
+    return 1;
+})
+
+override('login', config => {
+    config.hooks = {
+        before(input) {
+            console.log('hook called');
+        }
+    };
+
+    return config;
+});
 
 config({
     name: 'test4',
@@ -40,8 +55,8 @@ get('/test-2', async ({ stripe }) => {
 });
 
 get('/test', async ({crypto}) => {
-    const encrypted = await crypto.symetric.encrypt('AAA');
-    return await crypto.symetric.decrypt(encrypted);
+    const encrypted = await crypto.symmetric.encrypt('AAA');
+    return await crypto.symmetric.decrypt(encrypted);
 });
 
 post('/stripe', utils.stripeHook({

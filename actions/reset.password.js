@@ -1,7 +1,7 @@
 const {config, getPlugins} = require('../index');
 const {config: configPlugin} = getPlugins();
 const {ACTION_REQUEST_RESET, ACTION_RESET, TOKEN_TYPE_RESET, RESET_TOKEN_EXPIRY} = require('../constants');
-const {error, success, makeToken, hash} = require('../utils');
+const {error, success, makeToken, hash, hookRunner} = require('../utils');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
 
@@ -22,11 +22,13 @@ config({
      * @param i18n
      * @param mail
      * @param utils
+     * @param options
      * @returns {Promise<void>}
      */
 
-    async ({db, input, i18n, mail, utils}) => {
+    async ({db, input, i18n, mail, utils, options}) => {
         const {User, Token} = db;
+        const runner = hookRunner(options);
 
         /**
          * When requesting password reset
@@ -34,6 +36,7 @@ config({
 
         if (+input.action === ACTION_REQUEST_RESET) {
             const user = await User.findOne({email: input.email});
+            runner('before', user, input);
 
             if (!user) {
                 return error(i18n.translate('errors.invalidEmail'));
@@ -58,6 +61,7 @@ config({
                 })
             });
 
+            runner('after', user, input);
             return success(t('messages.resetRequested'));
         }
 
@@ -79,6 +83,7 @@ config({
             }
 
             const user = await User.findOne({_id: token.userId});
+            runner('before', user, input);
             const t = i18n.translator(user.locale).translate;
 
             if (!user) {
@@ -91,6 +96,7 @@ config({
 
             await user.save();
             await Token.deleteMany({userId: user._id, type: TOKEN_TYPE_RESET});
+            runner('after', user, input);
 
             return success(t('messages.resetDone'));
         }

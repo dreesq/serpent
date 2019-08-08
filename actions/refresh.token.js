@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_REFRESH, REFRESH_TOKEN_EXPIRY} = require('../constants');
-const {error, success, makeToken, hash} = require('../utils');
+const {error, success, makeToken, hash, hookRunner} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
@@ -18,12 +18,14 @@ config({
      * @param input
      * @param config
      * @param i18n
+     * @param options
      * @returns {Promise<void>}
      */
 
-    async ({db, input, i18n, config}) => {
+    async ({db, input, i18n, config, options}) => {
         const {Token, User} = db;
         const t = i18n.translate;
+        const runner = hookRunner(options);
 
         const token = await Token.findOne({
             token: hash(input.token),
@@ -42,6 +44,7 @@ config({
         }
 
         const user = await User.findOne({ _id: token.userId });
+        runner('before', user);
 
         if (!user) {
             return error(t('errors.invalidToken'));
@@ -55,6 +58,7 @@ config({
         token.token = hash(newToken);
         token.guid = guid;
         await token.save();
+        runner('after', user, token);
 
         const {secret, duration} = config.get('plugins.auth.jwt');
         const payload = {_id: user._id, ts: user.ts, guid: token.guid};

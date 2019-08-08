@@ -1,5 +1,5 @@
 const {config, getPlugins} = require('../index');
-const {removeKeys} = require('../utils');
+const {removeKeys, hookRunner} = require('../utils');
 const {config: configPlugin} = getPlugins();
 
 config({
@@ -12,10 +12,15 @@ config({
     /**
      * Returns the authenticated user
      * @param user
+     * @param options
      * @returns {Promise<*>}
      */
 
-    async ({user}) => {
-        return removeKeys(user, ['password', 'token', 'ts', '_id', '__v']);
+    async ({user, options}) => {
+        const runner = hookRunner(options);
+        const result = removeKeys(user, ['password', 'token', 'ts', '_id', '__v']);
+
+        runner('before', user);
+        return result;
     }
 );

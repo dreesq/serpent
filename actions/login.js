@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_REFRESH} = require('../constants');
-const {success, makeToken, hash} = require('../utils');
+const {success, makeToken, hash, hookRunner} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -45,10 +45,11 @@ const createRefreshToken = async (user, Token) => {
  * @param config
  * @param input
  * @param i18n
+ * @param runner
  * @returns {Promise<void>}
  */
 
-const local = async ({db, config, input, i18n}) => {
+const local = async ({db, config, input, i18n}, runner) => {
     const {User, Token} = db;
     const {email} = input;
     const t = i18n.translate;
@@ -115,7 +116,7 @@ const providers = {
     }
 };
 
-const makeProvider = (provider) => {
+const makeProvider = (provider, runner) => {
     return async ({db, config, input, axios}) => {
         const providerConfig = providers[provider];
         const {User, Token} = db;
@@ -135,13 +136,16 @@ const makeProvider = (provider) => {
          */
 
         if (!user) {
-            user = await User.create({
+            const row = {
                 name: data.name,
                 locale: data.locale,
                 email: data.email,
                 [providerConfig.dbField]: data[providerConfig.resultField],
                 password: await makeToken(64)
-            });
+            };
+
+            runner('create', row);
+            user = await User.create(row);
         }
 
         const res = {};
@@ -188,15 +192,19 @@ config({
      */
 
     async ctx => {
-        const {config, input, i18n} = ctx;
+        const {config, input, i18n, options} = ctx;
         const {provider} = input;
         const strategies = config.get('plugins.auth.strategies');
         const t = i18n.translate;
+        const runner = hookRunner(options);
 
         if (strategies.indexOf(provider) === -1) {
             throw new Error(t('errors.invalidProvider'));
         }
 
-        return await allProviders[provider](ctx);
+        runner('before', input);
+        const result = await allProviders[provider](ctx, runner);
+        runner('after', input, result);
+        return result;
     }
 );
