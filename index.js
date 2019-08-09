@@ -92,10 +92,12 @@ exports.register = (name, plugin) => {
 const onError = (error, req, res, next) => {
     const isProd = process.env.NODE_ENV !== 'development';
     const logger = plugin('logger');
-    const message = error instanceof Error ? error.stack : error;
+
+    let message = error instanceof Error ? error.stack : error;
+    message = isProd ? req.translate('errors.genericError') : message;
 
     logger.error(error);
-    res.status(500).json(error(!isProd ? message : req.translate('errors.genericError')));
+    res.status(500).json(error(message));
 };
 
 /**
@@ -353,8 +355,14 @@ exports.plugin = plugin = (name, fallback) => {
 
 exports.override = (action = '', reconfig) => {
     let registeredAction = router.getAction(action);
+
+    if (!Object.keys(registeredAction).length) {
+        throw new Error(`Tried overwriting un existing action (${action}).`);
+    }
+
     const {handler, ...options} = registeredAction;
     const newOptions = reconfig(options);
+
     return config(newOptions)(handler);
 };
 

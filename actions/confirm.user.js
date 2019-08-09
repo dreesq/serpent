@@ -1,7 +1,10 @@
 const {config, getPlugins} = require('../index');
-const {USER_STATUS_ACTIVE} = require('../constants');
 const {error, success, hash} = require('../utils');
 const {config: configPlugin} = getPlugins();
+const {
+    USER_STATUS_ACTIVE,
+    TOKEN_TYPE_CONFIRM
+} = require('../constants');
 
 config({
     name: 'confirmUser',
@@ -14,21 +17,26 @@ config({
      * Confirm user account
      * @param db
      * @param input
-     * @param i18n
+     * @param t
      * @returns {Promise<void>}
      */
 
-    async ({db, input, i18n}) => {
+    async ({db, input, t}) => {
         const {User, Token} = db;
-        const t = i18n.translate;
 
-        const token = await Token.findOne({token: hash(input.token)});
+        const token = await Token.findOne({
+            token: hash(input.token),
+            type: TOKEN_TYPE_CONFIRM
+        });
 
         if (!token) {
             return error(t('errors.invalidToken'));
         }
 
-        await User.updateOne({_id: token.userId}, {status: USER_STATUS_ACTIVE});
+        await User.updateOne({_id: token.userId}, {
+            status: USER_STATUS_ACTIVE
+        });
+
         await token.remove();
         return success(t('messages.userConfirmed'));
     }

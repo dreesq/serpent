@@ -1,85 +1,44 @@
 const {config, getPlugins} = require('../index');
-const {TOKEN_TYPE_REFRESH} = require('../constants');
-const {success, makeToken, hash, hookRunner} = require('../utils');
+const {success, makeToken, hookRunner} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-
-/**
- * Creates a refresh token
- * @param user
- * @param Token
- */
-
-const createRefreshToken = async (user, Token) => {
-    const tokens = await Token.find({
-        userId: user._id,
-        type: TOKEN_TYPE_REFRESH
-    });
-
-    if (tokens.length >= 10) {
-        await tokens[0].remove();
-    }
-
-    const [guid, refreshToken] = await Promise.all([
-        makeToken(12),
-        makeToken(128)
-    ]);
-
-    await Token.create({
-        token: hash(refreshToken),
-        userId: user._id,
-        guid,
-        type: TOKEN_TYPE_REFRESH
-    });
-
-    return {
-        refreshToken,
-        guid
-    };
-};
 
 /**
  * Local provider
  * @param db
  * @param config
  * @param input
- * @param i18n
+ * @param t
  * @param runner
+ * @param auth
  * @returns {Promise<void>}
  */
 
-const local = async ({db, config, input, i18n}, runner) => {
-    const {User, Token} = db;
+const local = async ({db, input, t, auth}, runner) => {
+    const {User} = db;
     const {email} = input;
-    const t = i18n.translate;
-
-    const authConfig = config.get('plugins.auth');
-    const {secret, duration} = authConfig.jwt || {};
 
     let user = await User.findOne({email});
 
     if (!user) {
-        throw new Error(t('errors.invalidLogin'));
+        runner('failed', input);
+        throw {
+            message: t('errors.invalidLogin'),
+            status: 400
+        };
     }
 
     const ok = await bcrypt.compare(input.password, user.password);
 
     if (!ok) {
-        throw new Error(t('errors.invalidLogin'));
+        runner('failed', input);
+        throw {
+            message: t('errors.invalidLogin'),
+            status: 400
+        }
     }
 
-    const res = {};
-    const payload = {_id: user._id, ts: user.ts};
-
-    if (authConfig.refresh && input.refresh) {
-        const {refreshToken, guid} = await createRefreshToken(user, Token);
-
-        res.refresh = refreshToken;
-        payload.guid = guid;
-    }
-
-    res.token = await jwt.sign(payload, secret, {expiresIn: duration});
+    const res = await auth.authenticateUser(user, input.refresh);
     return success(res);
 };
 
@@ -116,51 +75,45 @@ const providers = {
     }
 };
 
-const makeProvider = (provider, runner) => {
-    return async ({db, config, input, axios}) => {
-        const providerConfig = providers[provider];
-        const {User, Token} = db;
-        const {accessToken} = input;
+/**
+ * Factory for social login provider
+ * @param provider
+ * @returns {function({db: *, config: *, input: *, axios: *}, *): ({success}|string)}
+ */
 
-        const authConfig = config.get('plugins.auth');
-        const {secret, duration} = authConfig.jwt || {};
+const makeProvider = provider => async ({db, config, input, axios, auth}, runner) => {
+    const providerConfig = providers[provider];
 
-        const {data} = await axios.get(providerConfig.endpoint, providerConfig.payload(accessToken));
+    const {User,} = db;
+    const {accessToken} = input;
 
-        let user = await User.findOne({
-            [providerConfig.dbField]: data[providerConfig.resultField]
-        });
+    const {data} = await axios.get(
+        providerConfig.endpoint,
+        providerConfig.payload(accessToken)
+    );
 
-        /**
-         * Create the user if not already created
-         */
+    let user = await User.findOne({
+        [providerConfig.dbField]: data[providerConfig.resultField]
+    });
 
-        if (!user) {
-            const row = {
-                name: data.name,
-                locale: data.locale,
-                email: data.email,
-                [providerConfig.dbField]: data[providerConfig.resultField],
-                password: await makeToken(64)
-            };
+    /**
+     * Create the user if not already created
+     */
 
-            runner('create', row);
-            user = await User.create(row);
-        }
+    if (!user) {
+        const row = {
+            name: data.name,
+            locale: data.locale,
+            [providerConfig.dbField]: data[providerConfig.resultField],
+            password: await makeToken(128)
+        };
 
-        const res = {};
-        const payload = {_id: user._id, ts: user.ts};
+        runner('create', row, input);
+        user = await User.create(row);
+    }
 
-        if (authConfig.refresh && input.refresh) {
-            const {refreshToken, guid} = await createRefreshToken(user, Token);
-
-            res.refresh = refreshToken;
-            payload.guid = guid;
-        }
-
-        res.token = await jwt.sign(payload, secret, {expiresIn: duration});
-        return success(res);
-    };
+    const res = await auth.authenticateUser(user, input.refresh);
+    return success(res);
 };
 
 /**
@@ -175,13 +128,13 @@ const allProviders = {
 };
 
 config({
-    name: 'login',
+    route: ['post', '/login'],
     input: {
         email: 'required|email|when:provider,local',
         password: 'required|min:10|when:provider,local',
         accessToken: 'required|when:provider,!local',
         provider: 'required|string',
-        refresh: 'number'
+        ...(configPlugin.get('plugins.auth.refresh') ? {refresh: 'number'} : {})
     },
     enabled: configPlugin.get('plugins.auth')
 })(
@@ -192,14 +145,18 @@ config({
      */
 
     async ctx => {
-        const {config, input, i18n, options} = ctx;
+        const {config, input, t, options} = ctx;
         const {provider} = input;
         const strategies = config.get('plugins.auth.strategies');
-        const t = i18n.translate;
         const runner = hookRunner(options);
 
+        console.log('the provider is...', provider);
+
         if (strategies.indexOf(provider) === -1) {
-            throw new Error(t('errors.invalidProvider'));
+            throw {
+                message: t('errors.invalidProvider'),
+                status: 400
+            }
         }
 
         runner('before', input);

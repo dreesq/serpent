@@ -19,7 +19,7 @@ get('/test-6', () => {
     return 1;
 })
 
-override('login', config => {
+/*override('login', config => {
     config.hooks = {
         before(input) {
             console.log('hook called');
@@ -27,7 +27,7 @@ override('login', config => {
     };
 
     return config;
-});
+});*/
 
 config({
     name: 'test4',

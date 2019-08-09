@@ -25,6 +25,7 @@ module.exports = locales => {
         }
 
         req.translate = i18n.translator(lang).translate;
+        req.lang = lang;
         next();
     };
 };

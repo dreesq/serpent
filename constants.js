@@ -23,6 +23,7 @@ exports.SERVER_LISTENING = 'server:listening';
 exports.TOKEN_TYPE_RESET = 0;
 exports.TOKEN_TYPE_CONFIRM = 1;
 exports.TOKEN_TYPE_REFRESH = 2;
+exports.TOKEN_TYPE_UPDATE_EMAIL = 4;
 
 /**
  * Misc constants
@@ -43,9 +44,9 @@ exports.USER_STATUS_INACTIVE = 0;
 exports.USER_STATUS_ACTIVE = 1;
 
 /**
- * User account reset actions
+ * Multi action constants
  * @type {number}
  */
 
-exports.ACTION_REQUEST_RESET = 0;
-exports.ACTION_RESET = 1;
+exports.ACTION_REQUEST = 0;
+exports.ACTION_HANDLE = 1;

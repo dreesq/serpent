@@ -18,7 +18,16 @@ config({
 
     async ({user, options}) => {
         const runner = hookRunner(options);
-        const result = removeKeys(user, ['password', 'token', 'ts', '_id', '__v']);
+        const result = removeKeys(user, [
+            'password',
+            'token',
+            'ts',
+            '_id',
+            '__v',
+            'createdAt',
+            'updatedAt',
+            'stripe'
+        ]);
 
         runner('before', user);
         return result;
