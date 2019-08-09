@@ -128,7 +128,7 @@ const allProviders = {
 };
 
 config({
-    route: ['post', '/login'],
+    name: 'login',
     input: {
         email: 'required|email|when:provider,local',
         password: 'required|min:10|when:provider,local',
@@ -149,8 +149,6 @@ config({
         const {provider} = input;
         const strategies = config.get('plugins.auth.strategies');
         const runner = hookRunner(options);
-
-        console.log('the provider is...', provider);
 
         if (strategies.indexOf(provider) === -1) {
             throw {
