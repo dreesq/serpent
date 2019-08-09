@@ -6,7 +6,7 @@ module.exports = () => {
   return {
     debug: true,
     server: {
-      port: 3001
+      port: 3000
     }
   };
 };
