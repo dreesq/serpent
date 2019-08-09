@@ -24,6 +24,9 @@ module.exports = new Schema({
         index: true,
         required: true
     },
+    extra: {
+        type: Object
+    },
     description: {
         type: String
     },

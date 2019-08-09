@@ -103,7 +103,15 @@ exports.error = error = (data = '') => {
     };
 
     if (typeof data === 'object') {
-        res.errors = data;
+        if (data.message) {
+            res.errors.message[0] = data.message;
+        } else {
+            res.errors = data;
+        }
+
+        if (data.debug) {
+            res.debug = data.debug;
+        }
     }
 
     return res;
@@ -578,7 +586,25 @@ exports.hookRunner = (options = {}) => {
 };
 
 /**
+ * Given a string escapes it
+ * @param text
+ */
+
+exports.escape = (text = '') => {
+    let map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+
+    return text.replace(/[&<>"']/g, match => map[match]);
+};
+
+/**
  * Given an input and a form structure, maps its data to form base64
+ * @param form
  */
 
 exports.form = (form = {}) => {

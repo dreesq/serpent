@@ -1,9 +1,15 @@
 const {config, getPlugins} = require('../index');
 const {config: configPlugin} = getPlugins();
-const {ACTION_REQUEST_RESET, ACTION_RESET, TOKEN_TYPE_RESET, RESET_TOKEN_EXPIRY} = require('../constants');
 const {error, success, makeToken, hash, hookRunner} = require('../utils');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
+const {
+    ACTION_REQUEST,
+    ACTION_HANDLE,
+    TOKEN_TYPE_RESET,
+    RESET_TOKEN_EXPIRY,
+    TOKEN_TYPE_REFRESH
+} = require('../constants');
 
 config({
     name: 'resetPassword',
@@ -21,12 +27,13 @@ config({
      * @param input
      * @param i18n
      * @param mail
+     * @param config
      * @param utils
      * @param options
      * @returns {Promise<void>}
      */
 
-    async ({db, input, i18n, mail, utils, options}) => {
+    async ({db, input, i18n, config, mail, utils, options}) => {
         const {User, Token} = db;
         const runner = hookRunner(options);
 
@@ -34,7 +41,7 @@ config({
          * When requesting password reset
          */
 
-        if (+input.action === ACTION_REQUEST_RESET) {
+        if (+input.action === ACTION_REQUEST) {
             const user = await User.findOne({email: input.email});
             runner('before', user, input);
 
@@ -69,8 +76,11 @@ config({
          * When requesting password update
          */
 
-        if (+input.action === ACTION_RESET) {
-            const token = await Token.findOne({token: hash(input.token), type: TOKEN_TYPE_RESET});
+        if (+input.action === ACTION_HANDLE) {
+            const token = await Token.findOne({
+                token: hash(input.token),
+                type: TOKEN_TYPE_RESET
+            });
 
             if (!token) {
                 return error(i18n.translate('errors.invalidToken'));
@@ -95,9 +105,27 @@ config({
             user.ts = moment().unix();
 
             await user.save();
-            await Token.deleteMany({userId: user._id, type: TOKEN_TYPE_RESET});
-            runner('after', user, input);
+            await Token.deleteMany({
+                userId: user._id,
+                type: {
+                    $in: [
+                        TOKEN_TYPE_RESET,
+                        TOKEN_TYPE_REFRESH
+                    ]
+                }
+            });
 
+            if (config.get('plugins.auth.notify')) {
+                await mail({
+                    to: input.email,
+                    subject: t('emails.accountReset.subject'),
+                    html: t('emails.accountReset.html', {
+                        user
+                    })
+                });
+            }
+
+            runner('after', user, input);
             return success(t('messages.resetDone'));
         }
     }

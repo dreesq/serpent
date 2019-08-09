@@ -20,10 +20,9 @@ module.exports = (options) => {
 
         if (token) {
             try {
-                user = await auth.getUser(token);
+                user = await auth.getUser(token, req.translate);
             } catch(e) {
                 logger.error(e.stack);
-                return fail(e.message);
             }
         }
 

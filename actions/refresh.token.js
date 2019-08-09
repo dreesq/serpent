@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_REFRESH, REFRESH_TOKEN_EXPIRY} = require('../constants');
-const {error, success, makeToken, hash, hookRunner} = require('../utils');
+const {error, success, makeToken, hookRunner} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
@@ -17,18 +17,18 @@ config({
      * @param db
      * @param input
      * @param config
-     * @param i18n
+     * @param crypto
+     * @param t
      * @param options
      * @returns {Promise<void>}
      */
 
-    async ({db, input, i18n, config, options}) => {
+    async ({db, input, t, crypto, config, options}) => {
         const {Token, User} = db;
-        const t = i18n.translate;
         const runner = hookRunner(options);
 
         const token = await Token.findOne({
-            token: hash(input.token),
+            token: await crypto.hash(input.token),
             type: TOKEN_TYPE_REFRESH
         });
 
@@ -43,7 +43,10 @@ config({
             return error(t('errors.expiredToken'));
         }
 
-        const user = await User.findOne({ _id: token.userId });
+        const user = await User.findOne({
+            _id: token.userId
+        });
+
         runner('before', user);
 
         if (!user) {
@@ -55,14 +58,13 @@ config({
             makeToken(12)
         ]);
 
-        token.token = hash(newToken);
+        token.token = await crypto.hash(newToken);
         token.guid = guid;
         await token.save();
         runner('after', user, token);
 
         const {secret, duration} = config.get('plugins.auth.jwt');
         const payload = {_id: user._id, ts: user.ts, guid: token.guid};
-
         const accessToken = await jwt.sign(payload, secret, {expiresIn: duration});
 
         return success({

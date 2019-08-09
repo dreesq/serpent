@@ -37,6 +37,8 @@ module.exports = () => {
       },
       auth: {
         confirm: false,
+        notify: true,
+        update: true,
         reset: true,
         refresh: true,
         devices: true,

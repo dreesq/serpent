@@ -14,20 +14,10 @@ config({
     async ({ options }) => options
 );
 
-get('/test-6', () => {
+action('test-6', () => {
     undefined_variable
     return 1;
 })
-
-override('login', config => {
-    config.hooks = {
-        before(input) {
-            console.log('hook called');
-        }
-    };
-
-    return config;
-});
 
 config({
     name: 'test4',

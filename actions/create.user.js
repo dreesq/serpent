@@ -30,13 +30,13 @@ config({
      * @param input
      * @param config
      * @param mail
-     * @param i18n
+     * @param t
      * @param utils
      * @param options
      * @returns {Promise<void>}
      */
 
-    async ({db, mail, config, input, i18n, utils, options}) => {
+    async ({db, mail, config, input, t, utils, options}) => {
         const {User, Token} = db;
         const confirm = config.get('plugins.auth.confirm');
         const runner = hookRunner(options);
@@ -51,7 +51,6 @@ config({
 
         runner('before', input);
         const user = await User.create(input);
-        const t = i18n.translator(user.locale).translate;
 
         if (confirm) {
             const token = await makeToken();

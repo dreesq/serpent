@@ -15,13 +15,13 @@ config({
      * @param db
      * @param mail
      * @param user
-     * @param i18n
+     * @param t
      * @param utils
      * @returns {Promise<void>}
      */
 
-    async ({db, mail, user, i18n, utils}) => {
-        const t = i18n.translate;
+    async ({db, mail, user, t, utils}) => {
+        const {Token} = db;
 
         if (user.status !== USER_STATUS_INACTIVE) {
             return error(t('errors.alreadyConfirmed'));
@@ -29,7 +29,7 @@ config({
 
         const token = await makeToken();
 
-        await db.Token.findOneAndUpdate({
+        await Token.findOneAndUpdate({
             userId: user._id,
             type: TOKEN_TYPE_CONFIRM
         }, {
