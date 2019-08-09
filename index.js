@@ -90,11 +90,11 @@ exports.register = (name, plugin) => {
  */
 
 const onError = (error, req, res, next) => {
-    const isProd = process.env.NODE_ENV !== 'development';
+    const isDev = process.env.NODE_ENV !== 'production';
     const logger = plugin('logger');
 
     let message = error instanceof Error ? error.stack : error;
-    message = isProd ? req.translate('errors.genericError') : message;
+    message = isDev ? message : req.translate('errors.genericError');
 
     logger.error(error);
     res.status(500).json(error(message));
