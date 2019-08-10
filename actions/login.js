@@ -84,7 +84,7 @@ const providers = {
 const makeProvider = provider => async ({db, config, input, axios, auth}, runner) => {
     const providerConfig = providers[provider];
 
-    const {User,} = db;
+    const {User} = db;
     const {accessToken} = input;
 
     const {data} = await axios.get(

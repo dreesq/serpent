@@ -90,11 +90,11 @@ exports.register = (name, plugin) => {
  */
 
 const onError = (error, req, res, next) => {
-    const isDev = process.env.NODE_ENV !== 'production';
+    const isProd = process.env.NODE_ENV !== 'development';
     const logger = plugin('logger');
 
     let message = error instanceof Error ? error.stack : error;
-    message = isDev ? message : req.translate('errors.genericError');
+    message = isProd ? req.translate('errors.genericError') : message;
 
     logger.error(error);
     res.status(500).json(error(message));
@@ -228,8 +228,7 @@ const initRouter = async () => {
  * @param options
  */
 
-exports.setup = async (app, options) => {
-
+exports.setup = async (app, options = {}) => {
     let config = deepmerge(defaultOptions, options);
 
     /**
@@ -263,12 +262,8 @@ exports.setup = async (app, options) => {
  * @returns {Promise<void>}
  */
 
-exports.standalone = async (opts) => {
-    let config = {
-        ...options,
-        ...opts
-    };
-
+exports.standalone = async (options = {}) => {
+    let config = deepmerge(defaultOptions, options);
     buildHelpers();
 
     await initContext(false, config);
