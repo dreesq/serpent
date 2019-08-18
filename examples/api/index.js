@@ -1,7 +1,7 @@
 const {setup, start} = require('../../index');
 const app = require('express')();
 
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'development';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 (async () => {

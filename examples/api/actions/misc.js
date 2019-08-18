@@ -15,8 +15,10 @@ config({
 );
 
 action('test-6', () => {
-    undefined_variable
-    return 1;
+    return {
+        test: true,
+        test2: false
+    };
 })
 
 config({
