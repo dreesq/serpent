@@ -380,7 +380,7 @@ exports.autoCrud = (model, options = {}) => {
  * @returns {Function}
  */
 
-exports.autoFilter = autoFilter = (model, options) => {
+exports.autoFilter = autoFilter = (model, options = {}) => {
     return async ctx => {
         const {input, db, user} = ctx;
         let collection = db[model];
