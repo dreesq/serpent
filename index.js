@@ -97,7 +97,7 @@ const onError = (error, req, res, next) => {
     message = isProd ? req.translate('errors.genericError') : message;
 
     logger.error(error);
-    res.status(500).json(error(message));
+    res.status(500).json(utils.error(message));
 };
 
 /**

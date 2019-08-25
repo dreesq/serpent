@@ -3,15 +3,21 @@ const {get, post, action, override, config, register, plugin, utils} = require('
 get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 
 config({
-    route: ['get', '/test5'],
+    route: ['post', '/test5'],
     hooks: {
 
     },
     input: {
-
+        d: 'required',
+        a: {
+            z: 'required|number',
+            b: {
+                e: 'required|number'
+            }
+        }
     }
 })(
-    async ({ options }) => options
+    async ({ options, input }) => input
 );
 
 action('test-6', () => {
