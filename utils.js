@@ -610,7 +610,13 @@ exports.escape = (text = '') => {
 exports.form = (form = {}) => {
     let result = {};
 
-    for (const key in form) {
+    main: for (const key in form) {
+        for (const subKey in form[key]) {
+            if (typeof form[key][subKey] === 'object') {
+                continue main;
+            }
+        }
+
         let validation = false;
 
         if (form[key].validation) {
