@@ -613,6 +613,7 @@ exports.form = (form = {}) => {
     main: for (const key in form) {
         for (const subKey in form[key]) {
             if (typeof form[key][subKey] === 'object') {
+                console.warn(`Form does not support nested definitions. ${subKey} discarded from form definition`);
                 continue main;
             }
         }
