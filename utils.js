@@ -369,7 +369,7 @@ exports.autoCrud = (model, options = {}) => {
         const input = {};
 
         if (['create', 'update'].includes(method)) {
-            input.input = options.schema;
+            input.input = {...options.schema};
         }
 
         if (method === 'update') {
