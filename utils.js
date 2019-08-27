@@ -427,6 +427,10 @@ exports.autoFilter = autoFilter = (model, options = {}) => {
 
         if (Object.keys(sorts).length) {
             query.sort(sorts);
+        } else {
+            query.sort({
+                _id: -1
+            });
         }
 
         const limit = options.limit || 5;
