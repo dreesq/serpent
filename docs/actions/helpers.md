@@ -101,6 +101,7 @@ utils.autoCrud('User', {
     middleware: [
         'auth:required'
     ],
+    schema: {},
     path: '/user',
     restrictToUser: true,
     methods: [
@@ -121,9 +122,9 @@ utils.autoCrud('User', {
 });
 ```
 
-Above example creates a total of 5 actions that can be called by doing requests on the handler route having the following action naming: `${method}Auto${collection}` so if I would like to create an user, I would do a POST request in the handler route with the following request payload.
+Above example creates a total of 5 actions that can be called by doing requests on the handler route having the following action naming: `auto${method}${collection}` so if I would like to create an user, I would do a POST request in the handler route with the following request payload.
 
-```['createAutoUser', {name: 'user', password: 'password'}]```
+```['autoCreateUser', {name: 'user', password: 'password'}]```
 
 ```type``` parameter specify wether actions or rest routes should be created. If `type` value equals ```rest```, 5 routes would be created on following endpoints:
 
@@ -134,6 +135,8 @@ Above example creates a total of 5 actions that can be called by doing requests 
     remove - DELETE - /${path}
     get - GET - /${path}/:id
 ```
+
+``schema`` defines the validation structure for update and create actions
 
 The ```restrictToUser``` parameter attaches a ```where``` filter to ```userId``` is authenticated's user _id.
 

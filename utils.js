@@ -208,9 +208,10 @@ exports.autoCrud = (model, options = {}) => {
 
     const defaults = {
         methods,
-        name: `Auto${model}`,
+        name: model,
         select: null,
         middleware: [],
+        schema: {},
         type: 'actions',
         allowNull: false,
         restrictToUser: false,
@@ -226,6 +227,8 @@ exports.autoCrud = (model, options = {}) => {
         ...defaults,
         ...options
     };
+
+    const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
 
     /**
      * Name the method
@@ -261,7 +264,7 @@ exports.autoCrud = (model, options = {}) => {
         }
 
         return {
-            name: `${method}${name}`,
+            name: `auto${capitalize(method)}${name}`,
             visible
         };
     };
@@ -363,9 +366,20 @@ exports.autoCrud = (model, options = {}) => {
             throw new Error(`Invalid method ${method}.`);
         }
 
+        const input = {};
+
+        if (['create', 'update'].includes(method)) {
+            input.input = options.schema;
+        }
+
+        if (method === 'update') {
+            input.input.id = 'required|string|min:24'
+        }
+
         config({
             ...nameMethod(method),
-            middleware: options.middleware
+            middleware: options.middleware,
+            ...input
         })(
             defineMethod(model, method)
         );

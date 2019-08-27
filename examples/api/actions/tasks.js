@@ -2,9 +2,15 @@ const {utils, config, get, action, call} = require('../../../index');
 
 utils.autoCrud('Task', {
     fields: [
-        '-_id',
+        '_id',
         'title'
     ],
+    schema: utils.form({
+        title: {
+            label: 'Title',
+            validation: 'required|string|min:2'
+        }
+    }),
     before(ctx, method, filters) {
         return filters;
     },

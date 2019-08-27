@@ -23,3 +23,7 @@ Serpent comes with a couple of predefined actions, modifyable using the ```overr
 ##### resetPassword
 
 ##### sendConfirm
+
+##### setPassword
+
+##### setEmail
