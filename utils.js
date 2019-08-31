@@ -630,19 +630,15 @@ exports.form = (form = {}) => {
 
     main: for (const key in form) {
         for (const subKey in form[key]) {
-            if (typeof form[key][subKey] === 'object') {
+            if (typeof form[key][subKey] === 'object' && !Array.isArray(form[key][subKey])) {
                 console.warn(`Form does not support nested definitions. ${subKey} discarded from form definition`);
                 continue main;
             }
         }
 
-        let validation = false;
 
-        if (form[key].validation) {
-            validation = form[key].validation;
-        }
-
-        result[key] = `${encodeField(form[key])}|${validation}`;
+        const {validation = false, ...others} = form[key];
+        result[key] = `${encodeField(others)}|${validation}`;
     }
 
     return result;
