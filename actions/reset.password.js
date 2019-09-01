@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {config: configPlugin} = getPlugins();
-const {error, success, makeToken, hash, hookRunner} = require('../utils');
+const {error, success, makeToken, hookRunner} = require('../utils');
 const bcrypt = require('bcryptjs');
 const moment = require('moment');
 const {
@@ -30,10 +30,11 @@ config({
      * @param config
      * @param utils
      * @param options
+     * @param crypto
      * @returns {Promise<void>}
      */
 
-    async ({db, input, i18n, config, mail, utils, options}) => {
+    async ({db, input, i18n, config, mail, utils, options, crypto}) => {
         const {User, Token} = db;
         const runner = hookRunner(options);
 
@@ -54,7 +55,7 @@ config({
             await Token.create({
                 userId: user._id,
                 type: TOKEN_TYPE_RESET,
-                token: hash(token)
+                token: await crypto.hash(token)
             });
 
             const t = i18n.translator(user.locale).translate;
@@ -78,7 +79,7 @@ config({
 
         if (+input.action === ACTION_HANDLE) {
             const token = await Token.findOne({
-                token: hash(input.token),
+                token: await crypto.hash(input.token),
                 type: TOKEN_TYPE_RESET
             });
 

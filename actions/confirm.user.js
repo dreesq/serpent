@@ -1,5 +1,5 @@
 const {config, getPlugins} = require('../index');
-const {error, success, hash} = require('../utils');
+const {error, success} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const {
     USER_STATUS_ACTIVE,
@@ -18,14 +18,15 @@ config({
      * @param db
      * @param input
      * @param t
+     * @param crypto
      * @returns {Promise<void>}
      */
 
-    async ({db, input, t}) => {
+    async ({db, input, t, crypto}) => {
         const {User, Token} = db;
 
         const token = await Token.findOne({
-            token: hash(input.token),
+            token: await crypto.hash(input.token),
             type: TOKEN_TYPE_CONFIRM
         });
 

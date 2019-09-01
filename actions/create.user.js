@@ -1,6 +1,6 @@
 const {config, getPlugins} = require('../index');
 const {TOKEN_TYPE_CONFIRM, USER_STATUS_INACTIVE} = require('../constants');
-const {makeToken, success, hash, hookRunner} = require('../utils');
+const {makeToken, success, hookRunner} = require('../utils');
 const {config: configPlugin} = getPlugins();
 const bcrypt = require('bcryptjs');
 
@@ -33,10 +33,11 @@ config({
      * @param t
      * @param utils
      * @param options
+     * @param crypto
      * @returns {Promise<void>}
      */
 
-    async ({db, mail, config, input, t, utils, options}) => {
+    async ({db, mail, config, input, t, utils, options, crypto}) => {
         const {User, Token} = db;
         const confirm = config.get('plugins.auth.confirm');
         const runner = hookRunner(options);
@@ -58,7 +59,7 @@ config({
             await Token.create({
                 userId: user._id,
                 type: TOKEN_TYPE_CONFIRM,
-                token: hash(token)
+                token: await crypto.hash(token)
             });
 
             await mail({
