@@ -94,9 +94,9 @@ const onError = (error, req, res, next) => {
     const logger = plugin('logger');
 
     let message = error instanceof Error ? error.stack : error;
-    message = isProd ? req.translate('errors.genericError') : message;
+    logger.error(message);
 
-    logger.error(error);
+    message = isProd ? (req.translate ? req.translate('errors.genericError') : 'Internal Server Error') : message;
     res.status(500).json(utils.error(message));
 };
 
