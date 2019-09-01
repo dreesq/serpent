@@ -43,6 +43,11 @@ exports.SOURCE_REMOTE = 1;
 exports.USER_STATUS_INACTIVE = 0;
 exports.USER_STATUS_ACTIVE = 1;
 
+exports.USER_STATUS_MAP = {
+    [exports.USER_STATUS_INACTIVE]: 'Inactive',
+    [exports.USER_STATUS_ACTIVE]: 'Active'
+};
+
 /**
  * Multi action constants
  * @type {number}
