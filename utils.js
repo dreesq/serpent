@@ -401,7 +401,7 @@ exports.autoCrud = async (model, options = {}) => {
  * @returns {Function}
  */
 
-exports.autoFilter = autoFilter = async (model, options = {}) => {
+exports.autoFilter = autoFilter = (model, options = {}) => {
     return async ctx => {
         const {input, db, user} = ctx;
         let collection = db[model];
@@ -411,12 +411,25 @@ exports.autoFilter = autoFilter = async (model, options = {}) => {
         }
 
         const {filters = {}, sorts = {}, page = 1} = input;
+        const extra = [];
+        const queryProxy = new Proxy({}, {
+            get(target, name,) {
+                return (...args) => {
+                    extra.push([name, args]);
+                    return queryProxy;
+                }
+            }
+        });
 
-        let makeQuery = async () => {
+        if (options.before) {
+            await options.before(queryProxy, filters, ctx);
+        }
+
+        let makeQuery = () => {
             let query = collection.find();
 
-            if (options.before) {
-                await options.before(query, filters, ctx);
+            for (let [method, args] of extra) {
+                query[method](...args);
             }
 
             if (options.restrictToUser) {
@@ -430,7 +443,9 @@ exports.autoFilter = autoFilter = async (model, options = {}) => {
             return query;
         };
 
-        let query = await makeQuery();
+        let query = makeQuery();
+
+        console.log('query', query)
 
         if (Object.keys(sorts).length) {
             query.sort(sorts);
