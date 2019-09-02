@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const {MODULE_PATH} = require('./constants');
 const serpent = require('./');
+const mongoose = require('mongoose');
 
 /**
  * Promisify functions
@@ -295,7 +296,7 @@ exports.autoCrud = async (model, options = {}) => {
                 let id = input.id;
 
                 if (id) {
-                    filters._id = id;
+                    filters._id = mongoose.Types.ObjectId(id);
                 }
 
                 if (options.restrictToUser) {
@@ -347,7 +348,9 @@ exports.autoCrud = async (model, options = {}) => {
 
             if (method === 'update') {
                 delete input._id;
-                await collection.updateMany(filters, input);
+                await collection.update(filters, {
+                    $set: input
+                });
 
                 const updated = await collection.find(filters, fields);
                 data = updated.length === 1 ? updated[0] : updated;
