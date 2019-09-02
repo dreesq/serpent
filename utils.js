@@ -197,7 +197,7 @@ exports.d = d = (...args) => {
  * @param options
  */
 
-exports.autoCrud = (model, options = {}) => {
+exports.autoCrud = async (model, options = {}) => {
     const methods = [
         'create',
         'remove',
@@ -366,23 +366,30 @@ exports.autoCrud = (model, options = {}) => {
             throw new Error(`Invalid method ${method}.`);
         }
 
+        const actionOptions = {
+            ...nameMethod(method),
+            middleware: options.middleware,
+        };
+
         const input = {};
 
         if (['create', 'update'].includes(method)) {
-            input.input = {...options.schema};
+            input.input = {};
+
+            if (typeof options.schema === 'function') {
+                input.input = await options.schema(method);
+            }
+
+            if (typeof options.schema === 'object') {
+                input.input = {...options.schema};
+            }
         }
 
         if (method === 'update') {
             input.input.id = 'required|string|min:24'
         }
 
-        config({
-            ...nameMethod(method),
-            middleware: options.middleware,
-            ...input
-        })(
-            defineMethod(model, method)
-        );
+        config(actionOptions)(defineMethod(model, method));
     }
 };
 
@@ -394,7 +401,7 @@ exports.autoCrud = (model, options = {}) => {
  * @returns {Function}
  */
 
-exports.autoFilter = autoFilter = (model, options = {}) => {
+exports.autoFilter = autoFilter = async (model, options = {}) => {
     return async ctx => {
         const {input, db, user} = ctx;
         let collection = db[model];
@@ -405,11 +412,11 @@ exports.autoFilter = autoFilter = (model, options = {}) => {
 
         const {filters = {}, sorts = {}, page = 1} = input;
 
-        let makeQuery = () => {
+        let makeQuery = async () => {
             let query = collection.find();
 
             if (options.before) {
-                options.before(query, filters, ctx);
+                await options.before(query, filters, ctx);
             }
 
             if (options.restrictToUser) {
@@ -423,7 +430,7 @@ exports.autoFilter = autoFilter = (model, options = {}) => {
             return query;
         };
 
-        let query = makeQuery();
+        let query = await makeQuery();
 
         if (Object.keys(sorts).length) {
             query.sort(sorts);
@@ -458,7 +465,7 @@ exports.autoFilter = autoFilter = (model, options = {}) => {
         }
 
         if (options.after) {
-            data = options.after(data);
+            data = await options.after(data);
         }
 
         return data;
