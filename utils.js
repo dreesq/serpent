@@ -307,8 +307,10 @@ exports.autoCrud = async (model, options = {}) => {
                 }
             }
 
+            let autoFilterBefore;
+
             if (typeof before === 'function') {
-                await before(ctx, method, filters);
+                autoFilterBefore = await before(ctx, method, filters);
             }
 
             if (method === 'get') {
@@ -323,8 +325,8 @@ exports.autoCrud = async (model, options = {}) => {
                     restrictToUser: options.restrictToUser
                 };
 
-                if (typeof filters === 'function') {
-                    opts.before = filters;
+                if (typeof autoFilterBefore === 'function') {
+                    opts.before = autoFilterBefore;
                 }
 
                 data = await autoFilter(model, opts)(ctx);
