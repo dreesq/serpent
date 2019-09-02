@@ -573,17 +573,12 @@ exports.stripeHook = ({onSubscribe, onUnsubscribe, onEvent, onRefund}) => {
 
 /**
  * Generates a form structure for client side auto generation
- * @param type
- * @param label
- * @param placeholder
- * @param values
+ * @param field
  * @returns {Buffer | Buffer}
  */
 
-exports.encodeField = encodeField = ({type = 'text', label = '', placeholder = '', values = ''}) => {
-    let data = [type, label, placeholder, values];
-    let result = new Buffer(JSON.stringify(data)).toString('base64');
-
+exports.encodeField = encodeField = (field = {}) => {
+    let result = new Buffer(JSON.stringify(field)).toString('base64');
     return `form:${result}`;
 };
 
@@ -628,15 +623,7 @@ exports.escape = (text = '') => {
 exports.form = (form = {}) => {
     let result = {};
 
-    main: for (const key in form) {
-        for (const subKey in form[key]) {
-            if (typeof form[key][subKey] === 'object' && !Array.isArray(form[key][subKey])) {
-                console.warn(`Form does not support nested definitions. ${subKey} discarded from form definition`);
-                continue main;
-            }
-        }
-
-
+    for (const key in form) {
         const {validation = false, ...others} = form[key];
         result[key] = `${encodeField(others)}|${validation}`;
     }
