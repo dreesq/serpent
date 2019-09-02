@@ -371,24 +371,23 @@ exports.autoCrud = async (model, options = {}) => {
             middleware: options.middleware,
         };
 
-        const input = {};
+        let input = {};
 
         if (['create', 'update'].includes(method)) {
-            input.input = {};
-
             if (typeof options.schema === 'function') {
-                input.input = await options.schema(method);
+                input = await options.schema(method);
             }
 
             if (typeof options.schema === 'object') {
-                input.input = {...options.schema};
+                input = {...options.schema};
             }
         }
 
         if (method === 'update') {
-            input.input.id = 'required|string|min:24'
+            input.id = 'required|string|min:24'
         }
 
+        actionOptions.input = input;
         config(actionOptions)(defineMethod(model, method));
     }
 };
@@ -444,8 +443,6 @@ exports.autoFilter = autoFilter = (model, options = {}) => {
         };
 
         let query = makeQuery();
-
-        console.log('query', query)
 
         if (Object.keys(sorts).length) {
             query.sort(sorts);
