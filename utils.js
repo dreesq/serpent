@@ -308,7 +308,7 @@ exports.autoCrud = async (model, options = {}) => {
             }
 
             if (typeof before === 'function') {
-                filters = await before(ctx, method, filters);
+                await before(ctx, method, filters);
             }
 
             if (method === 'get') {
@@ -345,9 +345,7 @@ exports.autoCrud = async (model, options = {}) => {
 
             if (method === 'update') {
                 delete input._id;
-                await collection.updateMany(filters, {
-                    $set: input
-                });
+                await collection.updateMany(filters, input);
 
                 const updated = await collection.find(filters, fields);
                 data = updated.length === 1 ? updated[0] : updated;
