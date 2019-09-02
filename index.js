@@ -7,13 +7,15 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const http = require('http');
 const spdy = require('spdy');
-const {SERVER_LISTENING, APP_PATH} = require('./constants');
+const Constants = require('./constants');
 const utils = require('./utils');
 const fs = require('fs');
 const util = require('util');
 const path = require('path');
 const package = require('./package.json');
 const deepmerge = require('deepmerge');
+
+const {SERVER_LISTENING, APP_PATH} = Constants;
 
 /**
  * Promisify functions
@@ -424,3 +426,9 @@ exports.start = async (port = 3000) => {
     events.emit(SERVER_LISTENING);
     server.listen(port, onListen);
 };
+
+/**
+ * Expose Constants
+ */
+
+exports.Constants = Constants;
