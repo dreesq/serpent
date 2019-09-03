@@ -654,3 +654,66 @@ exports.form = (form = {}) => {
 
     return result;
 };
+
+/**
+ * Dotize object helper
+ * @param obj
+ * @param prefix
+ */
+
+exports.dotize = (obj, prefix) => {
+    let result = {};
+
+    const recurse = (o, p) => {
+        for (const f in o) {
+            let pre = (p === undefined ? '' : p + ".");
+
+            if (o[f] && typeof o[f] === "object"){
+                result = recurse(o[f], pre + f);
+            } else {
+                result[pre + f] = o[f];
+            }
+        }
+
+        return result;
+    };
+
+    return recurse(obj, prefix);
+};
+
+/**
+ * Sets a value to the object using dot notation
+ * @param obj
+ * @param key
+ * @param value
+ */
+
+exports.set = (obj = {}, key = '', value) => {
+    const keys = key.split('.');
+
+    if (!keys.length) {
+        return;
+    }
+
+    let current = obj;
+    let i = 0;
+    let total = keys.length;
+
+    while (keys[i]) {
+        let isLastIteration = i === total - 1;
+
+         if (!current.hasOwnProperty(keys[i]) && !isLastIteration) {
+             current[keys[i]] = {};
+         }
+
+         if (!isLastIteration) {
+             current = current[keys[i]];
+         }
+
+         if (isLastIteration) {
+             current[keys[i]] = value;
+         }
+
+         ++i;
+    }
+};
