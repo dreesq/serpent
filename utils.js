@@ -469,12 +469,14 @@ exports.autoFilter = autoFilter = (model, options = {}) => {
         let [data, total] = await Promise.all([query, count]);
 
         if (options.pagination) {
+            const pages = Math.ceil(total / limit);
+
             data = {
                 data,
                 pagination: {
                     page: limit === -1 ? 1 : page,
-                    pages: limit === -1 ? 1 : Math.ceil(total / limit),
-                    hasMoreItems: limit === -1 ? false : ((skip + limit) < total)
+                    pages: limit === -1 ? 1 : pages,
+                    hasMoreItems: limit === -1 ? false : page < pages
                 }
             }
         }
