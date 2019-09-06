@@ -717,3 +717,40 @@ exports.set = (obj = {}, key = '', value) => {
          ++i;
     }
 };
+
+/**
+ * Removes a key from an object using dot notation
+ * @param obj
+ * @param key
+ * @param value
+ */
+
+exports.unset = (obj = {}, key = '') => {
+    const keys = key.split('.');
+
+    if (!keys.length) {
+        return;
+    }
+
+    let current = obj;
+    let i = 0;
+    let total = keys.length;
+
+    while (keys[i]) {
+        let isLastIteration = i === total - 1;
+
+        if (!current.hasOwnProperty(keys[i])) {
+           break;
+        }
+
+        if (!isLastIteration) {
+            current = current[keys[i]];
+        }
+
+        if (isLastIteration) {
+            delete current[keys[i]];
+        }
+
+        ++i;
+    }
+};
