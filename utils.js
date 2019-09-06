@@ -482,7 +482,7 @@ exports.autoFilter = autoFilter = (model, options = {}) => {
         }
 
         if (options.after) {
-            data = await options.after(data);
+            data = await options.after(data, filters, ctx);
         }
 
         return data;
