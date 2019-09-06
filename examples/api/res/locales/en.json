@@ -1,3 +1,64 @@
 {
-  "greeting": "Hello there {{name}}, the count is {{count:no item|one item|_ items}}!"
+    "validation": {
+        "required": "Field {{field}} is required",
+        "string": "Field {{field}} is not a string.",
+        "email": "Field {{field}} is not a valid email.",
+        "min": "Field {{field}} must have at least {{options.0}} characters.",
+        "max": "Field {{field}} can have maximum {{options.0}} characters.",
+        "number": "Field {{field}} is not a number.",
+        "date": "Field {{field}} is not a valid date.",
+        "file": "Field {{field}} is not a file.",
+        "extension": "Field {{field}} has invalid file extension.",
+        "locale": "Invalid locale sent.",
+        "unique": "Field {{field}} with value {{value}} already exists.",
+        "captcha": "Captcha {{field}} was not validated.",
+        "array": "Field {{field}} must be a list of entries.",
+        "sameAs": "Field {{field}} value must be the same as {{options.0}}'s value."
+    },
+    "messages": {
+        "userCreated": "Account successfully created.",
+        "addDevice": "Device successfully registered.",
+        "userConfirmed": "Account successfully verified.",
+        "userConfirmRequired": "A mail containing verification details was sent to the registered email.",
+        "confirmResent": "A new confirmation email was successfully sent.",
+        "resetRequested": "A mail containing the reset url was sent to the registered email.",
+        "resetDone": "Account password successfully changed.",
+        "invalidOldPassword": "Password does not match account's one.",
+        "passwordChanged": "Password successfully changed.",
+        "emailChanged": "Email successfully changed.",
+        "emailChangeRequested": "An email containing confirmation url was sent to the given email."
+    },
+    "errors": {
+        "requiresAuth": "Action requires authentication.",
+        "requiresPermission": "User does not have sufficient permissions.",
+        "invalidAction": "Invalid action sent.",
+        "invalidToken": "Request token is invalid or does not exist.",
+        "invalidEmail": "An user with that email could not be found.",
+        "invalidLogin": "Invalid credentials.",
+        "invalidProvider": "Invalid provider.",
+        "expiredToken": "Request token is invalid or has expired.",
+        "rateLimit": "Rate limit for this resource exceeded.",
+        "alreadyConfirmed": "User has already confirmed his account.",
+        "genericError": "An error occurred. Please try again later.",
+        "authFailed": "Could not authenticate user."
+    },
+    "emails": {
+        "confirmAccount": {
+            "subject": "Confirm Account",
+            "html": "Hello {{user.name}}. Please confirm your account here {{url}}"
+        },
+        "resetAccount": {
+            "subject": "Reset Password",
+            "html": "Hello {{user.name}}. Please reset your account password here {{url}}"
+        },
+        "accountReset": {
+            "subject": "Account Password Changed",
+            "html": "Hello {{user.name}}. Your account's password was changed. If you didn't initiate this action please contact a website administrator as soon as possible."
+        },
+        "emailChangeRequested": {
+            "subject": "Confirm Email Change",
+            "html": "Hello {{user.name}}. To finish updating your account's email, use the following url: {{url}}"
+        }
+    },
+    "greeting": "Hello there {{name}}, the count is {{count:no item|one item|_ items}}!"
 }

@@ -52,10 +52,18 @@ get('/test-2', async ({ stripe }) => {
     return await stripe.products();
 });
 
-get('/test', async ({crypto}) => {
-    const encrypted = await crypto.symmetric.encrypt('AAA');
-    return await crypto.symmetric.decrypt(encrypted);
-});
+config({
+    route: ['get', '/test'],
+    input: {
+        content: 'required|string|min:3'
+    }
+})(
+    async ({input, t}) => {
+        const i18n = plugin('i18n');
+        await i18n.setTranslation('en', 'validation.required', input.content);
+        return t('validation.required');
+    }
+);
 
 post('/stripe', utils.stripeHook({
     async onSubscribe(data, ctx) {

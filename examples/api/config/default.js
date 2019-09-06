@@ -65,6 +65,7 @@ module.exports = () => {
         path: 'storage/logs.out',
         maxsize: 10000000,
         zippedArchive: true,
+        driver: 'db',
         maxFiles: 5
       },
       crypto: {
@@ -75,6 +76,7 @@ module.exports = () => {
       socket: {},
       i18n: {
         serveTranslations: ['messages', 'validation'],
+        driver: 'file',
         defaultLocale: 'en',
         path: 'res/locales',
         locales: [

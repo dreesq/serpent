@@ -34,6 +34,8 @@ exports.REFRESH_TOKEN_EXPIRY = 30;
 exports.RESET_TOKEN_EXPIRY = 3;
 exports.SOURCE_LOCAL = 0;
 exports.SOURCE_REMOTE = 1;
+exports.DRIVER_FILE = 'file';
+exports.DRIVER_DB = 'db';
 
 /**
  * User statuses
