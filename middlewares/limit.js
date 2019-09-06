@@ -12,7 +12,7 @@ const store = {};
  * Clean store interval
  */
 
-setInterval(() => {
+!process.env.LAMBDA_ENV && setInterval(() => {
     for (const ip in store) {
         for (const name in store[ip]) {
             if (!store[ip].hasOwnProperty(name)) {
