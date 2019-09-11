@@ -22,7 +22,7 @@ module.exports = (options) => {
             try {
                 user = await auth.getUser(token, req.translate);
             } catch(e) {
-                logger.error(e.stack);
+                logger.error(e instanceof Error ? e.stack : e);
             }
         }
 
