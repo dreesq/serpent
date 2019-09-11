@@ -38,13 +38,14 @@ config({
         }
 
         const password = await bcrypt.hash(input.new, 10);
+        const ts = moment().unix();
 
         await User.findOneAndUpdate({
             _id: user._id
         }, {
             $set: {
                 password,
-                ts: moment().unix()
+                ts
             }
         });
 
@@ -62,6 +63,8 @@ config({
                 })
             });
         }
+
+        user.ts = ts;
 
         const result = {
             message: t('messages.passwordChanged'),
