@@ -13,7 +13,8 @@
     "unique": "Field value already in use",
     "captcha": "Captcha must be validated",
     "array": "Field must be a list of entries",
-    "sameAs": "Field value must be the same as {{options.0}} value"
+    "sameAs": "Field value must be the same as {{options.0}} value",
+    "invalid": "Field value is invalid"
   },
   "messages": {
     "userCreated": "User successfully created",
