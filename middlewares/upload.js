@@ -11,6 +11,7 @@ const uuid = require('uuid/v4');
  */
 
 const unlink = promisify(fs.unlink);
+const rename = promisify(fs.rename);
 
 /**
  * Helper function
@@ -102,7 +103,9 @@ module.exports = options => {
 
             req.busboy.on('file', (name, file, filename, encoding, mime) => {
                 const ext = filename.substr(filename.lastIndexOf('.') + 1);
-                const out = path.join(APP_PATH, options[1], '/', `${uuid()}.${ext}`);
+                const fileName = `${uuid()}.${ext}`;
+                const basePath = path.join(APP_PATH, options[1], '/');
+                const out = path.join(basePath, fileName);
 
                 if (options[0].split('|').indexOf(name) === -1) {
                     return file.resume();
@@ -117,7 +120,7 @@ module.exports = options => {
                 const data = {
                     field: name,
                     path: out,
-                    filename,
+                    filename: fileName,
                     encoding,
                     mimetype: mime,
                     truncated: false,
@@ -125,6 +128,9 @@ module.exports = options => {
                     isFile: true,
                     async delete() {
                         await unlink(out);
+                    },
+                    async rename(name) {
+                        await rename(out, `${basePath}/${name}`)
                     }
                 };
 
