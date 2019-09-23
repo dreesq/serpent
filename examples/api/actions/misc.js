@@ -127,3 +127,14 @@ get('/random-number', ({ myPlugin, logger }) => {
 
     return randomNumber;
 });
+
+config({
+    route: ['post', '/test'],
+    middleware: [
+        'upload:file,storage/uploads,10 mb'
+    ]
+})(
+    async ({input}) => {
+        return input;
+    }
+);
