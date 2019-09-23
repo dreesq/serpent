@@ -30,7 +30,7 @@ action('test-6', () => {
 config({
     name: 'test4',
     middleware: [
-
+        'auth:required'
     ],
     input: utils.form({
         a: {
@@ -40,8 +40,8 @@ config({
         }
     })
 })(
-    async ({input}) => {
-        return input;
+    async ({input, user}) => {
+        return user;
     }
 );
 
