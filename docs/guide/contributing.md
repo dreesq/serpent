@@ -7,6 +7,6 @@ We are open for community created improvements. If you got any idea on how we ca
 
 ##### Issues
 
-For urgent issues such as security issues or bugs that affect the good going of the framework, you may create an issue on the [git repository](https://github.com/dreesq/serpent/issues) containing information on what the problem is and how we should reproduce it.
+For urgent issues such as security issues or bugs that affect the good going of the framework, you may create an issue on the [git repository](https://github.com/dreesq/serpent/issues) containing information on what the problem is and how we can reproduce it.
 
-Please note that the order we solve the issues is based on how urgent the issue is.
+Please note that the order we solve the issues is based on how important the issue is.

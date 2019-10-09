@@ -4,7 +4,7 @@ The framework is built with modern javascript in mind and because of that we rec
 
 Serpent is built to wrap the ```express``` package for maximum extensibility and because of that you should also install express by running ```npm install express``` command.
 
-The latest version of the framework is hosted on npm and can be installed by running ``npm install @dreesq/serpent`` and for the client component ```npm install @dreesq/serpent-client```
+The latest version of the framework is hosted on npm and can be installed by running ``npm install @dreesq/serpent`` and for the client component ```npm install @dreesq/serpent-client```. Note that installing `express` is not a requirement and framework can be run in standalone mode.
 
 
 ### Bootstraping

@@ -34,7 +34,6 @@
     "connect-busboy": "0.0.2",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
-    "crypto": "^1.0.1",
     "debug": "^4.1.1",
     "deepmerge": "^4.1.0",
     "express-session": "^1.16.2",
@@ -54,5 +53,8 @@
     "uuid": "^3.3.3",
     "winston": "^3.2.1",
     "winston-mongodb": "^5.0.0"
+  },
+  "devDependencies": {
+    "http-server": "^0.11.1"
   }
 }

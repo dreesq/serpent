@@ -4,7 +4,7 @@ The client component eases communication between client ad server and also provi
 
 #### Setup
 
-Client does not include any dependency but require `axios` and `socket.io-client`, if used, to be passed to the instance constructor.
+Client does not include any dependency but require `axios` and `socket.io-client`, if used, to must be passed to the instance constructor.
 
 You may install the latest version of the client using ``npm install @dreesq/serpent``.
 

@@ -19,17 +19,30 @@ Above example would not allow action to return its result if the request does no
 
 ##### auth
 
+Attempts to authenticate the user if ``Authorization`` header is present. If ```required``` option is present, middleware will return ```403``` status if not logged, preventing action handler from being called.
+
+```js
+    const {config} = require('@dreesq/serpent');
+    
+    config({
+        name: 'getUser',
+        middleware: [
+            'auth:required'
+        ]
+    })(
+        async ({user}) => user
+    );
+```
+
 ##### can
 
 ##### is
-
-##### i18n
 
 ##### limit
 
 ##### upload
 
-#### Custom middlewares
+### Custom middlewares
 
 You may pass custom middlewares by defining custom functions within the middleware array or if using the autoload functionality, by creating a new file and then registering it by using its file name.
 
@@ -54,3 +67,32 @@ You may pass custom middlewares by defining custom functions within the middlewa
         ]
     })('Result');
 ```
+
+If auto load is enabled, middlewares are loaded on application bootstrap and can be called using string representation like following:
+
+```js
+    // middlewares/myMiddleware.js
+    module.exports = options => {
+        return (req, res, next) => {
+            console.log(options[0], options[1]);
+            next();
+        }
+    }
+    
+    // action.js
+    const {config} = require('@dreesq/serpent');
+    
+    config({
+        name: 'action',
+        middleware: [
+            'myMiddleware:1,2,3',
+            'myMiddleware:5,5,8',
+        ]
+    })(
+        async () => {
+            return '1'
+        }
+    );
+```
+
+Above example would log ```1``` ```2``` ```5``` ```5``` in console.
