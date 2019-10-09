@@ -15,7 +15,9 @@ import Serpent from '@dreesq/serpent-client';
 import axios from 'axios';
 import sio from 'socket.io-client';
 
-const client = new Serpent('http://localhost:3001/handler', {
+const client = new Serpent({
+    handler: 'http://localhost:3001/handler',
+    actions: 'http://localhost:3001/actions',
     axios,
     sio
 });
