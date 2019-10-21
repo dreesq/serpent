@@ -1,14 +1,14 @@
 # Introduction
 
-The client component eases communication between client ad server and also provides useful helpers such as the debug console.
+The client component eases communication between client and server and also provides useful helpers such as the debug console.
 
 #### Setup
 
-Client does not include any dependency but require `axios` and `socket.io-client`, if used, to must be passed to the instance constructor.
+Client does not include any dependency but requires `axios` and `socket.io-client`, if used, to be passed to the constructor options.
 
-You may install the latest version of the client using ``npm install @dreesq/serpent``.
+You may install the latest version of the client using ``npm install @dreesq/serpent-client``.
 
-Once installed, you can ```import``` or direct include through script tag, the built package.
+Once installed, you can ```import``` or directly include through script tag the built package.
 
 ```js
 import Serpent from '@dreesq/serpent-client';
@@ -22,9 +22,9 @@ const client = new Serpent({
     sio
 });
 
-client.setup();
-
-// Client is now ready, note that the setup method is a promise
+client.setup().then(() => {
+    // Client is now ready, note that the setup method is a promise
+});
 ```
 
 #### Options
@@ -102,7 +102,7 @@ const options = {
 
 To easier debug the application, the library comes with a debug panel that offers useful insights and benchmarking.
 
-To turn the debugPanel open, you only need to pass ```debug: true``` and after setup, run ```client.debugPanel()``` like following:
+To turn the debugPanel on, you only need to pass ```debug: true``` as following:
 
 ```js
 import Serpent from '@dreesq/serpent-client';
@@ -110,6 +110,4 @@ import Serpent from '@dreesq/serpent-client';
 const client = new Serpent(path, {
     debug: true
 });
-
-client.setup().then(() => client.debugPanel());
 ```
