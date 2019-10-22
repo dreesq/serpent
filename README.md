@@ -1,19 +1,27 @@
 <p align="center"> 
   <img src="docs/res/logo.png">
+  <br />
+  [Documentation](https://dreesq.github.io/serpent)
 </p>
 
-Serpent is the first open source contribution of the dreesq team. Its purpose is to better improve developer's **productivity** by dealing with most of the code boilerplate any new application would require such as: Authentication, Middlewares, WebSockets, Internationalization etc.
+Serpent is the core component of Dreesq's ecosystem. Its purpose is to better improve developer's productivity by dealing with most of the code boilerplate any new application would require such as: Authentication, Middlewares, WebSockets, Internationalization etc.
 
-The framework is built with extension in mind, thus, we decided to build it on top of an already well known package, express.
+The framework is built with extension in mind, each aspect of it being configurable and extendable.
 
-Our focus is to provide **high quality**, **high performance** code, while still keeping Node's beautiful parts without introducing new paradigms. Because of that, we decided not to use any preprocessor and use the good old ES6.
+The main focus is to provide high quality, high performance code, while still keeping Node's beautiful parts without introducing new paradigms. Because of that, no preprocessor is used.
  
-We think that web applications should be **fun** to develop. Here's a quick snippet on how a basic action would be like:
+We think that web applications should be fun to develop.
+
+### Setup
+
+`npm install express @dreesq/serpent --save`
+
+Here's a basic http server example
 
 ```js
-    const {get} = require('@dreesq/serpent');
-
+    const {setup, get, start} = require('@dreesq/serpent');
+    const app = require('express')();
+    
     get('/hello/:name', async ({ input }) => `Hello there ${input.name}!`);
+    setup(app).then(start);
 ```
-
-If we caught your attention, we invite you to check the [documentation](https://dreesq.github.io/serpent).
