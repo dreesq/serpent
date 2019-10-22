@@ -19,9 +19,9 @@ We think that web applications should be fun to develop.
 Here's a basic http server example
 
 ```js
-    const {setup, get, start} = require('@dreesq/serpent');
-    const app = require('express')();
-    
-    get('/hello/:name', async ({ input }) => `Hello there ${input.name}!`);
-    setup(app).then(start);
+const {setup, get, start} = require('@dreesq/serpent');
+const app = require('express')();
+
+get('/hello/:name', async ({ input }) => `Hello there ${input.name}!`);
+setup(app).then(start);
 ```
