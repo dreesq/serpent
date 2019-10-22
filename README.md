@@ -1,7 +1,7 @@
 <p align="center"> 
   <img src="docs/res/logo.png">
   <br />
-  [Documentation](https://dreesq.github.io/serpent)
+  <a href="https://dreesq.github.io/serpent">Documentation</a>
 </p>
 
 Serpent is the core component of Dreesq's ecosystem. Its purpose is to better improve developer's productivity by dealing with most of the code boilerplate any new application would require such as: Authentication, Middlewares, WebSockets, Internationalization etc.
