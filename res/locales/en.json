@@ -14,7 +14,8 @@
     "captcha": "Captcha must be validated",
     "array": "Field must be a list of entries",
     "sameAs": "Field value must be the same as {{options.0}} value",
-    "invalid": "Field value is invalid"
+    "invalid": "Field value is invalid",
+    "boolean": "Field must be a boolean"
   },
   "messages": {
     "userCreated": "User successfully created",

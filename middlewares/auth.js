@@ -6,7 +6,7 @@ const {error} = require('../utils');
  */
 
 module.exports = (options) => {
-    const {auth, logger = console} = getPlugins();
+    const {auth} = getPlugins();
     const required = options && options[0] === 'required';
 
     return async (req, res, next) => {
@@ -22,7 +22,7 @@ module.exports = (options) => {
             try {
                 user = await auth.getUser(token, req.translate);
             } catch(e) {
-                logger.error(e instanceof Error ? e.stack : e);
+
             }
         }
 
