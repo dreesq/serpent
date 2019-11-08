@@ -15,7 +15,8 @@
     "array": "Field must be a list of entries",
     "sameAs": "Field value must be the same as {{options.0}} value",
     "invalid": "Field value is invalid",
-    "boolean": "Field must be a boolean"
+    "boolean": "Field must be a boolean",
+    "id": "Field value must be a valid identifier"
   },
   "messages": {
     "userCreated": "User successfully created",

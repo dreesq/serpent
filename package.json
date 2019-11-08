@@ -42,17 +42,17 @@
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.7",
+    "mongoose": "^5.7.8",
     "nodemailer": "^6.3.1",
-    "npm": "^6.12.1",
-    "qs": "^6.9.0",
+    "npm": "^6.13.0",
+    "qs": "^6.9.1",
     "redis": "^2.8.0",
     "socket.io": "^2.3.0",
     "spdy": "^4.0.1",
-    "stripe": "^7.11.0",
+    "stripe": "^7.13.0",
     "uuid": "^3.3.3",
     "winston": "^3.2.1",
-    "winston-mongodb": "^5.0.0"
+    "winston-mongodb": "^5.0.1"
   },
   "devDependencies": {
     "http-server": "^0.11.1"
