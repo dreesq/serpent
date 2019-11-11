@@ -722,7 +722,6 @@ exports.set = (obj = {}, key = '', value) => {
  * Removes a key from an object using dot notation
  * @param obj
  * @param key
- * @param value
  */
 
 exports.unset = (obj = {}, key = '') => {
