@@ -1,5 +1,5 @@
 <p align="center"> 
-  <img src="docs/res/logo.png" style="width: 191px;margin-bottom:23px;">
+  <img src="docs/res/logo.png" width="191">
   <br />
   <a href="https://dreesq.github.io/serpent">Documentation</a>
 </p>
