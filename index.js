@@ -382,24 +382,23 @@ exports.start = async (port = 3000) => {
     const name = config.get('name', 'app');
 
     logger.verbose(`
-    
-             \`/+-                                 
-            -+++++.                               
-           .++++:\`                                
-           /+++\`           .:///:-\`               
-           +++.          .+++++++++/\`             
-           :++\`         :+++++-\` \`-++.            
-           \`++-       .+++++:\`     .++\`           
-            .++-    \`:+++++-       \`++:           
-             \`:++/:/+++++/\`        -++/           
-               \`-/++++/:\`        \`:+++:           
-                    \`          .+++++/\`           
-                                \`-:-.
-                    
-            name: ${name}               
-            version: ${package.version}
-            env: ${env}
-            debug: ${debug}
+                            ,gæ
+                         ,g▓╢╢╢▓╝
+                       ,▓╣╢▓╜
+                      g╣╢▓\`      ,╦@▓▓▓@w,
+                     ▓╢╢▓       φ╣╢╢╣╣╢╢╢╢▓╖
+                    ]╢╢▓      g▓╜\`      ╚╣╢╢╗
+                    ╟╢╢▓            ,╓^  ]╢╢╣
+                     ▓╢╢▓╗     ,╥@▓╣╜    ╒╢╢▓
+                      ╙▓╢╢╢╣╣╣╢╢╢╢▓     ╓▓╢▓
+                         "╨╩▀╨╜"      ,▓╢╢▓
+                                   ,╥▓╢╢▓\`
+                                  ╙▓╢╢▓\`
+                          
+                    name: ${name}               
+                    version: ${package.version}
+                    env: ${env}
+                    debug: ${debug}
     `);
 
     const onListen = () => logger.info(`Listening on port ${port}`);
