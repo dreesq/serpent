@@ -1,6 +1,6 @@
 {
   "name": "@dreesq/serpent",
-  "version": "2.6.3",
+  "version": "2.6.2",
   "description": "An express wrapper for developing fast web applications",
   "main": "index.js",
   "directories": {
@@ -42,7 +42,7 @@
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.8",
+    "mongoose": "^5.7.10",
     "nodemailer": "^6.3.1",
     "npm": "^6.13.0",
     "qs": "^6.9.1",
