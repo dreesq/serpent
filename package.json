@@ -1,6 +1,6 @@
 {
   "name": "@dreesq/serpent",
-  "version": "2.6.2",
+  "version": "2.6.5",
   "description": "An express wrapper for developing fast web applications",
   "main": "index.js",
   "directories": {
