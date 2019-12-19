@@ -15,7 +15,7 @@ module.exports = permissions => {
             return res.status(403).json(error(req.translate('errors.requiresAuth')));
         }
 
-        if (!user.can.apply(this, permissions)) {
+        if (!user.can.apply(this, Object.keys(permissions))) {
             next(true);
             return res.status(403).json(error(req.translate('errors.requiresPermission')));
         }

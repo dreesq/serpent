@@ -28,9 +28,9 @@ action('test-6', () => {
 })
 
 config({
-    name: 'test4',
+    route: ['get', '/test23'],
     middleware: [
-        'auth:required'
+        'auth:required|source:query|key:token'
     ],
     input: utils.form({
         a: {
@@ -41,7 +41,7 @@ config({
     })
 })(
     async ({input, user}) => {
-        return user;
+        return user || 'NO USER';
     }
 );
 

@@ -10,7 +10,7 @@ module.exports = locales => {
     const {i18n, config} = getPlugins();
 
     return (req, res, next) => {
-        let lang = Array.isArray(locales) && locales[0];
+        let lang = Object.keys(locales)[0];
 
         if (!lang) {
             lang = config.get('plugins.i18n.defaultLocale', 'en');

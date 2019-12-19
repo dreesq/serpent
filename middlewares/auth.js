@@ -7,16 +7,16 @@ const {error} = require('../utils');
 
 module.exports = (options) => {
     const {auth} = getPlugins();
-    const required = options && options[0] === 'required';
+    const source = options.source || 'headers';
+    const key = options.key || 'authorization';
 
     return async (req, res, next) => {
         const fail = (message = req.translate('errors.requiresAuth')) => {
             res.status(401).json(error(message));
-            next(true);
         };
 
         let user = false;
-        let token = req.headers.authorization;
+        let token = req[source][key];
 
         if (token) {
             try {
@@ -26,7 +26,7 @@ module.exports = (options) => {
             }
         }
 
-        if (required && !user) {
+        if (options.required && !user) {
             return fail();
         }
 

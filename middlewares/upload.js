@@ -104,10 +104,11 @@ module.exports = options => {
             req.busboy.on('file', (name, file, filename, encoding, mime) => {
                 const ext = filename.substr(filename.lastIndexOf('.') + 1);
                 const fileName = `${uuid()}.${ext}`;
-                const basePath = path.join(APP_PATH, options[1], '/');
+                const basePath = path.join(APP_PATH, options.basePath, '/');
                 const out = path.join(basePath, fileName);
+                const extensions = Array.isArray(options.ext) ? options.ext : [options.ext];
 
-                if (options[0].split('|').indexOf(name) === -1) {
+                if (extensions.indexOf(name) === -1) {
                     return file.resume();
                 }
 
@@ -165,8 +166,8 @@ module.exports = options => {
 
         const opts = {
             limits: {
-                files: Number(options[3]) || 1,
-                fileSize: unhumanize(options[2] || '10 mb')
+                files: options.files || 1,
+                fileSize: unhumanize(options.maxSize || '10 mb')
             }
         };
 

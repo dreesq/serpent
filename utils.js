@@ -753,3 +753,27 @@ exports.unset = (obj = {}, key = '') => {
         ++i;
     }
 };
+
+/**
+ * Given an options string, attempts to parse it
+ * @param options
+ * @returns {{}}
+ */
+
+exports.parseOptions = options => {
+    if (!options || typeof options !== 'string') {
+        return {};
+    }
+
+    let result = {};
+    let keys = options.split(options.indexOf('|') > -1 ? '|' : ',');
+
+    for (const key of keys) {
+        let [name, opts] = key.split(':');
+        opts = opts && opts.length ? opts.replace(/\s+/gi, '').split(',') : [true];
+        opts = opts.map(opt => isNaN(opt) ? opt : Number(opt));
+        result[name] = opts.length === 1 ? opts[0] : opts;
+    }
+
+    return result;
+};

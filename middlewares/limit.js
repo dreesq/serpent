@@ -19,7 +19,7 @@ const store = {};
                 continue;
             }
 
-            if (moment().diff(store[ip][name][1], 'hours') >= 1) {
+            if (moment().diff(store[ip][name][1], 'hours') >= store[ip][name][2]) {
                 delete store[ip][name];
             }
         }
@@ -41,13 +41,12 @@ module.exports = options => {
         let name = req.name ? req.name : `${req.method}-${req.path}`;
 
         if (!store[req.ip][name]) {
-            store[req.ip][name] = [0, new Date()];
+            store[req.ip][name] = [0, new Date(), options.time];
         }
 
-        const limit = options[0];
         const current = store[req.ip][name];
 
-        if (current[0] > limit) {
+        if (current[0] > options.limit) {
             next(true);
             return res.status(429).json(error(req.translate('errors.rateLimit')));
         }

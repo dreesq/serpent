@@ -54,6 +54,7 @@
     "winston-mongodb": "^5.0.1"
   },
   "devDependencies": {
-    "http-server": "^0.11.1"
+    "http-server": "^0.11.1",
+    "nodemon": "^2.0.2"
   }
 }

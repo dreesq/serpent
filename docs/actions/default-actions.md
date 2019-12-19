@@ -37,6 +37,10 @@ const {data, errors} = await client.createUser({
 });
 ```
 
+##### setLocale
+
+Updates user's locale in database, requires translations reload on client in order to work.
+
 ##### getTranslations
 
 Get translations is being used by client library on bootstrap for storing server returned translations. Note that the available translations are being defined in configuration file in: `plugins.i18n.serveTranslations`. To enable this feature inside client library in ```i18n.load``` option. More on options can be found in [client documentation](/client/introduction).
