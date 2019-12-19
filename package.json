@@ -27,7 +27,7 @@
   ],
   "homepage": "https://github.com/dreesq/serpent#readme",
   "dependencies": {
-    "@elastic/elasticsearch": "^7.4.0",
+    "@elastic/elasticsearch": "^7.5.0",
     "axios": "^0.19.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -37,24 +37,24 @@
     "debug": "^4.1.1",
     "deepmerge": "^4.2.2",
     "express-session": "^1.17.0",
-    "firebase-admin": "^8.8.0",
+    "firebase-admin": "^8.9.0",
     "helmet": "^3.21.2",
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.12",
-    "nodemailer": "^6.3.1",
+    "mongoose": "^5.8.1",
+    "nodemailer": "^6.4.2",
     "qs": "^6.9.1",
     "redis": "^2.8.0",
     "socket.io": "^2.3.0",
     "spdy": "^4.0.1",
-    "stripe": "^7.13.1",
+    "stripe": "^7.14.0",
     "uuid": "^3.3.3",
     "winston": "^3.2.1",
     "winston-mongodb": "^5.0.1"
   },
   "devDependencies": {
-    "http-server": "^0.11.1",
+    "http-server": "^0.12.0",
     "nodemon": "^2.0.2"
   }
 }
