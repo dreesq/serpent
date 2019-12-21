@@ -36,6 +36,7 @@ module.exports = () => {
         server: 'mongodb://127.0.0.1/database'
       },
       auth: {
+        create: true,
         confirm: false,
         notify: true,
         update: true,

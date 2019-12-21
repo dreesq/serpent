@@ -22,7 +22,7 @@ config({
             }
         }
     },
-    enabled: configPlugin.get('plugins.auth')
+    enabled: configPlugin.get('plugins.auth.create')
 })(
     /**
      * Default create user action
