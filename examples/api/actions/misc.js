@@ -2,6 +2,7 @@ const {get, post, action, override, config, register, plugin, utils} = require('
 
 get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 
+
 config({
     route: ['post', '/test5'],
     hooks: {
