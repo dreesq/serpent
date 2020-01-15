@@ -1,4 +1,4 @@
-<img src="res/logo.png" style="display:block;margin: 30px auto;"/>
+<img src="res/logo_white.png" style="display:block;margin: 30px auto;"/>
 
 Serpent is the first open source contribution of the dreesq team. Its purpose is to better improve developer's **productivity** by dealing with most of the code boilerplate any new application would require such as: Authentication, Middlewares, WebSockets, Internationalization etc.
 
