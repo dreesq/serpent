@@ -174,21 +174,37 @@ const buildHelpers = () => {
     };
 
     for (const key in methods) {
-        exports[key] = (path, handler) => {
-            return config({
+        exports[key] = (path, handler, input, middleware) => {
+            const options = {
                 route: [methods[key], path]
-            })(
-                handler
-            );
+            };
+
+            if (input) {
+                options.input = input;
+            }
+
+            if (middleware) {
+                options.middleware = middleware;
+            }
+
+            return config(options)(handler);
         };
     }
 
-    exports.action = (name, handler) => {
-        return config({
+    exports.action = (name, handler, input, middleware) => {
+        const options = {
             name
-        })(
-            handler
-        );
+        };
+
+        if (input) {
+            options.input = input;
+        }
+
+        if (middleware) {
+            options.middleware = middleware;
+        }
+
+        return config(options)(handler);
     };
 
     /**
@@ -361,6 +377,24 @@ exports.override = (action = '', reconfig) => {
     const newOptions = reconfig(options);
 
     return config(newOptions)(handler);
+};
+
+/**
+ * Action decorator
+ * @param options
+ * @returns {decorator}
+ * @constructor
+ */
+
+exports.Action = (options = {}) => {
+    return function decorator(target, key, descriptor) {
+        config({
+            name: target.key,
+            ...options
+        })(
+            target.descriptor.value
+        );
+    }
 };
 
 /**
