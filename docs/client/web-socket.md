@@ -7,8 +7,10 @@ In order for it to work, you must have enabled web sockets on server by having `
 You may pass a custom `socket.io` connection address in library constructor
 
 ```js
+const sio = require('socket.io-client');
 const client = new Serpent({
-    sio: 'http://localhost:3031'
+    sio,
+    socket: 'http://localhost:3031'
 });
 
 let authenticated = false;
