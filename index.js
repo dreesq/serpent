@@ -18,6 +18,12 @@ const deepmerge = require('deepmerge');
 const {SERVER_LISTENING, APP_PATH} = Constants;
 
 /**
+ * Set environment as development if not defined
+ */
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+/**
  * Promisify functions
  */
 
