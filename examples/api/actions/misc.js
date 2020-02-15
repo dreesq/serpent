@@ -2,6 +2,11 @@ const {get, post, action, override, config, register, plugin, utils} = require('
 
 get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 
+action('hello', async ({ input }) => {
+    return `Hello ${input.name}!`;
+}, {
+    name: 'required|string'
+});
 
 config({
     route: ['post', '/test5'],

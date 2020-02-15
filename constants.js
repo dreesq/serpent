@@ -14,6 +14,7 @@ exports.MODULE_PATH = __dirname;
 
 exports.PLUGINS_INIT = 'plugins:init';
 exports.SERVER_LISTENING = 'server:listening';
+exports.GATEWAY_LOG = 'gateway:log';
 
 /**
  * Token types

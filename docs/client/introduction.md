@@ -31,9 +31,9 @@ client.setup().then(() => {
 
 The client configuration object allows the following options:
 
-##### debug: `true | false`
+##### dev: `true | false`
 
-Additional logs and metrics are done by the library if debug is enabled.
+Additional logs and metrics are done by the library if dev is enabled.
 
 ##### socket: `true | false`
 
@@ -98,16 +98,16 @@ const options = {
 }
 ```
 
-#### Debug
+#### Dev
 
-To easier debug the application, the library comes with a debug panel that offers useful insights and benchmarking.
+To easier develop the application, the library comes with a debug panel that offers useful insights and benchmarking.
 
-To turn the debugPanel on, you only need to pass ```debug: true``` as following:
+To turn the debugPanel on, you only need to pass ```dev: true``` as following:
 
 ```js
 import Serpent from '@dreesq/serpent-client';
 
 const client = new Serpent(path, {
-    debug: true
+    dev: true
 });
 ```
