@@ -29,9 +29,14 @@ exports.get = get = (obj, path, defaultValue = false) => {
  * Given an object, return selected fields
  * @param obj
  * @param fields
+ * @param clean
  */
 
-exports.select = select = (obj = {}, fields) => {
+exports.select = select = (obj = {}, fields, clean = false) => {
+    if (typeof fields === 'string') {
+        fields = fields.split(' ');
+    }
+
     if (!Array.isArray(fields)) {
         return obj;
     }
@@ -49,6 +54,18 @@ exports.select = select = (obj = {}, fields) => {
         if (!remove) {
             actions[key] = 1;
         }
+    }
+
+    if (clean) {
+        const result = {};
+
+        for (const field in actions) {
+            if (actions[field] === 1 && obj.hasOwnProperty(field)) {
+                result[field] = obj[field];
+            }
+        }
+
+        return result;
     }
 
     for (let key in obj) {

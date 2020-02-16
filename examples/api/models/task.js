@@ -8,6 +8,10 @@ module.exports = Schema => {
         userId: {
             type: Schema.ObjectId,
             references: 'user'
+        },
+        test: {
+            default: 'test',
+            type: String
         }
     });
 };

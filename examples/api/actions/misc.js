@@ -2,11 +2,15 @@ const {get, post, action, override, config, register, plugin, utils} = require('
 
 get('/hello/:name/:count?', ({input, t}) => t('greeting', input));
 
-action('hello', async ({ input }) => {
-    return `Hello ${input.name}!`;
-}, {
-    name: 'required|string'
-});
+action(
+    'hello',
+    async ({ input, db }) => {
+        return `Hello ${input.name}!`;
+    },
+    {
+        name: 'required|string'
+    }
+);
 
 config({
     route: ['post', '/test5'],
@@ -31,7 +35,7 @@ action('test-6', () => {
         test: true,
         test2: false
     };
-})
+});
 
 config({
     route: ['get', '/test23'],

@@ -33,7 +33,9 @@ module.exports = () => {
         }
       },
       db: {
-        server: 'mongodb://127.0.0.1/database'
+        driver: 'nedb',
+        path: './storage',
+        //server: 'mongodb://127.0.0.1/database'
       },
       auth: {
         create: true,

@@ -73,7 +73,9 @@ config({
                 return error(t('errors.invalidToken'));
             }
 
-            await User.updateOne({_id: token.userId}, {
+            await User.updateOne({
+                _id: token.userId
+            }, {
                 email: token.extra.email
             });
 

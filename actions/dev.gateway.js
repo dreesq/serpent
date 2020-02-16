@@ -1,4 +1,4 @@
-const {config, plugin, Constants} = require('../index');
+const {config, Constants} = require('../index');
 
 config({
     route: ['get', '/_dev_gateway'],
