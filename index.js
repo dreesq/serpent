@@ -132,7 +132,7 @@ const initMiddlewares = async () => {
         return;
     }
 
-    if (context.get('config').mamba) {
+    if (app.hasOwnProperty('__MAMBA__')) {
         return;
     }
 
@@ -443,7 +443,7 @@ exports.start = async (port = 3000) => {
 
     const onListen = () => logger.info(`Listening on port ${port}`);
 
-    if (context.get('config').mamba) {
+    if (app.hasOwnProperty('__MAMBA__')) {
         return app.__listen(port, onListen);
     }
 
