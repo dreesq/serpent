@@ -4,7 +4,7 @@ const {APP_PATH} = require('../constants');
 const path = require('path');
 const busboy = require('connect-busboy');
 const {promisify} = require('util');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 
 /**
  * Promisify functions
