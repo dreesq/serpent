@@ -40,7 +40,7 @@
     "firebase-admin": "^10.0.1",
     "helmet": "^3.22.0",
     "install": "^0.13.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.25.3",
     "mongoose": "^5.9.15",
     "nedb": "^1.8.0",
