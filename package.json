@@ -45,7 +45,7 @@
     "mongoose": "^5.9.15",
     "nedb": "^1.8.0",
     "nodemailer": "^6.4.6",
-    "npm-check-updates": "^6.0.1",
+    "npm-check-updates": "^16.7.4",
     "qs": "^6.9.4",
     "redis": "^3.0.2",
     "socket.io": "^4.4.1",
