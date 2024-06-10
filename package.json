@@ -37,7 +37,7 @@
     "debug": "^4.1.1",
     "deepmerge": "^4.2.2",
     "express-session": "^1.17.1",
-    "firebase-admin": "^10.0.1",
+    "firebase-admin": "^12.1.1",
     "helmet": "^3.22.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^8.5.1",
